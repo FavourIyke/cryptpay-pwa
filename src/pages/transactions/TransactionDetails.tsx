@@ -13,62 +13,83 @@ const TransactionDetails = ({ status }: any) => {
   return (
     <div className="w-full font-sora mt-8">
       <div className="w-full flex flex-col justify-center items-center">
-        <h4 className="text-gray-400 text-[12px] ">You bought</h4>
-        <h4 className="text-pending text-[18px] mt-1 ">
-          0.0011828 <span className="text-white">BTC</span>
+        <h4 className="text-gray-800  dark:text-gray-400 text-[12px] ">
+          You bought
         </h4>
-        <h4 className=" text-white text-[12px] mt-2">Completed time: 04:25</h4>
+        <h4 className="dark:text-pending text-[#F3A218] font-semibold text-[18px] mt-1 ">
+          0.0011828{" "}
+          <span className="text-gray-800 dark:dark:text-white  font-normal">
+            BTC
+          </span>
+        </h4>
+        <h4 className=" text-gray-800 dark:dark:text-white  text-[12px] mt-2">
+          Completed time: 04:25
+        </h4>
       </div>
-      <div className="w-full mt-8 flex justify-between items-center">
-        <h4 className="text-gray-400 text-[12px] ">Reference</h4>
-        <div className="flex items-center gap-2">
-          <h4 className="text-gray-400 text-[12px] ">256521T....sjsg</h4>
-          <CopyToClipboard
-            text="256521T5841sgasga5514sjsg"
-            onCopy={() => {
-              setOnCopyRef(true);
-              setTimeout(() => {
-                setOnCopyRef(false);
-              }, 2500);
-            }}
-          >
-            {onCopyRef ? (
-              <FiClipboard className="text-[16px] text-white" />
-            ) : (
-              <FiCopy className="text-[16px] text-white" />
-            )}
-          </CopyToClipboard>
+      <div className="w-full mt-8 rounded-xl p-4  bg-[#F1F1F1] dark:bg-transparent">
+        <div className="w-full flex mt-2 justify-between items-center">
+          <h4 className="text-gray-800  dark:text-gray-400 text-[12px] ">
+            Reference
+          </h4>
+          <div className="flex items-center gap-2">
+            <h4 className="text-gray-800  dark:text-gray-400 text-[12px] ">
+              256521T....sjsg
+            </h4>
+            <CopyToClipboard
+              text="256521T5841sgasga5514sjsg"
+              onCopy={() => {
+                setOnCopyRef(true);
+                setTimeout(() => {
+                  setOnCopyRef(false);
+                }, 2500);
+              }}
+            >
+              {onCopyRef ? (
+                <FiClipboard className="text-[16px] dark:text-white text-gray-700" />
+              ) : (
+                <FiCopy className="text-[16px] dark:text-white text-gray-700" />
+              )}
+            </CopyToClipboard>
+          </div>
+        </div>
+        <div className="w-full mt-8 flex justify-between items-center">
+          <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
+            Hash
+          </h4>
+          <div className="flex items-center gap-2">
+            <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
+              shhddi...41sga
+            </h4>
+            <CopyToClipboard
+              text="shhdiiuhgdg567uytrfg41sga"
+              onCopy={() => {
+                setOnCopyHash(true);
+                setTimeout(() => {
+                  setOnCopyHash(false);
+                }, 2500);
+              }}
+            >
+              {onCopyHash ? (
+                <FiClipboard className="text-[16px] dark:text-white text-gray-700" />
+              ) : (
+                <FiCopy className="text-[16px] dark:text-white text-gray-700" />
+              )}
+            </CopyToClipboard>
+          </div>
         </div>
       </div>
-      <div className="w-full mt-3 flex justify-between items-center">
-        <h4 className="text-gray-400 text-[12px] ">Hash</h4>
-        <div className="flex items-center gap-2">
-          <h4 className="text-gray-400 text-[12px] ">shhddi...41sga</h4>
-          <CopyToClipboard
-            text="shhdiiuhgdg567uytrfg41sga"
-            onCopy={() => {
-              setOnCopyHash(true);
-              setTimeout(() => {
-                setOnCopyHash(false);
-              }, 2500);
-            }}
-          >
-            {onCopyHash ? (
-              <FiClipboard className="text-[16px] text-white" />
-            ) : (
-              <FiCopy className="text-[16px] text-white" />
-            )}
-          </CopyToClipboard>
-        </div>
-      </div>
-      <h4 className="text-white text-[14px] mt-8">Payment Details</h4>
-      <div className="full mt-8">
+      <h4 className="dark:text-white text-gray-700 text-[14px] mt-8">
+        Payment Details
+      </h4>
+      <div className="w-full mt-8 rounded-xl p-4  bg-[#F1F1F1] dark:bg-transparent">
         <div className="w-full  flex justify-between items-center">
-          <h4 className="text-gray-400 text-[12px] ">Status</h4>
+          <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
+            Status
+          </h4>
           <div
-            className={`p-2 gap-2 rounded-xl flex justify-center items-center bg-opacity-10 ${
+            className={`px-2 py-1 gap-2 rounded-md  flex justify-center items-center bg-opacity-30 dark:bg-opacity-10 ${
               status === "Successful"
-                ? "bg-success_green"
+                ? "bg-success_green "
                 : status === "Pending"
                 ? "bg-pending"
                 : status === "Failed"
@@ -77,11 +98,11 @@ const TransactionDetails = ({ status }: any) => {
             }`}
           >
             <div
-              className={`w-[6px] h-[6px] rounded-full ${
+              className={`w-[6px] h-[6px] rounded-full  ${
                 status === "Successful"
-                  ? "bg-success_green"
+                  ? "dark:bg-success_green bg-[#0E871D]"
                   : status === "Pending"
-                  ? "bg-pending"
+                  ? "dark:bg-pending bg-[#DD900D]"
                   : status === "Failed"
                   ? "bg-red-500"
                   : ""
@@ -90,9 +111,9 @@ const TransactionDetails = ({ status }: any) => {
             <h4
               className={`${
                 status === "Successful"
-                  ? "text-success_green"
+                  ? "dark:text-success_green text-[#0E871D]"
                   : status === "Pending"
-                  ? "text-pending"
+                  ? "dark:text-pending text-[#DD900D]"
                   : status === "Failed"
                   ? "text-red-500"
                   : ""
@@ -103,13 +124,21 @@ const TransactionDetails = ({ status }: any) => {
           </div>
         </div>
         <div className="w-full mt-4 flex justify-between items-center">
-          <h4 className="text-gray-400 text-[12px] ">Rate</h4>
-          <h4 className="text-gray-400 text-[12px] ">1705.56/$</h4>
+          <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
+            Rate
+          </h4>
+          <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
+            1705.56/$
+          </h4>
         </div>
         <div className="w-full mt-4 flex justify-between items-center">
-          <h4 className="text-gray-400 text-[12px] ">Transaction ID</h4>
+          <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
+            Transaction ID
+          </h4>
           <div className="flex items-center gap-2">
-            <h4 className="text-gray-400 text-[12px] ">6521T5....wid</h4>
+            <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
+              6521T5....wid
+            </h4>
             <CopyToClipboard
               text="6521T5841sg3rgwid"
               onCopy={() => {
@@ -120,17 +149,21 @@ const TransactionDetails = ({ status }: any) => {
               }}
             >
               {onCopyTxnId ? (
-                <FiClipboard className="text-[16px] text-white" />
+                <FiClipboard className="text-[16px] dark:text-white text-gray-700" />
               ) : (
-                <FiCopy className="text-[16px] text-white" />
+                <FiCopy className="text-[16px] dark:text-white text-gray-700" />
               )}
             </CopyToClipboard>
           </div>
         </div>
         <div className="w-full  mt-4 flex justify-between items-center">
-          <h4 className="text-gray-400 text-[12px] ">Merchant Name</h4>
+          <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
+            Merchant Name
+          </h4>
           <div className="flex items-center gap-2">
-            <h4 className="text-gray-400 text-[12px] ">Mamudu Jeffrey</h4>
+            <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
+              Mamudu Jeffrey
+            </h4>
             <CopyToClipboard
               text="Mamudu Jeffrey"
               onCopy={() => {
@@ -141,17 +174,21 @@ const TransactionDetails = ({ status }: any) => {
               }}
             >
               {onCopyMerchantname ? (
-                <FiClipboard className="text-[16px] text-white" />
+                <FiClipboard className="text-[16px] dark:text-white text-gray-700" />
               ) : (
-                <FiCopy className="text-[16px] text-white" />
+                <FiCopy className="text-[16px] dark:text-white text-gray-700" />
               )}
             </CopyToClipboard>
           </div>
         </div>
         <div className="w-full mt-4 flex justify-between items-center">
-          <h4 className="text-gray-400 text-[12px] ">Bank Name</h4>
+          <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
+            Bank Name
+          </h4>
           <div className="flex items-center gap-2">
-            <h4 className="text-gray-400 text-[12px] ">Fidelity Bank</h4>
+            <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
+              Fidelity Bank
+            </h4>
             <CopyToClipboard
               text="Fidelity Bank"
               onCopy={() => {
@@ -162,17 +199,21 @@ const TransactionDetails = ({ status }: any) => {
               }}
             >
               {onCopyBank ? (
-                <FiClipboard className="text-[16px] text-white" />
+                <FiClipboard className="text-[16px] dark:text-white text-gray-700" />
               ) : (
-                <FiCopy className="text-[16px] text-white" />
+                <FiCopy className="text-[16px] dark:text-white text-gray-700" />
               )}
             </CopyToClipboard>
           </div>
         </div>
         <div className="w-full mt-4 flex justify-between items-center">
-          <h4 className="text-gray-400 text-[12px] ">Account Number</h4>
+          <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
+            Account Number
+          </h4>
           <div className="flex items-center gap-2">
-            <h4 className="text-gray-400 text-[12px] ">00125480881</h4>
+            <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
+              00125480881
+            </h4>
             <CopyToClipboard
               text="00125480881"
               onCopy={() => {
@@ -183,9 +224,9 @@ const TransactionDetails = ({ status }: any) => {
               }}
             >
               {onCopyAccountNo ? (
-                <FiClipboard className="text-[16px] text-white" />
+                <FiClipboard className="text-[16px] dark:text-white text-gray-700" />
               ) : (
-                <FiCopy className="text-[16px] text-white" />
+                <FiCopy className="text-[16px] dark:text-white text-gray-700" />
               )}
             </CopyToClipboard>
           </div>

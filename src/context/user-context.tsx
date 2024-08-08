@@ -1,59 +1,36 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { ContextValueType, PropsType } from "../types/index";
+
 export const UserContext = createContext<ContextValueType>({});
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider: React.FC<PropsType> = ({ children }) => {
-  const [theme, setTheme] = useState(
-    localStorage.getItem("theme") ? localStorage.getItem("theme") : null
+  const [theme, setTheme] = useState<string | null>(
+    localStorage.getItem("theme") || "system"
   );
+  const [userCurrency, setUserCurrency] = useState<string>("NGN");
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
   const element = document.documentElement;
 
-  useEffect(() => {
-    const updateTheme = () => {
-      if (
-        localStorage.theme === "dark" ||
-        (!("theme" in localStorage) && darkQuery.matches)
-      ) {
-        setTheme("dark");
+  const applyTheme = (theme: string | null) => {
+    if (theme === "dark") {
+      element.classList.add("dark");
+      updateMetaTags("dark");
+    } else if (theme === "light") {
+      element.classList.remove("dark");
+      updateMetaTags("light");
+    } else if (theme === "system") {
+      if (darkQuery.matches) {
         element.classList.add("dark");
         updateMetaTags("dark");
       } else {
-        setTheme("light");
         element.classList.remove("dark");
         updateMetaTags("light");
       }
-    };
+    }
+  };
 
-    const updateMetaTags = (theme: string) => {
-      const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-      if (themeColorMeta) {
-        themeColorMeta.setAttribute(
-          "content",
-          theme === "dark" ? "#0D0D0D" : "#FFFFFF"
-        );
-      }
-    };
-
-    updateTheme();
-    darkQuery.addEventListener("change", (e) => {
-      if (!("theme" in localStorage)) {
-        if (e.matches) {
-          setTheme("dark");
-          updateMetaTags("dark");
-        } else {
-          setTheme("light");
-          updateMetaTags("light");
-        }
-      }
-    });
-
-    return () => {
-      darkQuery.removeEventListener("change", updateTheme);
-    };
-  }, [darkQuery, element.classList]);
-  useEffect(() => {
+  const updateMetaTags = (theme: string) => {
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
     if (themeColorMeta) {
       themeColorMeta.setAttribute(
@@ -61,42 +38,35 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
         theme === "dark" ? "#0D0D0D" : "#FFFFFF"
       );
     }
-  }, [theme]);
+  };
 
   useEffect(() => {
-    switch (theme) {
-      case "dark":
-        setTheme("dark");
-        element.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-        break;
+    applyTheme(theme);
 
-      case "light":
-        setTheme("light");
-        element.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-        break;
-      default:
-        localStorage.removeItem("theme");
+    if (theme === "system") {
+      darkQuery.addEventListener("change", () => applyTheme("system"));
+    }
 
-        break;
+    return () => {
+      darkQuery.removeEventListener("change", () => applyTheme("system"));
+    };
+  }, [theme, darkQuery]);
+
+  useEffect(() => {
+    if (theme !== "system") {
+      localStorage.setItem("theme", theme as string);
+    } else {
+      localStorage.removeItem("theme");
     }
   }, [theme]);
 
-  darkQuery.addEventListener("change", (e) => {
-    if (!("theme" in localStorage)) {
-      if (e.matches) {
-        element.classList.add("dark");
-      } else {
-        element.classList.remove("dark");
-      }
-    }
-  });
   return (
     <UserContext.Provider
       value={{
         theme,
         setTheme,
+        userCurrency,
+        setUserCurrency,
       }}
     >
       {children}
