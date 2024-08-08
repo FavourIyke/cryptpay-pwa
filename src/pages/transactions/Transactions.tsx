@@ -9,14 +9,14 @@ const Transactions = () => {
   const [showHistory, setShowHistory] = useState<boolean>(false);
   return (
     <div
-      className={` w-full font-sora h-screen pb-16 lgss:pb-0 dark:bg-primary_dark `}
+      className={` w-full font-sora h-screen pb-16 lgss:pb-0 bg-white dark:bg-primary_dark `}
     >
       <Navbar />
       <div
-        className={` w-10/12 mds:w-8/12 md:7/12 border border-[#303030] rounded-xl mx-auto p-6 bg-[#1F1F1F] mt-12  lgss:w-2/5 xxl:w-1/3 `}
+        className={` w-10/12 mds:w-8/12 md:7/12 border shadow-lg dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-6 dark:bg-[#1F1F1F] mt-12  lgss:w-2/5 xxl:w-1/3 `}
       >
         <div className="w-full flex justify-between items-center">
-          <h4 className="text-gray-100 font-semibold text-[20px]">
+          <h4 className="text-gray-800 dark:text-gray-100 font-semibold text-[20px]">
             All Transactions
           </h4>
           <Link
@@ -26,9 +26,9 @@ const Transactions = () => {
                 setShowHistory(false);
               }
             }}
-            className="w-[40px] h-[40px] rounded-full bg-[#3D3D3D] flex justify-center items-center"
+            className="w-[40px] h-[40px] rounded-full bg-[#007AFF] bg-opacity-10 dark:bg-opacity-100 dark:bg-[#3D3D3D] flex justify-center items-center"
           >
-            <IoClose className="text-white text-[14px]" />
+            <IoClose className="text-black dark:text-white text-[14px]" />
           </Link>
         </div>
         {showHistory ? (
