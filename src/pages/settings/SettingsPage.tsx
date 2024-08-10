@@ -11,7 +11,7 @@ const SettingsPage = () => {
   const [logout, setLogout] = useState<boolean>(false);
   return (
     <div
-      className={` w-full font-sora h-screen pb-16 lgss:pb-0 bg-white dark:bg-primary_dark `}
+      className={` w-full font-sora h-screen overflow-auto pb-16  bg-white dark:bg-primary_dark `}
     >
       <Navbar />
       <div className={`${paddingX} w-full mt-12 lgss:flex lgss:gap-12 `}>
