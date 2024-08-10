@@ -38,10 +38,10 @@ const Dashboard = () => {
   const [bankAddedModal, setBankAddedModal] = useState<boolean>(false);
   return (
     <div
-      className={` w-full font-sora h-full lgss:h-screen pb-16 lgss:pb-0 bg-white dark:bg-primary_dark `}
+      className={` w-full font-sora h-screen overflow-auto pb-16  bg-white dark:bg-primary_dark `}
     >
       <Navbar />
-      <div className={`${paddingX} w-full mt-12 lgss:flex lgss:gap-12 `}>
+      <div className={`${paddingX}  w-full mt-12 lgss:flex lgss:gap-12 `}>
         <div className="w-full lgss:w-3/5">
           <div className="w-full  h-[401px] flex justify-center items-center">
             <div className="w-full bg-dashboardBg bg-cover bg-center py-6 rounded-[40px] h-full flex flex-col gap-24 justify-end items-center">
