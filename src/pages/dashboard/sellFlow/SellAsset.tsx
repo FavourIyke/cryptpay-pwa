@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { FiClipboard, FiCopy } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { CiExport } from "react-icons/ci";
 import { kudaLogo } from "../../../assets/images";
 import { SlArrowLeft } from "react-icons/sl";
+import useAuthAxios from "../../../utils/baseAxios";
+import { API } from "../../../constants/api";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { errorMessage } from "../../../utils/errorMessage";
 
 const SellAsset = ({
   setSellAssetModal,
@@ -15,6 +20,43 @@ const SellAsset = ({
   coin,
 }: any) => {
   const [onCopy, setOnCopy] = useState<boolean>(false);
+  // const axiosInstance = useAuthAxios();
+  // const getWalletAddy = async ({ crypto_type }: any) => {
+  //   const response = await axiosInstance.post(API.walletAddresses, {
+  //     crypto_type,
+  //   });
+  //   return response.data;
+  // };
+  // const completeGetAddy = useMutation({
+  //   mutationFn: getWalletAddy,
+  //   onSuccess: (r) => {
+  //     console.log(r);
+  //     // toast.success(r.message);
+  //     // queryClient.invalidateQueries({
+  //     //   queryKey: ["user-preferences"],
+  //     // });
+  //   },
+  //   onError: (e) => {
+  //     console.log(e);
+  //     const err = e as any;
+  //     toast.error(errorMessage(err?.message || err?.data?.message));
+  //   },
+  // });
+
+  // useEffect(() => {
+  //   completeGetAddy.mutate({
+  //     crypto_type: "eth",
+  //     // coin === "BTC"
+  //     //   ? "btc"
+  //     //   : coin === "ETH"
+  //     //   ? "eth"
+  //     //   : coin === "SOL"
+  //     //   ? "sol"
+  //     //   : coin === "USDT"
+  //     //   ? "usdt"
+  //     //   : "",
+  //   });
+  // }, [coin]);
 
   return (
     <div className="fixed inset-0 top-20 flex font-sora justify-start items-start pt-10 bg-white dark:bg-primary_dark   backdrop-blur-sm">

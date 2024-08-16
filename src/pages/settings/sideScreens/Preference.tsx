@@ -1,15 +1,86 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PiCurrencyCircleDollarBold } from "react-icons/pi";
 import { SlArrowLeft } from "react-icons/sl";
 import { useUser } from "../../../context/user-context";
 import { IoMoonSharp } from "react-icons/io5";
 import { RiSunFill } from "react-icons/ri";
+import useAuthAxios from "../../../utils/baseAxios";
+import { API } from "../../../constants/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { errorMessage } from "../../../utils/errorMessage";
 
 const Preference = ({ setSidePage, setScreen, setMode }: any) => {
-  const { theme } = useUser();
-  const [pushActive, setPushActive] = useState<boolean>(false);
-  const [emailActive, setEmailActive] = useState<boolean>(false);
-  const [promotionsActive, setPromotionsActive] = useState<boolean>(false);
+  const { theme, userPreferences, refetch2 } = useUser();
+  const axiosInstance = useAuthAxios();
+  // const queryClient = useQueryClient();
+
+  const updatePushN = async ({ push_notifications }: any) => {
+    const response = await axiosInstance.post(API.userPreferences, {
+      push_notifications,
+    });
+    return response.data;
+  };
+  const updateEmailN = async ({ email_notifications }: any) => {
+    const response = await axiosInstance.post(API.userPreferences, {
+      email_notifications,
+    });
+    return response.data;
+  };
+  const updatePromotionsN = async ({ promotion_notifications }: any) => {
+    const response = await axiosInstance.post(API.userPreferences, {
+      promotion_notifications,
+    });
+    return response.data;
+  };
+  const handleUpdatePushN = useMutation({
+    mutationFn: updatePushN,
+    onSuccess: (r) => {
+      // console.log(r);
+      toast.success(r.message);
+      // queryClient.invalidateQueries({
+      //   queryKey: ["user-preferences"],
+      // });
+      refetch2();
+    },
+    onError: (e) => {
+      console.log(e);
+      const err = e as any;
+      toast.error(errorMessage(err?.message || err?.data?.message));
+    },
+  });
+  const handleUpdateEmailN = useMutation({
+    mutationFn: updateEmailN,
+    onSuccess: (r) => {
+      toast.success(r.message);
+      // queryClient.invalidateQueries({
+      //   queryKey: ["user-preferences"],
+      // });
+      refetch2();
+    },
+    onError: (e) => {
+      console.log(e);
+      const err = e as any;
+      toast.error(errorMessage(err?.message || err?.data?.message));
+    },
+  });
+  const handleUpdatePromotionN = useMutation({
+    mutationFn: updatePromotionsN,
+    onSuccess: (r) => {
+      // console.log(r);
+      toast.success(r.message);
+      // queryClient.invalidateQueries({
+      //   queryKey: ["user-preferences"],
+      // });
+      refetch2();
+    },
+    onError: (e) => {
+      console.log(e);
+      const err = e as any;
+      toast.error(errorMessage(err?.message || err?.data?.message));
+    },
+  });
+
   return (
     <div className="w-full font-sora">
       <button
@@ -47,10 +118,7 @@ const Preference = ({ setSidePage, setScreen, setMode }: any) => {
           </div>
           {/* <SlArrowRight className="text-gray-400 dark:text-gray-200 text-[15px]" /> */}
         </button>
-        <button
-          onClick={() => {}}
-          className="w-full flex  justify-between items-center  bg-transparent"
-        >
+        <button className="w-full flex  justify-between items-center  bg-transparent">
           <div className="flex items-start gap-3">
             <div className="flex justify-center items-center  w-[32px] h-[32px] rounded-full dark:bg-gray-200 dark:text-gray-800 bg-text_blue text-white">
               <PiCurrencyCircleDollarBold className="text-[16px] text-white dark:text-gray-800" />
@@ -66,14 +134,21 @@ const Preference = ({ setSidePage, setScreen, setMode }: any) => {
           </div>
           <div className="flex justify-center gap-2 lgss:gap-4 mx-4 lgss:mx-0 items-center flex-col lgss:flex-row">
             <div
-              onClick={() => setPushActive((prev) => !prev)}
+              onClick={() => {
+                handleUpdatePushN.mutate({
+                  push_notifications:
+                    !userPreferences?.preferences.push_notifications,
+                });
+              }}
               className={`flex w-[52px] cursor-pointer h-8  rounded-full transition-all duration-500 ${
-                pushActive ? "bg-text_blue" : "bg-gray-600"
+                userPreferences?.preferences.push_notifications
+                  ? "bg-text_blue"
+                  : "bg-gray-600"
               }`}
             >
               <span
                 className={`h-8  w-8 rounded-full transition-all duration-500 bg-gray-100 ${
-                  pushActive ? "ml-5" : ""
+                  userPreferences?.preferences.push_notifications ? "ml-5" : ""
                 }`}
               ></span>
             </div>
@@ -98,14 +173,21 @@ const Preference = ({ setSidePage, setScreen, setMode }: any) => {
           </div>
           <div className="flex justify-center gap-2 lgss:gap-4 mx-4 lgss:mx-0 items-center flex-col lgss:flex-row">
             <div
-              onClick={() => setEmailActive((prev) => !prev)}
+              onClick={() => {
+                handleUpdateEmailN.mutate({
+                  email_notifications:
+                    !userPreferences?.preferences.email_notifications,
+                });
+              }}
               className={`flex w-[52px] cursor-pointer h-8  rounded-full transition-all duration-500 ${
-                emailActive ? "bg-text_blue" : "bg-gray-600"
+                userPreferences?.preferences.email_notifications
+                  ? "bg-text_blue"
+                  : "bg-gray-600"
               }`}
             >
               <span
                 className={`h-8  w-8 rounded-full transition-all duration-500 bg-gray-100 ${
-                  emailActive ? "ml-5" : ""
+                  userPreferences?.preferences.email_notifications ? "ml-5" : ""
                 }`}
               ></span>
             </div>
@@ -130,14 +212,23 @@ const Preference = ({ setSidePage, setScreen, setMode }: any) => {
           </div>
           <div className="flex justify-center gap-2 lgss:gap-4 mx-4 lgss:mx-0 items-center flex-col lgss:flex-row">
             <div
-              onClick={() => setPromotionsActive((prev) => !prev)}
+              onClick={() => {
+                handleUpdatePromotionN.mutate({
+                  promotion_notifications:
+                    !userPreferences?.preferences.promotion_notifications,
+                });
+              }}
               className={`flex w-[52px] cursor-pointer h-8  rounded-full transition-all duration-500 ${
-                promotionsActive ? "bg-text_blue" : "bg-gray-600"
+                userPreferences?.preferences.promotion_notifications
+                  ? "bg-text_blue"
+                  : "bg-gray-600"
               }`}
             >
               <span
                 className={`h-8  w-8 rounded-full transition-all duration-500 bg-gray-100 ${
-                  promotionsActive ? "ml-5" : ""
+                  userPreferences?.preferences.promotion_notifications
+                    ? "ml-5"
+                    : ""
                 }`}
               ></span>
             </div>

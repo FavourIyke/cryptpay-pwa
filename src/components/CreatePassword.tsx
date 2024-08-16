@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { SlArrowLeft } from "react-icons/sl";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import AuthNav from "./AuthNav";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import { HiOutlineCheckCircle } from "react-icons/hi";
 import { validateCreatePassword } from "../utils/validations";
+import { API } from "../constants/api";
+import useAuthAxios from "../utils/baseAxios";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { errorMessage } from "../utils/errorMessage";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const CreatePassword = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -12,12 +18,55 @@ const CreatePassword = () => {
   const [password, setPassword] = useState<string>("");
   const [passwordC, setPasswordC] = useState<string>("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const info = location.state;
+  const axiosInstance = useAuthAxios();
+
+  const handleSignIn = async ({
+    email,
+    username,
+    referral_code,
+    password,
+  }: any) => {
+    const response = await axiosInstance.post(API.signup, {
+      email,
+      username,
+      referral_code,
+      password,
+    });
+    return response.data;
+  };
+
+  const completeSignIn = useMutation({
+    mutationFn: handleSignIn,
+    onSuccess: (r) => {
+      toast.success(r.message);
+      setTimeout(() => {
+        navigate("/verify-mail", {
+          state: {
+            email: info.email,
+          },
+        });
+      }, 1000);
+    },
+    onError: (error: any) => {
+      toast.error(
+        errorMessage((error?.data as any)?.message || String(error?.data))
+      );
+    },
+  });
 
   const createAccount = () => {
     if (!validateCreatePassword(password, passwordC)) {
       return;
     }
-    navigate("/login");
+    const data = {
+      username: info.username,
+      email: info.email,
+      referral_code: null,
+      password: password,
+    };
+    completeSignIn.mutate(data);
   };
   const upperCaseRegex = /[A-Z]/;
   const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
@@ -29,16 +78,16 @@ const CreatePassword = () => {
       <div
         className={` w-9/12 mds:w-7/12 md:6/12 border  dark:border-[#303030]  border-[#E6E6E6] rounded-xl mx-auto p-6 dark:bg-[#1F1F1F] mt-12  lgss:w-1/3 xxl:w-1/3 `}
       >
-        {/* <Link to="/sign-up" className="flex items-center gap-2 ">
+        <Link to="/sign-up" className="flex items-center gap-2 ">
           <SlArrowLeft className="dark:text-[#D8D8D8] text-gray-800 text-[12px]" />
           <h4 className="dark:text-[#D8D8D8] text-gray-800 text-[14px]">
             Back
           </h4>
-        </Link> */}
-        <h4 className="text-gray-800 dark:text-gray-100  font-semibold text-[20px]">
+        </Link>
+        <h4 className="text-gray-800 dark:text-gray-100 mt-6 font-semibold text-[20px]">
           Create Password
         </h4>
-        <div className="mt-6 w-full">
+        <div className="mt-4 w-full">
           <div className="w-full">
             <label className="text-gray-800 text-[14px]  dark:text-white">
               Password
@@ -125,14 +174,18 @@ const CreatePassword = () => {
           </div>
           <button
             onClick={createAccount}
-            disabled={!password || !passwordC}
+            disabled={!password || !passwordC || completeSignIn.isPending}
             className={`w-full h-[52px] rounded-[18px] mt-12 ${
               !password || !passwordC
                 ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
                 : "bg-text_blue text-white"
             }  flex justify-center items-center  font-semibold`}
           >
-            Create Password
+            {completeSignIn.isPending ? (
+              <ClipLoader color="#FFFFFF" size={30} />
+            ) : (
+              "Create account"
+            )}
           </button>
         </div>
       </div>

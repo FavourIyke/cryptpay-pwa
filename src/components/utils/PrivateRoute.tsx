@@ -9,7 +9,7 @@ const PrivateRoute: FC<{ children: any }> = ({ children, ...rest }) => {
   return token && token !== "none" ? (
     <>{children}</>
   ) : !token ? (
-    <></>
+    <Navigate to="/login" state={{ from: location.pathname }} />
   ) : (
     <Navigate to="/login" state={{ from: location.pathname }} />
   );

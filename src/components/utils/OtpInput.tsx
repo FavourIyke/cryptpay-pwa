@@ -16,6 +16,17 @@ const OtpInputField: React.FC<OtpInputFieldProps> = ({
   shouldAutoFocus = true,
 }) => {
   const { theme } = useUser();
+  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const getThemeBasedImage = () => {
+    if (theme === "dark") {
+      return "dark";
+    } else if (theme === "light") {
+      return "light";
+    } else if (theme === "system") {
+      return darkQuery.matches ? "dark" : "light";
+    }
+    return "dark"; // fallback in case of an unexpected value
+  };
 
   const handlePaste = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -75,7 +86,8 @@ const OtpInputField: React.FC<OtpInputFieldProps> = ({
     },
   };
 
-  const styles = theme === "dark" ? darkThemeStyles : lightThemeStyles;
+  const styles =
+    getThemeBasedImage() === "dark" ? darkThemeStyles : lightThemeStyles;
 
   return (
     <div className="flex w-full flex-col justify-center lgss:justify-start lgss:px-0 items-center">
