@@ -9,7 +9,7 @@ interface ITokenExpired {
 }
 // Define your custom hook
 const useAuthAxios = () => {
-  const [, setCookie, removeCookie] = useCookies(["token"]);
+  const [, setCookie, removeCookie] = useCookies(["cryptpay-token"]);
 const cookies = new Cookies();
   const handleError = (error: AxiosError) => {
     if (error.response) {
@@ -19,7 +19,7 @@ const cookies = new Cookies();
         (error.response.data as ITokenExpired)?.error === "Unauthorized" &&
         (error.response.data as ITokenExpired)?.message === "Session expired"
       ) {
-        removeCookie("token");
+        removeCookie("cryptpay-token");
       }
       return error.response;
     } else if (error.request) {
@@ -33,7 +33,7 @@ const cookies = new Cookies();
   baseAxios.interceptors.request.use(
     async (config) => {
       if (!config.headers?.Authorization) {
-        const token = cookies.get("token");
+        const token = cookies.get("cryptpay-token");
         if (token) {
           if (!config.headers) {
             config.headers = {} as AxiosRequestHeaders;

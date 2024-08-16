@@ -15,10 +15,10 @@ import FinalModal from "./sellFlow/FinalModal";
 import BuyCoin from "./buyFlow/BuyCoin";
 import BuyReceipt from "./buyFlow/BuyReceipt";
 import AddBankModal from "./addBank/AddBankModal";
-import { RiSunFill } from "react-icons/ri";
-import { IoMoonSharp } from "react-icons/io5";
 import BankAddedModal from "./addBank/BankAddedModal";
 import { useUser } from "../../context/user-context";
+import { SlArrowRight } from "react-icons/sl";
+import { TiWarning } from "react-icons/ti";
 
 const Dashboard = () => {
   const [showBalance, setShowBalance] = useState<boolean>(false);
@@ -36,6 +36,8 @@ const Dashboard = () => {
   const [coinAmount, setCoinAmount] = useState("");
   const [addBankModal, setAddBankModal] = useState<boolean>(false);
   const [bankAddedModal, setBankAddedModal] = useState<boolean>(false);
+  const { userDetails } = useUser();
+
   return (
     <div
       className={` w-full font-sora h-screen overflow-auto pb-16  bg-white dark:bg-primary_dark `}
@@ -44,7 +46,10 @@ const Dashboard = () => {
       <div className={`${paddingX}  w-full mt-12 lgss:flex lgss:gap-12 `}>
         <div className="w-full lgss:w-3/5">
           <div className="w-full  h-[401px] flex justify-center items-center">
-            <div className="w-full bg-dashboardBg bg-cover bg-center py-6 rounded-[40px] h-full flex flex-col gap-24 justify-end items-center">
+            <div className="w-full bg-dashboardBg bg-cover bg-center py-6 rounded-[40px] h-full flex flex-col gap-[70px] mds:gap-24 justify-end items-center">
+              <h4 className="mds:hidden text-[14px]  capitalize dark:text-gray-200 font-medium ">
+                Hello, {userDetails?.data?.profile.username}
+              </h4>
               <div>
                 <h4 className="uppercase text-center text-white tracking-wider text-[10px] font-semibold ">
                   total payout
@@ -72,7 +77,7 @@ const Dashboard = () => {
                   ~ NGN 10,235,674.98
                 </h4>
               </div>
-              <div className="flex gap-12 justify-center items-center">
+              <div className="flex gap-6 xxs:gap-10 mds:gap-16 justify-center items-center">
                 <div>
                   <button
                     onClick={() => {
@@ -112,6 +117,25 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+          <Link
+            to="/kyc"
+            className="w-full flex justify-between items-center gap-4 px-4 py-3 mt-6 bg-[#664101] rounded-2xl text-[#F5B546] "
+          >
+            <div className="flex  w-9/12 items-start gap-3">
+              <div>
+                <TiWarning className="text-[28px]" />
+              </div>
+
+              <div>
+                <h4 className=" font-bold text-[16px]">KYC Incomplete</h4>
+                <h4 className="  text-[13px] text-left">
+                  It appears that you have not yet completed your Know Your
+                  Customer (KYC) verification process.
+                </h4>
+              </div>
+            </div>
+            <SlArrowRight className="text-white text-[16px]" />
+          </Link>
           <div className="flex w-[70%] xs:w-3/5 mds:w-1/2 mt-8 px-2 bg-[#F1F1F1] dark:bg-[#1C1C1C] h-[56px] rounded-2xl items-center">
             <button
               onClick={() => setSellRateFlow(false)}

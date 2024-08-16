@@ -1,9 +1,38 @@
+import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { RiErrorWarningFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { API } from "../../constants/api";
+import useAuthAxios from "../../utils/baseAxios";
+import { toast } from "react-toastify";
+import { errorMessage } from "../../utils/errorMessage";
+import { useAuth } from "../../context/auth-context";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const LogoutModal = ({ setLogout }: any) => {
+  const { logout } = useAuth();
   const navigate = useNavigate();
+  const axiosInstance = useAuthAxios();
+
+  const handleLogout = async () => {
+    const response = await axiosInstance.post(API.logout, {});
+    return response.data;
+  };
+  const completeLogout = useMutation({
+    mutationFn: handleLogout,
+    onSuccess: (r) => {
+      toast.success(r.message);
+      setTimeout(() => {
+        logout();
+      }, 1500);
+    },
+    onError: (error: any) => {
+      console.log(error);
+      toast.error(
+        errorMessage((error?.data as any)?.error || String(error?.data))
+      );
+    },
+  });
   return (
     <div className="fixed inset-0 flex font-sora justify-center items-center  -top-20   backdrop-blur-sm ">
       <div
@@ -28,11 +57,15 @@ const LogoutModal = ({ setLogout }: any) => {
             </button>
             <button
               onClick={() => {
-                navigate("/login");
+                completeLogout.mutate();
               }}
               className={`w-10/12 h-[52px] rounded-[18px] dark:bg-[#DD524D] bg-[#D42620] mt-4 text-white flex justify-center items-center  font-semibold`}
             >
-              Log out
+              {completeLogout.isPending ? (
+                <ClipLoader color="#FFFFFF" size={30} />
+              ) : (
+                "Log out"
+              )}
             </button>
           </div>
         </div>

@@ -36,7 +36,7 @@ const RateBoard = ({
           <h4 className="dark:text-gray-400 text-black font-medium text-[15px]">
             1780/$
           </h4>
-          <SlArrowRight className="text-black dark:text-white txt-[24px]" />
+          <SlArrowRight className="text-black dark:text-white text-[14px]" />
         </div>
       </div>
       <div
@@ -65,7 +65,7 @@ const RateBoard = ({
           <h4 className="dark:text-gray-400 text-black font-medium text-[15px]">
             1780/$
           </h4>
-          <SlArrowRight className="text-black dark:text-white txt-[24px]" />
+          <SlArrowRight className="text-black dark:text-white text-[14px]" />
         </div>
       </div>
       <div
@@ -94,7 +94,7 @@ const RateBoard = ({
           <h4 className="dark:text-gray-400 text-black font-medium text-[15px]">
             1780/$
           </h4>
-          <SlArrowRight className="text-black dark:text-white txt-[24px]" />
+          <SlArrowRight className="text-black dark:text-white text-[14px]" />
         </div>
       </div>
       <div
@@ -123,7 +123,7 @@ const RateBoard = ({
           <h4 className="dark:text-gray-400 text-black font-medium text-[15px]">
             1780/$
           </h4>
-          <SlArrowRight className="text-black dark:text-white txt-[24px]" />
+          <SlArrowRight className="text-black dark:text-white text-[14px]" />
         </div>
       </div>
     </div>

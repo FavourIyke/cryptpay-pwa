@@ -3,11 +3,16 @@ import { SlArrowLeft } from "react-icons/sl";
 import { Link, useNavigate } from "react-router-dom";
 import AuthNav from "./AuthNav";
 import { toast } from "react-toastify";
+import useAuthAxios from "../utils/baseAxios";
+import { API } from "../constants/api";
+import { useMutation } from "@tanstack/react-query";
+import { errorMessage } from "../utils/errorMessage";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState<string>("");
   const navigate = useNavigate();
-
+  const axiosInstance = useAuthAxios();
   const validateEmail = (mail: string) => {
     if (!mail) {
       toast("Kindly tell us your mail", { type: "error" });
@@ -23,11 +28,38 @@ const ForgotPassword = () => {
 
     return true;
   };
+  const handleForgotPassword = async ({ email }: any) => {
+    const response = await axiosInstance.post(API.forgotPassword, {
+      email,
+    });
+    return response.data;
+  };
+  const completeForgotP = useMutation({
+    mutationFn: handleForgotPassword,
+    onSuccess: (r) => {
+      toast.success(r.message);
+      navigate("/reset-password", {
+        state: {
+          email: email,
+        },
+      });
+    },
+    onError: (error: any) => {
+      console.log(error);
+      toast.error(
+        errorMessage((error?.data as any)?.message || String(error?.data))
+      );
+    },
+  });
   const handleReset = () => {
     if (!validateEmail(email)) {
       return;
     }
-    navigate("/verify-mail-change");
+    const data = {
+      email: email,
+    };
+
+    completeForgotP.mutate(data);
   };
 
   return (
@@ -66,14 +98,18 @@ const ForgotPassword = () => {
         </div>
         <button
           onClick={handleReset}
-          disabled={!email}
+          disabled={!email || completeForgotP.isPending}
           className={`w-full h-[52px] rounded-[18px] mt-12 ${
             !email
               ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
               : "bg-text_blue text-white"
           }  flex justify-center items-center  font-semibold`}
         >
-          Reset
+          {completeForgotP.isPending ? (
+            <ClipLoader color="#FFFFFF" size={30} />
+          ) : (
+            "Reset"
+          )}
         </button>
       </div>
     </div>

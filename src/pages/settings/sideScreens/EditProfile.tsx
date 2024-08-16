@@ -1,12 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import Webcam from "react-webcam";
 import { SlArrowLeft } from "react-icons/sl";
 import { avatar } from "../../../assets/images";
 import { FaCamera } from "react-icons/fa6";
 import { validateSaveDetails } from "../../../utils/validations";
+import { useUser } from "../../../context/user-context";
 
 const EditProfile = ({ setSidePage, setScreen }: any) => {
+  const { userDetails } = useUser();
+
   const [fullName, setFullName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
+  const [showWebcam, setShowWebcam] = useState(false);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const webcamRef = useRef<Webcam>(null);
+
+  const handleImageChoice = () => {
+    const userChoice = window.confirm("Would you like to take a selfie?");
+    if (userChoice) {
+      setShowWebcam(true);
+    } else {
+      document.getElementById("fileInput")?.click();
+    }
+  };
+  // console.log(imageSrc);
+  const handleCapture = () => {
+    const image = webcamRef.current?.getScreenshot();
+    if (image) {
+      setImageSrc(image);
+      setShowWebcam(false);
+    }
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        setImageSrc(fileReader.result as string);
+        console.log(fileReader.result); // Log the result here
+      };
+      fileReader.readAsDataURL(event.target.files[0]);
+    }
+  };
 
   const handleSave = () => {
     if (!validateSaveDetails(username, fullName)) {
@@ -28,14 +63,47 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
       <h4 className="text-gray-800 dark:text-gray-100 mt-12 lgss:mt-8 font-semibold text-[18px]">
         Edit Profile
       </h4>
-      <div className="flex justify-start mt-12 items-end">
-        <div className="w-[88px] h-[88px] rounded-full">
-          <img src={avatar} alt="" className="w-full h-full bg-cover" />
+      {showWebcam ? (
+        <div className="w-full mt-4 flex flex-col justify-center items-center gap-4">
+          <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
+          <button
+            onClick={handleCapture}
+            className="mt-2 text-white p-2 bg-text_blue rounded-xl text-[14px] font-medium"
+          >
+            Capture Photo
+          </button>
         </div>
-        <div className="w-[32px] h-[32px] relative right-5 flex justify-center items-center rounded-full dark:bg-[#424242]  bg-text_blue text-white text-[16px]">
-          <FaCamera />
+      ) : (
+        <div className="flex justify-start mt-12 items-end">
+          <div
+            className={
+              imageSrc
+                ? "w-[90px] h-[80px] rounded-full"
+                : "w-[88px] h-[88px] rounded-full"
+            }
+          >
+            <img
+              src={imageSrc ? imageSrc : avatar}
+              alt=""
+              className="w-full h-full rounded-full obj-cover"
+            />
+          </div>
+
+          <div
+            onClick={handleImageChoice}
+            className="w-[32px] h-[32px] relative right-5 flex justify-center items-center cursor-pointer rounded-full dark:bg-[#424242]  bg-text_blue text-white text-[16px]"
+          >
+            <FaCamera />
+          </div>
+          <input
+            type="file"
+            id="fileInput"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handleFileUpload}
+          />
         </div>
-      </div>
+      )}
       <div className="w-full mt-8">
         <div className="w-full">
           <label className="text-gray-800 text-[14px]  dark:text-white">
@@ -65,7 +133,7 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="daniel001"
+            placeholder={userDetails?.data?.username}
             className="w-full dark:text-gray-400 text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
           />
         </div>

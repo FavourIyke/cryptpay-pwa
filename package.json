@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@hookform/resolvers": "^2.9.10",
+    "@smile_identity/smart-camera-web": "1.0.2",
     "@tanstack/react-query": "^5.51.11",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -37,6 +38,7 @@
     "react-shimmer": "^3.2.0",
     "react-spinners": "^0.14.1",
     "react-toastify": "^10.0.5",
+    "react-webcam": "^7.2.0",
     "react18-input-otp": "^1.1.2",
     "typescript": "^4.9.5",
     "uuid": "^9.0.0",

@@ -19,7 +19,7 @@ const ThemeProvider = () => {
 
   return (
     <ToastContainer
-      autoClose={2000}
+      autoClose={1500}
       theme={getThemeBasedImage()}
       className="toast-container"
     />

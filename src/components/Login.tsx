@@ -1,19 +1,67 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AuthNav from "./AuthNav";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { validateLoginDetails } from "../utils/validations";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { errorMessage } from "../utils/errorMessage";
+import { API } from "../constants/api";
+import useAuthAxios from "../utils/baseAxios";
+import ClipLoader from "react-spinners/ClipLoader";
+import { useAuth } from "../context/auth-context";
 
 const Login = () => {
+  const { token } = useAuth();
+  const location = useLocation();
+  const { state } = location;
+  const { from = "/dashboard" } = state || {};
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
+  const axiosInstance = useAuthAxios();
+
+  useEffect(() => {
+    if (token && token !== "none") {
+      navigate(from);
+    }
+  }, [token]);
+  const handleSignIn = async ({ email, password }: any) => {
+    const response = await axiosInstance.post(API.login, {
+      email,
+      password,
+    });
+    return response.data;
+  };
+
+  const completeLogin = useMutation({
+    mutationFn: handleSignIn,
+    onSuccess: (r) => {
+      toast.success(r.message);
+      setTimeout(() => {
+        navigate("/verify-login", {
+          state: {
+            email: email,
+          },
+        });
+      }, 1000);
+    },
+    onError: (error: any) => {
+      toast.error(
+        errorMessage((error?.data as any)?.message || String(error?.data))
+      );
+    },
+  });
   const handleLogin = () => {
     if (!validateLoginDetails) {
       return;
     }
-    navigate("/dashboard");
+    const data = {
+      email: email,
+      password: password,
+    };
+    completeLogin.mutate(data);
   };
 
   return (
@@ -72,14 +120,18 @@ const Login = () => {
           </Link>
           <button
             onClick={handleLogin}
-            disabled={!email || !password}
+            disabled={!email || !password || completeLogin.isPending}
             className={`w-full h-[52px] rounded-[18px] mt-12 ${
               !email || !password
                 ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
                 : "bg-text_blue text-white"
             }  flex justify-center items-center  font-semibold`}
           >
-            Login
+            {completeLogin.isPending ? (
+              <ClipLoader color="#FFFFFF" size={30} />
+            ) : (
+              "Login"
+            )}
           </button>
           <h4 className="dark:text-white text-center text-gray-800 mt-4 text-[12px] ">
             Don't have an account yet?{" "}

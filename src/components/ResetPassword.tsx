@@ -1,23 +1,74 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiOutlineCheckCircle } from "react-icons/hi";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import { validateCreatePassword } from "../utils/validations";
 import AuthNav from "./AuthNav";
 import { SlArrowLeft } from "react-icons/sl";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import OtpInputField from "./utils/OtpInput";
+import useAuthAxios from "../utils/baseAxios";
+import { API } from "../constants/api";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { errorMessage } from "../utils/errorMessage";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showCPassword, setShowCPassword] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const [passwordC, setPasswordC] = useState<string>("");
+  const [otp, setOtp] = useState<string>("");
+  const axiosInstance = useAuthAxios();
+  const location = useLocation();
+  const info = location.state;
   const navigate = useNavigate();
 
-  const createAccount = () => {
+  const handleChange = (otp: React.SetStateAction<string>) => {
+    setOtp(otp);
+  };
+
+  const handleResetPassword = async ({
+    email,
+    reset_code,
+    password,
+    password_confirmation,
+  }: any) => {
+    const response = await axiosInstance.post(API.resetPassword, {
+      email,
+      reset_code,
+      password,
+      password_confirmation,
+    });
+    return response.data;
+  };
+
+  const completeResetPassword = useMutation({
+    mutationFn: handleResetPassword,
+    onSuccess: (r) => {
+      toast.success(r.message);
+      setTimeout(() => {
+        navigate("/reset-success");
+      }, 1000);
+    },
+    onError: (error: any) => {
+      toast.error(
+        errorMessage((error?.data as any)?.message || String(error?.data))
+      );
+    },
+  });
+
+  const resetPassword = () => {
     if (!validateCreatePassword(password, passwordC)) {
       return;
     }
-    navigate("/reset-success");
+    const data = {
+      email: info.email,
+      reset_code: otp,
+      password: password,
+      password_confirmation: passwordC,
+    };
+    completeResetPassword.mutate(data);
   };
   const upperCaseRegex = /[A-Z]/;
   const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
@@ -35,10 +86,12 @@ const ResetPassword = () => {
             Back
           </h4>
         </Link>
-        <h4 className="text-gray-800 dark:text-gray-100 mt-4 font-semibold text-[20px]">
+        <h4 className="text-gray-800 dark:text-gray-100 mt-4 mb-6 font-semibold text-[20px]">
           Create New Password
         </h4>
-        <div className="mt-6 w-full">
+        <OtpInputField otp={otp} setOtp={setOtp} handleChange={handleChange} />
+
+        <div className="mt-4 w-full">
           <div className="w-full">
             <label className="text-gray-800 text-[14px]  dark:text-white">
               Password
@@ -124,15 +177,24 @@ const ResetPassword = () => {
             </div>
           </div>
           <button
-            onClick={createAccount}
-            disabled={!password || !passwordC}
+            onClick={resetPassword}
+            disabled={
+              !password ||
+              !passwordC ||
+              otp.length !== 6 ||
+              completeResetPassword.isPending
+            }
             className={`w-full h-[52px] rounded-[18px] mt-12 ${
               !password || !passwordC
                 ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
                 : "bg-text_blue text-white"
             }  flex justify-center items-center  font-semibold`}
           >
-            Reset Password
+            {completeResetPassword.isPending ? (
+              <ClipLoader color="#FFFFFF" size={30} />
+            ) : (
+              "Reset password"
+            )}
           </button>
         </div>
       </div>
