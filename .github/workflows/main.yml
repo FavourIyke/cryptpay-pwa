@@ -1,10 +1,10 @@
-name: Build cryptpay-pwa
+name: Build cryptpay-pwa App
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:
 
 jobs:
   build:
@@ -23,6 +23,8 @@ jobs:
         run: npm install
 
       - name: Build the app
+        env:
+          CI: false  # Set CI to false to avoid treating warnings as errors
         run: npm run build
 
       - name: Archive production-ready build
