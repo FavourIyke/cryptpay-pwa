@@ -1,9 +1,10 @@
-name: Build crpytpay-pwa
+name: Build cryptpay-pwa
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:  # Allows manual triggering
 
 jobs:
   build:
@@ -16,7 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 'lts' # or '18.x' for the latest major version
+          node-version: 'lts'
 
       - name: Install dependencies
         run: npm install
