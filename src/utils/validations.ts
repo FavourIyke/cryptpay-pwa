@@ -45,7 +45,7 @@ import { toast } from "react-toastify";
       return false;
     }
     const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /[!@#_$%^&*(),.?":{}|<>]/;
     if (!passwordRegex.test(password)) {
      
       toast("Password must contain atleast 8 characters, 1 uppercase, 1 lowercase and 1 special character", { type: "error" });
@@ -95,6 +95,25 @@ import { toast } from "react-toastify";
     }
      if (!fullname) {
       toast("Kindly tell us your full name", { type: "error" });
+      return false;
+    }
+
+    return true;
+  };
+
+
+  export const validateBvn = (bvnno: string, surnamee: string) => {
+    if (!bvnno) {
+      toast("Enter your BVN", { type: "error" });
+      return false;
+    }
+    if (!surnamee) {
+      toast("Enter your surname", { type: "error" });
+      return false;
+    }
+    const bvnRegex = /^[0-9]{11}$/;
+    if (!bvnRegex.test(bvnno)) {
+      toast("This BVN is not correct", { type: "error" });
       return false;
     }
 

@@ -8,10 +8,13 @@ import CurrencyChange from "./sideScreens/CurrencyChange";
 import Referral from "./sideScreens/Referral";
 import InvitedFriends from "./sideScreens/InvitedFriends";
 import Leaderboard from "./sideScreens/Leaderboard";
+import Security from "./sideScreens/Security";
+import TransactionPin from "./sideScreens/TransactionPin";
 
 const SidePage = ({ setSidePage, setScreen, screen }: any) => {
   const { theme } = useUser();
   const [mode, setMode] = useState<number>(1);
+  const [secScreen, setSecScreen] = useState<number>(1);
   const [refMode, setRefMode] = useState<number>(1);
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -51,6 +54,20 @@ const SidePage = ({ setSidePage, setScreen, screen }: any) => {
                 <Mode setMode={setMode} />
               ) : mode === 3 ? (
                 <CurrencyChange setMode={setMode} />
+              ) : null}
+            </div>
+          ) : screen === 6 ? (
+            <div className="">
+              {secScreen === 1 ? (
+                <Security
+                  setSidePage={setSidePage}
+                  setScreen={setScreen}
+                  setSecScreen={setSecScreen}
+                />
+              ) : secScreen === 2 ? (
+                <TransactionPin setSecScreen={setSecScreen} />
+              ) : secScreen === 3 ? (
+                <div></div>
               ) : null}
             </div>
           ) : screen === 4 ? (

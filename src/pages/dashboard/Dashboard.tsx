@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { paddingX } from "../../constants";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
@@ -19,6 +19,12 @@ import BankAddedModal from "./addBank/BankAddedModal";
 import { useUser } from "../../context/user-context";
 import { SlArrowRight } from "react-icons/sl";
 import { TiWarning } from "react-icons/ti";
+import GenerateWallet from "./sellFlow/GenerateWallet";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { API } from "../../constants/api";
+import { errorMessage } from "../../utils/errorMessage";
+import useAuthAxios from "../../utils/baseAxios";
 
 const Dashboard = () => {
   const [showBalance, setShowBalance] = useState<boolean>(false);
@@ -36,7 +42,28 @@ const Dashboard = () => {
   const [coinAmount, setCoinAmount] = useState("");
   const [addBankModal, setAddBankModal] = useState<boolean>(false);
   const [bankAddedModal, setBankAddedModal] = useState<boolean>(false);
+  const [generateAddyModal, setGenerateAddyModal] = useState<boolean>(false);
+  const [walletAddy, setWalletAddy] = useState<string>("");
   const { userDetails } = useUser();
+  const axiosInstance = useAuthAxios();
+  const [networks, setNetworks] = useState<any[]>([]);
+
+  const getKycStatus = async () => {
+    const response = await axiosInstance.get(API.checkKycStatus);
+    return response.data;
+  };
+  const { data: kycStatus, error: error2 } = useQuery({
+    queryKey: ["kyc-status"],
+    queryFn: getKycStatus,
+    retry: 1,
+  });
+
+  useEffect(() => {
+    if (error2) {
+      const newError = error2 as any;
+      toast.error(errorMessage(newError?.message || newError?.data?.message));
+    }
+  }, [error2]);
 
   return (
     <div
@@ -117,25 +144,30 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <Link
-            to="/kyc"
-            className="w-full flex justify-between items-center gap-4 px-4 py-3 mt-6 bg-[#664101] rounded-2xl text-[#F5B546] "
-          >
-            <div className="flex  w-9/12 items-start gap-3">
-              <div>
-                <TiWarning className="text-[28px]" />
-              </div>
+          {kycStatus?.data.kyc_level === "0" && (
+            <Link
+              to="/kyc"
+              className="w-full flex justify-between items-center gap-4 px-4 py-3 mt-6 bg-[#664101] rounded-2xl text-[#F5B546] "
+            >
+              <div className="flex  w-9/12 items-start gap-3">
+                <div>
+                  <TiWarning className="text-[28px]" />
+                </div>
 
-              <div>
-                <h4 className=" font-bold text-[16px]">KYC Incomplete</h4>
-                <h4 className="  text-[13px] text-left">
-                  It appears that you have not yet completed your Know Your
-                  Customer (KYC) verification process.
-                </h4>
+                <div>
+                  <h4 className=" font-bold text-[16px]">KYC Incomplete</h4>
+                  <h4 className="  text-[12px] mt-1 text-left">
+                    {kycStatus?.message}
+                  </h4>
+                  <h4 className="  text-[11px] mt-1 text-left">
+                    It appears that you have not yet completed your Know Your
+                    Customer (KYC) verification process.
+                  </h4>
+                </div>
               </div>
-            </div>
-            <SlArrowRight className="text-white text-[16px]" />
-          </Link>
+              <SlArrowRight className="text-white text-[16px]" />
+            </Link>
+          )}
           <div className="flex w-[70%] xs:w-3/5 mds:w-1/2 mt-8 px-2 bg-[#F1F1F1] dark:bg-[#1C1C1C] h-[56px] rounded-2xl items-center">
             <button
               onClick={() => setSellRateFlow(false)}
@@ -166,6 +198,8 @@ const Dashboard = () => {
             sellRateFlow={sellRateFlow}
             setSellRate={setSellRate}
             setCoin={setCoin}
+            networks={networks}
+            setNetworks={setNetworks}
           />
         </div>
         <div className="w-full lgss:w-2/5 mt-12 lgss:mt-6">
@@ -199,6 +233,7 @@ const Dashboard = () => {
             setSelectCoinModal={setSelectCoinModal}
             setCoin={setCoin}
             setSelectNetworkModal={setSelectNetworkModal}
+            setNetworks={setNetworks}
           />
         )}
       </div>
@@ -210,6 +245,7 @@ const Dashboard = () => {
           coin={coin}
           network={network}
           setNetwork={setNetwork}
+          networks={networks}
           sellRate={sellRate}
           setBuyCoinModal={setBuyCoinModal}
         />
@@ -218,18 +254,32 @@ const Dashboard = () => {
         <SelectBank
           setSelectBankModal={setSelectBankModal}
           setSelectNetworkModal={setSelectNetworkModal}
-          setSellAssetModal={setSellAssetModal}
+          setGenerateAddyModal={setGenerateAddyModal}
           setAddBankModal={setAddBankModal}
+        />
+      )}
+      {generateAddyModal && (
+        <GenerateWallet
+          setGenerateAddyModal={setGenerateAddyModal}
+          setSellAssetModal={setSellAssetModal}
+          setSelectBankModal={setSelectBankModal}
+          coin={coin}
+          network={network}
+          setNetwork={setNetwork}
+          walletAddy={walletAddy}
+          setWalletAddy={setWalletAddy}
         />
       )}
       {sellAssetModal && (
         <SellAsset
           setSellAssetModal={setSellAssetModal}
-          setSelectBankModal={setSelectBankModal}
+          setGenerateAddyModal={setGenerateAddyModal}
           setFinalModal={setFinalModal}
           coin={coin}
           network={network}
           setNetwork={setNetwork}
+          walletAddy={walletAddy}
+          setWalletAddy={setWalletAddy}
         />
       )}
       {finalModal && (
@@ -238,6 +288,7 @@ const Dashboard = () => {
           setSellAssetModal={setSellAssetModal}
           sellRate={sellRate}
           setBuyReceiptModal={setBuyReceiptModal}
+          setWalletAddy={setWalletAddy}
         />
       )}
       {buyCoinModal && (

@@ -68,7 +68,7 @@ const ForgotPassword = () => {
     >
       <AuthNav />
       <div
-        className={` w-9/12 mds:w-7/12 md:6/12 border  dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-6 dark:bg-[#1F1F1F] mt-12  lgss:w-1/3 xxl:w-1/3 `}
+        className={` w-11/12 mds:w-9/12 md:6/12 lgss:w-1/2 xxl:w-[35%] xxxl:w-[25%] border  dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-6 dark:bg-[#1F1F1F] mt-12   `}
       >
         <Link to="/login" className="flex items-center gap-2 ">
           <SlArrowLeft className="dark:text-[#D8D8D8] text-gray-800 text-[12px]" />

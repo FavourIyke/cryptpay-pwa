@@ -95,7 +95,7 @@ const MainPage = ({ setScreen, setSidePage, setLogout }: any) => {
         onClick={() => {
           setLogout(true);
         }}
-        className="w-full hidden lgss:flex justify-between items-center px-4 mt-12 bg-transparent"
+        className="w-full flex justify-between items-center px-4 mt-12 bg-transparent"
       >
         <div className="flex items-center gap-4">
           <div className="flex justify-center items-center w-[32px] h-[32px] rounded-full bg-[#DD524D] dark:text-gray-800  text-white">

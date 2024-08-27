@@ -1,15 +1,37 @@
-import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import React, { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
-import { btc, eth, usdt, solana } from "../../../assets/images";
+import { toast } from "react-toastify";
+import { API } from "../../../constants/api";
+import useAuthAxios from "../../../utils/baseAxios";
+import { errorMessage } from "../../../utils/errorMessage";
 
 const SelectCoin = ({
   setSelectCoinModal,
   setSelectNetworkModal,
   setCoin,
+  setNetworks,
 }: any) => {
+  const axiosInstance = useAuthAxios();
+  const getCoins = async () => {
+    const response = await axiosInstance.get(API.getCoins);
+    return response.data.data;
+  };
+  const { data: coins, error: error2 } = useQuery({
+    queryKey: ["get-coins"],
+    queryFn: getCoins,
+    retry: 1,
+  });
+
+  useEffect(() => {
+    if (error2) {
+      const newError = error2 as any;
+      toast.error(errorMessage(newError?.message || newError?.data?.message));
+    }
+  }, [error2]);
   return (
-    <div className="fixed inset-0 top-20 flex font-sora justify-start items-start pt-24 bg-white dark:bg-primary_dark   backdrop-blur-sm">
+    <div className="fixed inset-0  flex font-sora justify-start items-start pt-24 bg-white dark:bg-primary_dark   backdrop-blur-sm">
       <div
         className={` w-10/12 mds:w-8/12 md:7/12 border dark:border-[#303030] border-[#E6E6E6]  rounded-xl mx-auto p-6 dark:bg-[#1F1F1F] mt-12  lgss:w-2/5 xxl:w-1/3 `}
       >
@@ -42,98 +64,40 @@ const SelectCoin = ({
           Select an asset to start trading
         </h4>
         <div className="w-full font-sora mt-6 flex-col flex gap-4">
-          <div
-            onClick={() => {
-              setCoin("BTC");
-              setSelectNetworkModal(true);
-              setSelectCoinModal(false);
-            }}
-            className="flex cursor-pointer justify-between px-4  rounded-xl h-[58px] items-center"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-[32px] h-[32px]  rounded-full ">
-                <img src={btc} alt="" className="w-full h-full bg-cover" />
+          {coins?.cryptocurrencies.length >= 1 ? (
+            coins?.cryptocurrencies.map((coin: any, index: any) => (
+              <div
+                key={index}
+                onClick={() => {
+                  setCoin(coin.symbol);
+                  setNetworks(coin.networks);
+                  setSelectNetworkModal(true);
+                }}
+                className="flex cursor-pointer justify-between py-4  rounded-xl h-[58px] items-center"
+              >
+                <div className="flex  items-center gap-3">
+                  <div className="w-[32px] h-[32px]  rounded-full ">
+                    <img
+                      src={coin.logo}
+                      alt={`${coin.name} logo`}
+                      className="w-full h-full bg-cover rounded-full"
+                    />
+                  </div>
+                  <h4 className="dark:text-gray-400 text-black font-medium text-[15px]">
+                    {coin.name === "Tether" ? "USDT" : coin.name}
+                  </h4>
+                </div>
+                <div className="flex items-center gap-3">
+                  <h4 className="dark:text-gray-400 text-black font-medium text-[15px]">
+                    1780/$
+                  </h4>
+                  <SlArrowRight className="text-black dark:text-white text-[14px]" />
+                </div>
               </div>
-              <h4 className="text-black dark:text-gray-400 font-medium text-[12px]">
-                Bitcoin
-              </h4>
-            </div>
-            <div className="flex items-center gap-3">
-              <h4 className="text-black dark:text-gray-400 font-medium text-[12px]">
-                1780/$
-              </h4>
-              <SlArrowRight className="text-black dark:text-white txt-[24px]" />
-            </div>
-          </div>
-          <div
-            onClick={() => {
-              setCoin("ETH");
-              setSelectNetworkModal(true);
-              setSelectCoinModal(false);
-            }}
-            className="flex cursor-pointer justify-between px-4  rounded-xl h-[58px] items-center"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-[32px] h-[32px]  rounded-full ">
-                <img src={eth} alt="" className="w-full h-full bg-cover" />
-              </div>
-              <h4 className="text-black dark:text-gray-400 font-medium text-[12px]">
-                Ethereum
-              </h4>
-            </div>
-            <div className="flex items-center gap-3">
-              <h4 className="text-black dark:text-gray-400 font-medium text-[12px]">
-                1780/$
-              </h4>
-              <SlArrowRight className="text-black dark:text-white txt-[24px]" />
-            </div>
-          </div>
-          <div
-            onClick={() => {
-              setCoin("USDT");
-              setSelectNetworkModal(true);
-              setSelectCoinModal(false);
-            }}
-            className="flex cursor-pointer justify-between px-4  rounded-xl h-[58px] items-center"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-[32px] h-[32px]  rounded-full ">
-                <img src={usdt} alt="" className="w-full h-full bg-cover" />
-              </div>
-              <h4 className="text-black dark:text-gray-400 font-medium text-[12px]">
-                USDT
-              </h4>
-            </div>
-            <div className="flex items-center gap-3">
-              <h4 className="text-black dark:text-gray-400 font-medium text-[12px]">
-                1780/$
-              </h4>
-              <SlArrowRight className="text-black dark:text-white txt-[24px]" />
-            </div>
-          </div>
-          <div
-            onClick={() => {
-              setCoin("SOL");
-              setSelectNetworkModal(true);
-              setSelectCoinModal(false);
-            }}
-            className="flex cursor-pointer justify-between px-4  rounded-xl h-[58px] items-center"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-[32px] h-[32px]  rounded-full ">
-                <img src={solana} alt="" className="w-full h-full bg-cover" />
-              </div>
-              <h4 className="text-black dark:text-gray-400 font-medium text-[12px]">
-                Solana
-              </h4>
-            </div>
-            <div className="flex items-center gap-3">
-              <h4 className="text-black dark:text-gray-400 font-medium text-[12px]">
-                1780/$
-              </h4>
-              <SlArrowRight className="text-black dark:text-white txt-[24px]" />
-            </div>
-          </div>
+            ))
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </div>

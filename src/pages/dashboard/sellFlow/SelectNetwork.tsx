@@ -11,10 +11,11 @@ const SelectNetwork = ({
   setNetwork,
   coin,
   sellRate,
+  networks,
 }: any) => {
-  const [networkSelect, setNetworkSelect] = useState<number>(0);
+  const [networkSelect, setNetworkSelect] = useState<number>(100);
   return (
-    <div className="fixed inset-0 top-20 flex font-sora justify-start items-start pt-24 bg-white dark:bg-primary_dark   backdrop-blur-sm">
+    <div className="fixed inset-0  flex font-sora justify-start items-start pt-24 bg-white dark:bg-primary_dark   backdrop-blur-sm">
       <div
         className={` w-10/12 mds:w-8/12 md:7/12 border dark:border-[#303030] border-[#E6E6E6]  rounded-xl mx-auto p-6 dark:bg-[#1F1F1F] mt-12  lgss:w-2/5 xxl:w-1/3 `}
       >
@@ -45,7 +46,50 @@ const SelectNetwork = ({
           Select Network
         </h4>
         <div className="w-full mt-12">
-          {coin === "USDT" || coin === "ETH" ? (
+          {networks.map((networkk: any, index: any) => (
+            <div
+              key={index}
+              className="w-full flex mt-8 justify-between items-center"
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  onClick={() => {
+                    if (networkSelect === index) {
+                      setNetworkSelect(100);
+                      setNetwork("");
+                    } else {
+                      setNetworkSelect(index);
+                      setNetwork(networkk.code);
+                    }
+                  }}
+                  className={`w-[20px] h-[20px] p-1 flex justify-center items-center rounded-full  ${
+                    networkSelect === index
+                      ? "border-[#5E91FF]  "
+                      : "bg-transparent border-[#505050]"
+                  } border `}
+                >
+                  <div
+                    className={`w-full h-full rounded-full  ${
+                      networkSelect === index
+                        ? " bg-[#5E91FF] "
+                        : "bg-transparent "
+                    } `}
+                  />
+                </div>
+                <h4 className="text-[14px] dark:text-gray-300 uppercase text-black tracking-widest">
+                  {networkk.code}
+                </h4>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <IoMdStopwatch className="text-[16px] dark:text-[#D0D5DD] text-black" />
+                <h4 className="text-[10px] dark:text-[#D0D5DD] text-black tracking-widest">
+                  ~ 15 mins
+                </h4>
+              </div>
+            </div>
+          ))}
+          {/* {coin === "USDT" || coin === "ETH" ? (
             <>
               <div className="w-full flex mt-8 justify-between items-center">
                 <div className="flex items-center gap-3">
@@ -56,7 +100,7 @@ const SelectNetwork = ({
                         setNetwork("");
                       } else {
                         setNetworkSelect(1);
-                        setNetwork("BEP-20");
+                        setNetwork("bep20");
                       }
                     }}
                     className={`w-[20px] h-[20px] p-1 flex justify-center items-center rounded-full  ${
@@ -94,7 +138,7 @@ const SelectNetwork = ({
                         setNetwork("");
                       } else {
                         setNetworkSelect(2);
-                        setNetwork("ERC-20");
+                        setNetwork("erc20");
                       }
                     }}
                     className={`w-[20px] h-[20px] p-1 flex justify-center items-center rounded-full  ${
@@ -135,7 +179,7 @@ const SelectNetwork = ({
                       setNetwork("");
                     } else {
                       setNetworkSelect(3);
-                      setNetwork("TRC-20");
+                      setNetwork("trc20");
                     }
                   }}
                   className={`w-[20px] h-[20px] p-1 flex justify-center items-center rounded-full  ${
@@ -173,7 +217,7 @@ const SelectNetwork = ({
                       setNetwork("");
                     } else {
                       setNetworkSelect(4);
-                      setNetwork("SOL");
+                      setNetwork("bep20");
                     }
                   }}
                   className={`w-[20px] h-[20px] p-1 flex justify-center items-center rounded-full  ${
@@ -211,7 +255,7 @@ const SelectNetwork = ({
                       setNetwork("");
                     } else {
                       setNetworkSelect(5);
-                      setNetwork("BTC");
+                      setNetwork("btc");
                     }
                   }}
                   className={`w-[20px] h-[20px] p-1 flex justify-center items-center rounded-full  ${
@@ -238,10 +282,10 @@ const SelectNetwork = ({
                 </h4>
               </div>
             </div>
-          )}
+          )} */}
         </div>
         <button
-          disabled={networkSelect === 0}
+          disabled={networkSelect === 100}
           onClick={() => {
             setSelectNetworkModal(false);
             if (sellRate) {
@@ -251,7 +295,7 @@ const SelectNetwork = ({
             }
           }}
           className={`w-full h-[52px] rounded-[18px] mt-16 ${
-            networkSelect === 0
+            networkSelect === 100
               ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
               : "bg-text_blue text-white"
           }  flex justify-center items-center  font-semibold`}
