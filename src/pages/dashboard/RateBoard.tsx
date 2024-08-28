@@ -31,6 +31,7 @@ const RateBoard = ({
       toast.error(errorMessage(newError?.message || newError?.data?.message));
     }
   }, [error2]);
+
   return (
     <div className="w-full font-sora mt-12 flex-col flex gap-4">
       {coins?.cryptocurrencies.length >= 1 ? (

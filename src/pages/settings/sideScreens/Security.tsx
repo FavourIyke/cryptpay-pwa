@@ -31,7 +31,7 @@ const Security = ({ setSidePage, setScreen, setSecScreen }: any) => {
       refetch2();
     },
     onError: (e) => {
-      console.log(e);
+      // console.log(e);
       const err = e as any;
       toast.error(errorMessage(err?.message || err?.data?.message));
     },

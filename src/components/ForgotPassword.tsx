@@ -45,7 +45,6 @@ const ForgotPassword = () => {
       });
     },
     onError: (error: any) => {
-      console.log(error);
       toast.error(
         errorMessage((error?.data as any)?.message || String(error?.data))
       );

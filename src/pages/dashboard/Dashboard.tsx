@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 import { API } from "../../constants/api";
 import { errorMessage } from "../../utils/errorMessage";
 import useAuthAxios from "../../utils/baseAxios";
+import KycModal from "./KycModal";
 
 const Dashboard = () => {
   const [showBalance, setShowBalance] = useState<boolean>(false);
@@ -47,6 +48,7 @@ const Dashboard = () => {
   const { userDetails } = useUser();
   const axiosInstance = useAuthAxios();
   const [networks, setNetworks] = useState<any[]>([]);
+  const [kycModal, setKycModal] = useState<boolean>(false);
 
   const getKycStatus = async () => {
     const response = await axiosInstance.get(API.checkKycStatus);
@@ -155,9 +157,8 @@ const Dashboard = () => {
                 </div>
 
                 <div>
-                  <h4 className=" font-bold text-[16px]">KYC Incomplete</h4>
-                  <h4 className="  text-[12px] mt-1 text-left">
-                    {kycStatus?.message}
+                  <h4 className=" font-bold text-[16px]">
+                    {kycStatus?.message ? kycStatus?.message : "KYC Incomplete"}
                   </h4>
                   <h4 className="  text-[11px] mt-1 text-left">
                     It appears that you have not yet completed your Know Your
@@ -326,6 +327,7 @@ const Dashboard = () => {
           setAddBankModal={setAddBankModal}
         />
       )}
+      {kycModal && <KycModal setKycModal={setKycModal} />}
     </div>
   );
 };

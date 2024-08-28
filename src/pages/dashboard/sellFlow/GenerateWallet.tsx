@@ -82,7 +82,7 @@ const GenerateWallet = ({
       }, 2000);
     },
     onError: (e) => {
-      console.log(e);
+      // console.log(e);
       const err = e as any;
       toast.error(errorMessage(err?.message || err?.data?.message));
     },

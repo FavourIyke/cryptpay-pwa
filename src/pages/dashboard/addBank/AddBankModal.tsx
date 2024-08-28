@@ -3,6 +3,12 @@ import { CiSearch } from "react-icons/ci";
 import { IoClose } from "react-icons/io5";
 import { SlArrowDown, SlArrowLeft } from "react-icons/sl";
 import { kudaLogo, opayLogo } from "../../../assets/images";
+import useAuthAxios from "../../../utils/baseAxios";
+import { API } from "../../../constants/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { errorMessage } from "../../../utils/errorMessage";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const AddBankModal = ({
   setBankAddedModal,
@@ -11,17 +17,87 @@ const AddBankModal = ({
 }: any) => {
   const [bankNumber, setBankNumber] = useState<string>("");
   const [bankName, setBankName] = useState<string>("");
+  const [bankCode, setBankCode] = useState<string>("");
   const [bankQuery, setBankQuery] = useState<string>("");
   const [dropDown, setDropDown] = useState<boolean>(false);
   const [disabled, setDisabled] = useState<boolean>(false);
+  const [userBankName, setUserBankName] = useState<string>("");
+  const axiosInstance = useAuthAxios();
 
+  const getAllBanks = async () => {
+    const response = await axiosInstance.get(API.getAllBanks);
+    return response.data;
+  };
+
+  const { data: allBanks, error: error1 } = useQuery({
+    queryKey: ["all-banks"],
+    queryFn: getAllBanks,
+    retry: 1,
+  });
   useEffect(() => {
-    if (!bankName || bankNumber.length !== 10) {
+    if (error1) {
+      const newError = error1 as any;
+      toast.error(errorMessage(newError?.message || newError?.data?.message));
+    }
+  }, [error1]);
+  const getbankName = async ({ account_number, bank_code }: any) => {
+    const response = await axiosInstance.post(API.getBankName, {
+      account_number,
+      bank_code,
+    });
+    return response.data;
+  };
+  const addBank = async ({ bank_code, account_number, account_name }: any) => {
+    const response = await axiosInstance.post(API.userBanks, {
+      bank_code,
+      account_number,
+      account_name,
+    });
+    return response.data;
+  };
+
+  const completeGetBankName = useMutation({
+    mutationFn: getbankName,
+    onSuccess: (r) => {
+      toast.success(r.message);
+      setUserBankName(r.data.account_name);
+    },
+    onError: (e) => {
+      // console.log(e);
+      const err = e as any;
+      toast.error(errorMessage(err?.message || err?.data?.message));
+    },
+  });
+  const completeAddBank = useMutation({
+    mutationFn: addBank,
+    onSuccess: (r) => {
+      toast.success(r.message);
+      setTimeout(() => {
+        setAddBankModal(false);
+        setBankAddedModal(true);
+      }, 1500);
+    },
+    onError: (e) => {
+      // console.log(e);
+      const err = e as any;
+      toast.error(errorMessage(err?.message || err?.data?.message));
+    },
+  });
+  useEffect(() => {
+    if (bankNumber.length === 10 && bankCode) {
+      completeGetBankName.mutate({
+        account_number: bankNumber,
+        bank_code: bankCode,
+      });
+    }
+  }, [bankCode, bankNumber]);
+  useEffect(() => {
+    if (!bankName || bankNumber.length !== 10 || !userBankName) {
       setDisabled(true);
     } else {
       setDisabled(false);
     }
-  }, [bankName, bankNumber.length]);
+  }, [bankName, bankNumber.length, userBankName]);
   return (
     <div className="fixed inset-0 top-20 flex font-sora justify-start items-start pt-12 bg-white dark:bg-primary_dark   backdrop-blur-sm">
       <div
@@ -85,43 +161,35 @@ const AddBankModal = ({
                   className="w-10/12 outline-none placeholder:text-[12px] bg-transparent"
                 />
               </div>
-              <div className="w-full mt-4 h-[200px] overflow-auto">
-                <div
-                  onClick={() => {
-                    setBankName("Kuda");
-                    setDropDown((prev) => !prev);
-                  }}
-                  className="flex w-full mt-4 cursor-pointer gap-2 items-center"
-                >
-                  <div className="w-[24px] h-[24px] ">
-                    <img
-                      src={kudaLogo}
-                      className="w-full h-full bg-cover"
-                      alt=""
-                    />
-                  </div>
-                  <h4 className="dark:text-gray-50 text-gray-800  font-medium text-[14px]">
-                    Kuda MFB
-                  </h4>
-                </div>
-                <div
-                  onClick={() => {
-                    setBankName("Opay");
-                    setDropDown((prev) => !prev);
-                  }}
-                  className="flex gap-2 mt-4 items-center"
-                >
-                  <div className="w-[24px] h-[24px] ">
-                    <img
-                      src={opayLogo}
-                      className="w-full h-full bg-cover"
-                      alt=""
-                    />
-                  </div>
-                  <h4 className="dark:text-gray-50 text-gray-800  font-medium text-[14px]">
-                    Opay
-                  </h4>
-                </div>
+              <div className="w-full mt-4 h-[200px]  overflow-auto">
+                {allBanks.data
+                  .filter((searchValue: any) => {
+                    return bankQuery.toLowerCase() === ""
+                      ? searchValue
+                      : searchValue.name.toLowerCase().includes(bankQuery);
+                  })
+                  .map((bank: any, index: any) => (
+                    <div
+                      key={index}
+                      onClick={() => {
+                        setBankName(bank.name);
+                        setBankCode(bank.code);
+                        setDropDown((prev) => !prev);
+                      }}
+                      className="flex w-full border-b border-[#FAFAFA] py-4 dark:border-[#484848]  cursor-pointer gap-2 items-center"
+                    >
+                      {/* <div className="w-[24px] h-[24px] ">
+                      <img
+                        src={kudaLogo}
+                        className="w-full h-full bg-cover"
+                        alt=""
+                      />
+                    </div> */}
+                      <h4 className="dark:text-gray-50 text-gray-800  font-medium text-[13px]">
+                        {bank.name}
+                      </h4>
+                    </div>
+                  ))}
               </div>
             </div>
           ) : (
@@ -136,14 +204,17 @@ const AddBankModal = ({
                 placeholder="Enter 10 digit account number"
                 className="w-full dark:text-gray-400 text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
               />
-              <h4 className="text-[14px] mt-2 dark:text-gray-400 text-gray-800">
-                Daniel Mason Ovie
+              <h4 className="text-[13px] font-semibold mt-4 dark:text-gray-400 text-gray-800">
+                {userBankName && userBankName}
               </h4>
               <button
                 disabled={disabled}
                 onClick={() => {
-                  setAddBankModal(false);
-                  setBankAddedModal(true);
+                  completeAddBank.mutate({
+                    bank_code: bankCode,
+                    account_number: bankNumber,
+                    account_name: userBankName,
+                  });
                 }}
                 className={`w-full h-[52px] rounded-[18px] mt-8 ${
                   disabled
@@ -151,7 +222,11 @@ const AddBankModal = ({
                     : "bg-text_blue text-white"
                 }  flex justify-center items-center  font-semibold`}
               >
-                Save
+                {completeAddBank.isPending ? (
+                  <ClipLoader color="#FFFFFF" size={30} />
+                ) : (
+                  "Save"
+                )}
               </button>
             </div>
           )}

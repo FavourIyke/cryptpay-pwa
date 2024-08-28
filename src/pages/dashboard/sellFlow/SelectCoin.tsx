@@ -71,6 +71,7 @@ const SelectCoin = ({
                 onClick={() => {
                   setCoin(coin.symbol);
                   setNetworks(coin.networks);
+                  setSelectCoinModal(false);
                   setSelectNetworkModal(true);
                 }}
                 className="flex cursor-pointer justify-between py-4  rounded-xl h-[58px] items-center"
