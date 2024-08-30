@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { API } from "../../../constants/api";
 import useAuthAxios from "../../../utils/baseAxios";
 import { errorMessage } from "../../../utils/errorMessage";
-import { kudaLogo } from "../../../assets/images";
 import ClipLoader from "react-spinners/ClipLoader";
 import { truncateWord } from "../../../utils/wordFunctions";
 
@@ -19,6 +18,7 @@ const GenerateWallet = ({
   setNetwork,
   setWalletAddy,
   walletAddy,
+  selectedBankDetails,
 }: any) => {
   const axiosInstance = useAuthAxios();
   const [showProceedButton, setShowProceedButton] = useState<boolean>(false);
@@ -63,6 +63,23 @@ const GenerateWallet = ({
       toast.success("Wallet fetched ...");
     }
   }, [data, success1]);
+
+  const getAllBanks = async () => {
+    const response = await axiosInstance.get(API.getAllBanks);
+    return response.data;
+  };
+
+  const { data: allBanks, error: error2 } = useQuery({
+    queryKey: ["all-banks"],
+    queryFn: getAllBanks,
+    retry: 1,
+  });
+  useEffect(() => {
+    if (error2) {
+      const newError = error2 as any;
+      toast.error(errorMessage(newError?.message || newError?.data?.message));
+    }
+  }, [error2]);
 
   const generateWalletAddy = async ({ crypto_type, network }: any) => {
     const response = await axiosInstance.post(API.generateWalletAddresses, {
@@ -169,23 +186,40 @@ const GenerateWallet = ({
           <div className="mt-4 w-full border border-gray-300 dark:bg-transparent dark:border-gray-700 rounded-xl p-4">
             <div className="w-full  flex justify-between items-start">
               <div className="flex gap-2 items-center">
-                <div className="w-[24px] h-[24px] ">
-                  <img
-                    src={kudaLogo}
-                    className="w-full h-full bg-cover"
-                    alt=""
+                <div
+                  className={`w-[20px] h-[20px] p-1 flex justify-center items-center rounded-full  ${
+                    selectedBankDetails.is_default
+                      ? "border-[#5E91FF]  "
+                      : "bg-transparent border-[#505050]"
+                  } border `}
+                >
+                  <div
+                    className={`w-full h-full rounded-full  ${
+                      selectedBankDetails.is_default
+                        ? " bg-[#5E91FF] "
+                        : "bg-transparent "
+                    } `}
                   />
                 </div>
-                <h4 className="dark:text-gray-50  text-gray-800 font-medium text-[12px]">
-                  Kuda MFB
-                </h4>
+                {allBanks?.data
+                  .filter(
+                    (banki: any) => banki.code === selectedBankDetails.bank_code
+                  )
+                  .map((bankk: any, index: any) => (
+                    <h4
+                      key={index}
+                      className="dark:text-gray-50 text-gray-800  font-medium text-[12px]"
+                    >
+                      {bankk.name}
+                    </h4>
+                  ))}
               </div>
               <div className="">
-                <h4 className="dark:text-gray-400 text-gray-800 text-right font-medium text-[12px]">
-                  Mamudu A Jeffrey
+                <h4 className="dark:text-gray-400 text-gray-800 uppercase text-right font-medium text-[12px]">
+                  {selectedBankDetails.account_name}
                 </h4>
                 <h4 className="dark:text-gray-400 text-gray-800 mt-2 text-right  font-medium text-[12px]">
-                  2032321252
+                  {selectedBankDetails.account_number}
                 </h4>
               </div>
             </div>
@@ -194,8 +228,8 @@ const GenerateWallet = ({
         <div className="px-6 py-4 bg-[#DD900D] rounded-xl mt-6">
           <h4 className="text-white text-[14px]">Note</h4>
           <p className="text-gray-50 text-[12px] mt-2">
-            Please ensure to send only Bitcoin (BTC) to this address or you may
-            lose your funds.
+            Please ensure to send only {coin} to this address or you may lose
+            your funds.
           </p>
         </div>
         {showProceedButton && (

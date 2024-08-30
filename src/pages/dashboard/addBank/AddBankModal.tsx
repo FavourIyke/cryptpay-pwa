@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoClose } from "react-icons/io5";
 import { SlArrowDown, SlArrowLeft } from "react-icons/sl";
-import { kudaLogo, opayLogo } from "../../../assets/images";
 import useAuthAxios from "../../../utils/baseAxios";
 import { API } from "../../../constants/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -23,6 +22,7 @@ const AddBankModal = ({
   const [disabled, setDisabled] = useState<boolean>(false);
   const [userBankName, setUserBankName] = useState<string>("");
   const axiosInstance = useAuthAxios();
+  const [isChecked, setIsChecked] = useState(false);
 
   const getAllBanks = async () => {
     const response = await axiosInstance.get(API.getAllBanks);
@@ -47,11 +47,17 @@ const AddBankModal = ({
     });
     return response.data;
   };
-  const addBank = async ({ bank_code, account_number, account_name }: any) => {
+  const addBank = async ({
+    bank_code,
+    account_number,
+    account_name,
+    is_default,
+  }: any) => {
     const response = await axiosInstance.post(API.userBanks, {
       bank_code,
       account_number,
       account_name,
+      is_default,
     });
     return response.data;
   };
@@ -99,7 +105,7 @@ const AddBankModal = ({
     }
   }, [bankName, bankNumber.length, userBankName]);
   return (
-    <div className="fixed inset-0 top-20 flex font-sora justify-start items-start pt-12 bg-white dark:bg-primary_dark   backdrop-blur-sm">
+    <div className="fixed inset-0  flex font-sora justify-start items-start pt-24 bg-white dark:bg-primary_dark   backdrop-blur-sm">
       <div
         className={` w-10/12 mds:w-8/12 md:7/12 border dark:border-[#303030] border-[#E6E6E6]  rounded-xl mx-auto p-6 dark:bg-[#1F1F1F]   lgss:w-2/5 xxl:w-1/3 `}
       >
@@ -162,7 +168,7 @@ const AddBankModal = ({
                 />
               </div>
               <div className="w-full mt-4 h-[200px]  overflow-auto">
-                {allBanks.data
+                {allBanks?.data
                   .filter((searchValue: any) => {
                     return bankQuery.toLowerCase() === ""
                       ? searchValue
@@ -207,14 +213,32 @@ const AddBankModal = ({
               <h4 className="text-[13px] font-semibold mt-4 dark:text-gray-400 text-gray-800">
                 {userBankName && userBankName}
               </h4>
+              {userBankName && (
+                <div className="mt-4 flex justify-start gap-3 items-center">
+                  <input
+                    type="checkbox"
+                    checked={isChecked}
+                    onChange={(e) => setIsChecked(e.target.checked)}
+                    className="h-[18px] w-[18px]"
+                  />
+                  <h4 className="text-[13px] text-gray-600 dark:text-gray-400 font-sora font-semibold">
+                    Make default bank
+                  </h4>
+                </div>
+              )}
               <button
                 disabled={disabled}
                 onClick={() => {
-                  completeAddBank.mutate({
+                  const requestData = {
                     bank_code: bankCode,
                     account_number: bankNumber,
                     account_name: userBankName,
-                  });
+                    is_default: false,
+                  };
+                  if (isChecked) {
+                    requestData.is_default = true;
+                  }
+                  completeAddBank.mutate(requestData);
                 }}
                 className={`w-full h-[52px] rounded-[18px] mt-8 ${
                   disabled

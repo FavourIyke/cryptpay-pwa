@@ -4,9 +4,12 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { FiArrowRightCircle, FiClipboard, FiCopy } from "react-icons/fi";
 import ButtonConfig from "./ButtonConfig";
 import { SlArrowRight } from "react-icons/sl";
+import { useUser } from "../../context/user-context";
 
 const MainPage = ({ setScreen, setSidePage, setLogout }: any) => {
   const [onCopyID, setOnCopyID] = useState<boolean>(false);
+  const { userDetails } = useUser();
+
   return (
     <div className="font-sora w-full">
       <div className="w-full rounded-xl h-[160px] bg-[#F1F1F1] dark:bg-[#1F1F1F] flex flex-col  items-center justify-center p-4 ">
@@ -14,14 +17,15 @@ const MainPage = ({ setScreen, setSidePage, setLogout }: any) => {
           <img src={avatar} alt="" className="w-full h-full bg-cover" />
         </div>
         <h4 className="text-[14px] font-medium text-gray-800 mt-2 dark:text-white ">
-          Daniel Mason Ovie
+          {userDetails?.data?.profile.first_name}{" "}
+          {userDetails?.data?.profile.last_name}
         </h4>
         <div className="flex items-center mt-1 gap-2">
           <h4 className="text-[10px]  text-gray-500 dark:text-gray-300 ">
-            User ID: daniel001
+            User ID: {userDetails?.data?.profile.username}
           </h4>
           <CopyToClipboard
-            text="daniel001"
+            text={userDetails?.data?.profile.username}
             onCopy={() => {
               setOnCopyID(true);
               setTimeout(() => {

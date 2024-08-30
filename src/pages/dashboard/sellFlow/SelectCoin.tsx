@@ -90,7 +90,7 @@ const SelectCoin = ({
                 </div>
                 <div className="flex items-center gap-3">
                   <h4 className="dark:text-gray-400 text-black font-medium text-[15px]">
-                    1780/$
+                    {coin.sell_rate}/$
                   </h4>
                   <SlArrowRight className="text-black dark:text-white text-[14px]" />
                 </div>

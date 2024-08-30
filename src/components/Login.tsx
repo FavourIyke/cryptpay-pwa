@@ -12,7 +12,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { useAuth } from "../context/auth-context";
 
 const Login = () => {
-  const { token } = useAuth();
+  const { token, authenticate } = useAuth();
   const location = useLocation();
   const { state } = location;
   const { from = "/dashboard" } = state || {};
@@ -39,12 +39,18 @@ const Login = () => {
     mutationFn: handleSignIn,
     onSuccess: (r) => {
       toast.success(r.message);
+
       setTimeout(() => {
-        navigate("/verify-login", {
-          state: {
-            email: email,
-          },
-        });
+        if (r.data.email_auth) {
+          navigate("/verify-login", {
+            state: {
+              email: email,
+            },
+          });
+        } else {
+          authenticate(r.data.token);
+          navigate("/dashboard");
+        }
       }, 1000);
     },
     onError: (error: any) => {

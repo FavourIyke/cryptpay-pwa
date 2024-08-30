@@ -1,20 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoAddOutline, IoClose } from "react-icons/io5";
-import { kudaLogo, opayLogo } from "../../../assets/images";
 import { SlArrowLeft } from "react-icons/sl";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { API } from "../../../constants/api";
 import useAuthAxios from "../../../utils/baseAxios";
 import { errorMessage } from "../../../utils/errorMessage";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const SelectBank = ({
   setSelectBankModal,
   setSelectNetworkModal,
   setGenerateAddyModal,
   setAddBankModal,
+  setSelectedBankDetails,
 }: any) => {
   const axiosInstance = useAuthAxios();
+  const queryClient = useQueryClient();
+  const [loadingIndex, setLoadingIndex] = useState<number | null>(null);
+
+  const [bankId, setBankId] = useState<number>();
   const getUserBanks = async () => {
     const response = await axiosInstance.get(API.userBanks);
     return response.data.data;
@@ -48,6 +53,31 @@ const SelectBank = ({
       toast.error(errorMessage(newError?.message || newError?.data?.message));
     }
   }, [error1]);
+  const makeDefault = async () => {
+    const response = await axiosInstance.put(API.setDefaultBank(bankId), {});
+    return response.data;
+  };
+
+  const completeMakeDefault = useMutation({
+    mutationFn: makeDefault,
+    onSuccess: (r) => {
+      toast.success(r.message);
+      queryClient.invalidateQueries({
+        queryKey: ["user-banks"],
+      });
+      setLoadingIndex(null);
+      // setTimeout(() => {
+      //   setSelectBankModal(false);
+      //   setGenerateAddyModal(true);
+      // }, 1500);
+    },
+    onError: (e) => {
+      // console.log(e);
+      const err = e as any;
+      toast.error(errorMessage(err?.message || err?.data?.message));
+      setLoadingIndex(null);
+    },
+  });
 
   return (
     <div className="fixed inset-0  flex font-sora justify-start items-start pt-24 bg-white dark:bg-primary_dark   backdrop-blur-sm">
@@ -85,64 +115,78 @@ const SelectBank = ({
         </h4>
         <div
           className={
-            userBanks.length > 2
+            userBanks?.length > 2
               ? "mt-8 w-full h-[250px] overflow-auto pb-4"
               : "mt-8 w-full pb-4"
           }
         >
-          {userBanks?.map((bank: any, index: any) => (
-            <div
-              key={index}
-              onClick={() => {
-                setSelectBankModal(false);
-                setGenerateAddyModal(true);
-              }}
-              className="w-full mt-6 cursor-pointer flex justify-between items-start pb-4 border-b  border-[#FAFAFA]  dark:border-[#484848] "
-            >
-              <div className="flex gap-4 items-center">
-                {/* <div className="w-[24px] h-[24px] ">
+          {userBanks
+            ?.sort((a: any, b: any) => b.is_default - a.is_default)
+            .map((bank: any, index: any) => (
+              <div
+                key={index}
+                onClick={() => {
+                  if (bank.is_default) {
+                    setSelectBankModal(false);
+                    setGenerateAddyModal(true);
+                    setSelectedBankDetails(bank);
+                  } else {
+                    setBankId(bank.id);
+                    setLoadingIndex(index);
+                    setTimeout(() => {
+                      completeMakeDefault.mutate();
+                    }, 1000);
+                  }
+                }}
+                className="w-full mt-6 cursor-pointer flex justify-between items-start pb-4 border-b  border-[#FAFAFA]  dark:border-[#484848] "
+              >
+                <div className="flex gap-4 items-center">
+                  {/* <div className="w-[24px] h-[24px] ">
                   <img
                     src={opayLogo}
                     className="w-full h-full bg-cover"
                     alt=""
                   />
                 </div> */}
-                <div
-                  onClick={() => {}}
-                  className={`w-[20px] h-[20px] p-1 flex justify-center items-center rounded-full  ${
-                    true
-                      ? "border-[#5E91FF]  "
-                      : "bg-transparent border-[#505050]"
-                  } border `}
-                >
-                  <div
-                    className={`w-full h-full rounded-full  ${
-                      true ? " bg-[#5E91FF] " : "bg-transparent "
-                    } `}
-                  />
-                </div>
-                {allBanks.data
-                  .filter((banki: any) => banki.code === bank.bank_code)
-                  .map((bankk: any, index: any) => (
-                    <h4
-                      key={index}
-                      className="dark:text-gray-50 text-gray-800  font-medium text-[12px]"
+                  {loadingIndex === index ? (
+                    <ClipLoader color="#5E91FF" size={20} />
+                  ) : (
+                    <div
+                      className={`w-[20px] h-[20px] p-1 flex justify-center items-center rounded-full  ${
+                        bank.is_default
+                          ? "border-[#5E91FF]  "
+                          : "bg-transparent border-[#505050]"
+                      } border `}
                     >
-                      {bankk.name}
-                    </h4>
-                  ))}
-              </div>
-              <div className="">
-                <h4 className="dark:text-gray-400 text-gray-800 uppercase text-right font-medium text-[12px]">
-                  {bank.account_name}
-                </h4>
+                      <div
+                        className={`w-full h-full rounded-full  ${
+                          bank.is_default ? " bg-[#5E91FF] " : "bg-transparent "
+                        } `}
+                      />
+                    </div>
+                  )}
+                  {allBanks?.data
+                    .filter((banki: any) => banki.code === bank.bank_code)
+                    .map((bankk: any, index: any) => (
+                      <h4
+                        key={index}
+                        className="dark:text-gray-50 text-gray-800  font-medium text-[12px]"
+                      >
+                        {bankk.name}
+                      </h4>
+                    ))}
+                </div>
+                <div className="">
+                  <h4 className="dark:text-gray-400 text-gray-800 uppercase text-right font-medium text-[12px]">
+                    {bank.account_name}
+                  </h4>
 
-                <h4 className="dark:text-gray-400 text-gray-800 mt-2 text-right  font-medium text-[12px]">
-                  {bank.account_number}
-                </h4>
+                  <h4 className="dark:text-gray-400 text-gray-800 mt-2 text-right  font-medium text-[12px]">
+                    {bank.account_number}
+                  </h4>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
         <div className="w-full mt-12">

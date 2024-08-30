@@ -49,6 +49,7 @@ const Dashboard = () => {
   const axiosInstance = useAuthAxios();
   const [networks, setNetworks] = useState<any[]>([]);
   const [kycModal, setKycModal] = useState<boolean>(false);
+  const [selectedBankDetails, setSelectedBankDetails] = useState<any[]>([]);
 
   const getKycStatus = async () => {
     const response = await axiosInstance.get(API.checkKycStatus);
@@ -257,6 +258,7 @@ const Dashboard = () => {
           setSelectNetworkModal={setSelectNetworkModal}
           setGenerateAddyModal={setGenerateAddyModal}
           setAddBankModal={setAddBankModal}
+          setSelectedBankDetails={setSelectedBankDetails}
         />
       )}
       {generateAddyModal && (
@@ -269,6 +271,7 @@ const Dashboard = () => {
           setNetwork={setNetwork}
           walletAddy={walletAddy}
           setWalletAddy={setWalletAddy}
+          selectedBankDetails={selectedBankDetails}
         />
       )}
       {sellAssetModal && (
@@ -281,6 +284,7 @@ const Dashboard = () => {
           setNetwork={setNetwork}
           walletAddy={walletAddy}
           setWalletAddy={setWalletAddy}
+          selectedBankDetails={selectedBankDetails}
         />
       )}
       {finalModal && (
