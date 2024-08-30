@@ -44,7 +44,7 @@ const Preference = ({ setSidePage, setScreen, setMode }: any) => {
       refetch2();
     },
     onError: (e) => {
-      console.log(e);
+      // console.log(e);
       const err = e as any;
       toast.error(errorMessage(err?.message || err?.data?.message));
     },
@@ -59,7 +59,7 @@ const Preference = ({ setSidePage, setScreen, setMode }: any) => {
       refetch2();
     },
     onError: (e) => {
-      console.log(e);
+      // console.log(e);
       const err = e as any;
       toast.error(errorMessage(err?.message || err?.data?.message));
     },

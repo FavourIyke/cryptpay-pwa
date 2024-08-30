@@ -37,12 +37,11 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
       const fileReader = new FileReader();
       fileReader.onload = () => {
         setImageSrc(fileReader.result as string);
-        console.log(fileReader.result); // Log the result here
+        // console.log(fileReader.result); // Log the result here
       };
       fileReader.readAsDataURL(event.target.files[0]);
     }
   };
-
   const handleSave = () => {
     if (!validateSaveDetails(username, fullName)) {
       return;
@@ -109,20 +108,17 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
           <label className="text-gray-800 text-[14px]  dark:text-white">
             Full Name
           </label>
-          <input
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            placeholder="Daniel Mason Ovie"
-            className="w-full dark:text-gray-400 text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
-          />
+          <div className="w-full  mt-2  h-[52px] flex justify-start items-center dark:text-gray-500 text-gray-600 outline-none text-[14px] bg-[#D2D2D2] dark:bg-[#2B2B2B] bg-transparent px-4  rounded-xl ">
+            {userDetails?.data?.profile.first_name}{" "}
+            {userDetails?.data?.profile.last_name}
+          </div>
         </div>
         <div className="w-full mt-6 ">
           <label className="text-gray-800 text-[14px]  dark:text-white">
             Email
           </label>
           <div className="w-full  mt-2  h-[52px] flex justify-start items-center dark:text-gray-500 text-gray-600 outline-none text-[14px] bg-[#D2D2D2] dark:bg-[#2B2B2B] bg-transparent px-4  rounded-xl ">
-            jeffmamudu@gmail.com
+            {userDetails?.data?.profile.email}
           </div>
         </div>
         <div className="w-full mt-6">
@@ -133,7 +129,7 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder={userDetails?.data?.username}
+            placeholder={userDetails?.data?.profile.username}
             className="w-full dark:text-gray-400 text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
           />
         </div>
