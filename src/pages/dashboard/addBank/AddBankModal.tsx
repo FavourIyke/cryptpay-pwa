@@ -146,7 +146,7 @@ const AddBankModal = ({
               onClick={() => setDropDown((prev) => !prev)}
               className="w-full cursor-pointer dark:text-gray-400 text-gray-800 bg-[#FAFAFA] dark:bg-transparent dark:border-gray-400 h-[52px] mt-2 flex justify-between items-center  outline-none text-[14px] border border-gray-300 bg-transparent px-4  rounded-xl "
             >
-              <h4 className="text-[14px] dark:text-gray-50 text-gray-8000">
+              <h4 className="text-[14px] dark:text-gray-200 text-gray-500">
                 {bankName ? bankName : "Select bank"}
               </h4>
               <SlArrowDown className="dark:text-white text-gray-800 txt-[24px]" />

@@ -16,7 +16,11 @@ import nigeriaFlag from "./Country.png"
 import success from "./success.png"
 import cryptpay from "./cryptpayES.svg"
 import darkCrypt from "./darkCrypt.svg"
+import naijaLogo from "./naijaLogo.svg"
+import feedback from "./feedB.svg"
 export  {
+    feedback,
+    naijaLogo,
     nigeriaFlag,
     darkCrypt,
     cryptpay,

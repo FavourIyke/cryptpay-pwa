@@ -23,5 +23,6 @@ export const API = {
   getTransactions: `${BASE_URL}/api/transactions`,
   checkKycStatus: `${BASE_URL}/api/check-verification-status`,
   getWalletAddress: (coin:string, network:string) => `${BASE_URL}/api/wallet-address?crypto_type=${coin}&network=${network}`,
-  setDefaultBank: (bankId:any, ) => `${BASE_URL}/api/banks/${bankId}/set-default`
+  setDefaultBank: (bankId:any, ) => `${BASE_URL}/api/banks/${bankId}/set-default`,
+  deleteBank: (bankId:any, ) => `${BASE_URL}/api/bank/delete/${bankId}`
 };

@@ -90,7 +90,7 @@ const Kyc = () => {
               Dial *565*0# to check for your BVN
             </h4>
           </div>
-          <div className="w-full mt-10">
+          <div className="w-full mt-6">
             <label className="text-gray-800 text-[14px] dark:text-white">
               Surname
             </label>
@@ -141,6 +141,12 @@ const Kyc = () => {
             )}
           </button>
         </div>
+        <h4 className="text-[14px] mt-8 text-gray-800 text-center dark:text-gray-300 font-medium">
+          I will do this later{" "}
+          <Link to="/dashboard" className="text-text_blue">
+            Skip
+          </Link>
+        </h4>
       </div>
     </div>
   );

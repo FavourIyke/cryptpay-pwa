@@ -77,7 +77,7 @@ const Dashboard = () => {
         <div className="w-full lgss:w-3/5">
           <div className="w-full  h-[401px] flex justify-center items-center">
             <div className="w-full bg-dashboardBg bg-cover bg-center py-6 rounded-[40px] h-full flex flex-col gap-[70px] mds:gap-24 justify-end items-center">
-              <h4 className="mds:hidden text-[14px]  capitalize dark:text-gray-200 font-medium ">
+              <h4 className="mds:hidden text-[14px]  capitalize text-gray-100  font-medium ">
                 Hello, {userDetails?.data?.profile.username}
               </h4>
               <div>
