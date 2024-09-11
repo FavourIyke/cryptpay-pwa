@@ -18,7 +18,9 @@ import cryptpay from "./cryptpayES.svg"
 import darkCrypt from "./darkCrypt.svg"
 import naijaLogo from "./naijaLogo.svg"
 import feedback from "./feedB.svg"
+import trx from "./trx.png"
 export  {
+    trx,
     feedback,
     naijaLogo,
     nigeriaFlag,

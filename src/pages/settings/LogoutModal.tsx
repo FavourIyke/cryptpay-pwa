@@ -26,6 +26,7 @@ const LogoutModal = ({ setLogout }: any) => {
     },
     onError: (error: any) => {
       // console.log(error);
+      logout();
       toast.error(
         errorMessage((error?.data as any)?.error || String(error?.data))
       );

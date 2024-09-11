@@ -38,7 +38,7 @@ const ForgotPassword = () => {
     mutationFn: handleForgotPassword,
     onSuccess: (r) => {
       toast.success(r.message);
-      navigate("/reset-password", {
+      navigate("/verify-reset", {
         state: {
           email: email,
         },

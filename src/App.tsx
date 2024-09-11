@@ -14,6 +14,7 @@ import SettingsPage from "./pages/settings/SettingsPage";
 import PrivateRoute from "./components/utils/PrivateRoute";
 import VerifyLogin from "./components/VerifyLogin";
 import Kyc from "./components/Kyc";
+import VerifyReset from "./components/VerifyReset";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <Route path="/verify-login" element={<VerifyLogin />} />
       <Route path="/create-password" element={<CreatePassword />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/verify-reset" element={<VerifyReset />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/reset-success" element={<ResetSuccess />} />
       <Route path="/" element={<Redirect to="/login" />} />
@@ -43,14 +45,7 @@ function App() {
           </PrivateRoute>
         }
       />
-      <Route
-        path="/dashboard"
-        element={
-          <PrivateRoute>
-            <Dashboard />
-          </PrivateRoute>
-        }
-      />
+
       <Route
         path="/transactions"
         element={

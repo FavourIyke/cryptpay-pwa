@@ -26,8 +26,27 @@ import { API } from "../../constants/api";
 import { errorMessage } from "../../utils/errorMessage";
 import useAuthAxios from "../../utils/baseAxios";
 import KycModal from "./KycModal";
+import { cryptpay, darkCrypt } from "../../assets/images";
+import { formatAmount, getFormattedDate } from "../../utils/formatDate";
+import DetailsModal from "./transactionList/DetailsModal";
 
 const Dashboard = () => {
+  const { theme } = useUser();
+  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const getThemeBasedImage = () => {
+    if (theme === "dark") {
+      return cryptpay;
+    } else if (theme === "light") {
+      return darkCrypt;
+    } else if (theme === "system") {
+      return darkQuery.matches ? cryptpay : darkCrypt;
+    }
+    return darkCrypt; // fallback in case of an unexpected value
+  };
+  const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [clickedPayout, setClickedPayout] = useState<any[]>([]);
+
   const [showBalance, setShowBalance] = useState<boolean>(false);
   const [sellRateFlow, setSellRateFlow] = useState<boolean>(false);
   const [sellRate, setSellRate] = useState<boolean>(false);
@@ -51,6 +70,24 @@ const Dashboard = () => {
   const [kycModal, setKycModal] = useState<boolean>(false);
   const [selectedBankDetails, setSelectedBankDetails] = useState<any[]>([]);
 
+  const getPayoutsSummary = async () => {
+    const response = await axiosInstance.get(API.getSummary);
+    return response.data.data;
+  };
+  const { data: payoutSummary, error: error4 } = useQuery({
+    queryKey: ["get-payout-summary"],
+    queryFn: getPayoutsSummary,
+    retry: 1,
+  });
+  const getPayouts = async () => {
+    const response = await axiosInstance.get(API.getTransactions);
+    return response.data.data;
+  };
+  const { data: payouts, error: error3 } = useQuery({
+    queryKey: ["get-payouts"],
+    queryFn: getPayouts,
+    retry: 1,
+  });
   const getKycStatus = async () => {
     const response = await axiosInstance.get(API.checkKycStatus);
     return response.data;
@@ -67,6 +104,24 @@ const Dashboard = () => {
       toast.error(errorMessage(newError?.message || newError?.data?.message));
     }
   }, [error2]);
+  useEffect(() => {
+    if (error3) {
+      const newError = error3 as any;
+      toast.error(errorMessage(newError?.message || newError?.data?.message));
+    }
+    if (error4) {
+      const newError = error4 as any;
+      toast.error(errorMessage(newError?.message || newError?.data?.message));
+    }
+  }, [error3, error4]);
+  // console.log(payouts);
+
+  const sortedPayouts = payouts?.sort((a: any, b: any) => {
+    return (
+      new Date(b.transaction_date).getTime() -
+      new Date(a.transaction_date).getTime()
+    );
+  });
 
   return (
     <div
@@ -86,10 +141,17 @@ const Dashboard = () => {
                 </h4>
                 <div className="flex  justify-center mt-3 items-center gap-4">
                   <h4 className="text-[40px] text-white">
-                    {showBalance ? `$7,524` : "*****"}.
-                    <span className="text-[#646464]">
+                    {showBalance
+                      ? `$${
+                          payoutSummary?.total_asset_in_usd
+                            ? formatAmount(payoutSummary?.total_asset_in_usd)
+                            : "0.00"
+                        }`
+                      : "*****"}
+
+                    {/* <span className="text-[#646464]">
                       {showBalance ? `08` : "**"}
-                    </span>
+                    </span> */}
                   </h4>
                   {showBalance ? (
                     <VscEyeClosed
@@ -103,9 +165,18 @@ const Dashboard = () => {
                     />
                   )}
                 </div>
-                <h4 className="mt-1 text-center text-white  text-[12px]  ">
-                  ~ NGN 10,235,674.98
-                </h4>
+                {showBalance ? (
+                  <h4 className="mt-1 text-center text-white  text-[12px]  ">
+                    ~ NGN{" "}
+                    {payoutSummary?.total_payouts_ngn
+                      ? formatAmount(payoutSummary?.total_payouts_ngn)
+                      : "0.00"}
+                  </h4>
+                ) : (
+                  <h4 className="mt-1 text-center text-white  text-[12px]  ">
+                    ~ *****
+                  </h4>
+                )}
               </div>
               <div className="flex gap-6 xxs:gap-10 mds:gap-16 justify-center items-center">
                 <div>
@@ -147,7 +218,8 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          {kycStatus?.data.kyc_level === "0" && (
+          {kycStatus?.data.kyc_level === "0" ||
+          kycStatus?.data.kyc_status === null ? (
             <Link
               to="/kyc"
               className="w-full flex justify-between items-center gap-4 px-4 py-3 mt-6 bg-[#664101] rounded-2xl text-[#F5B546] "
@@ -169,7 +241,7 @@ const Dashboard = () => {
               </div>
               <SlArrowRight className="text-white text-[16px]" />
             </Link>
-          )}
+          ) : null}
           <div className="flex w-[70%] xs:w-3/5 mds:w-1/2 mt-8 px-2 bg-[#F1F1F1] dark:bg-[#1C1C1C] h-[56px] rounded-2xl items-center">
             <button
               onClick={() => setSellRateFlow(false)}
@@ -213,21 +285,32 @@ const Dashboard = () => {
               View all
             </Link>
           </div>
-          <div className="h-[600px] lgss:h-[800px] mt-8 flex-col flex gap-6 py-4">
-            <TransactionCard
-              type="Deposit"
-              status="Pending"
-              nairaAmount={300}
-              coin="Solana"
-              coinAmount={200}
-            />
-            <TransactionCard
-              type="Payout"
-              status="Successful"
-              nairaAmount={156092}
-              coin="Bitcoin"
-              coinAmount={0.05}
-            />
+          <div className="h-[600px] lgss:h-[800px] overflow-auto mt-4 flex-col flex gap-6 py-4">
+            {sortedPayouts?.length >= 1 ? (
+              sortedPayouts.slice(0, 4).map((payout: any, index: number) => (
+                <div key={index} className="w-full">
+                  <h4 className="text-gray-500 text-left mb-4 text-[12px]">
+                    {getFormattedDate(payout.transaction_date)}
+                  </h4>
+                  <div
+                    onClick={() => {
+                      setClickedPayout(payout);
+                      setShowDetails(true);
+                    }}
+                    className="cursor-pointer w-full"
+                  >
+                    <TransactionCard payouts={payout} />
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="w-full flex flex-col h-full px-12   justify-start mt-12 items-center">
+                <img src={getThemeBasedImage()} alt="" />
+                <h4 className="text-[14px] mt-10 text-center text-gray-800 dark:text-gray-500">
+                  There are no transaction available yet
+                </h4>
+              </div>
+            )}
           </div>
         </div>
         {selectCoinModal && (
@@ -259,6 +342,7 @@ const Dashboard = () => {
           setGenerateAddyModal={setGenerateAddyModal}
           setAddBankModal={setAddBankModal}
           setSelectedBankDetails={setSelectedBankDetails}
+          selectedBankDetails={selectedBankDetails}
         />
       )}
       {generateAddyModal && (
@@ -332,6 +416,12 @@ const Dashboard = () => {
         />
       )}
       {kycModal && <KycModal setKycModal={setKycModal} />}
+      {showDetails && (
+        <DetailsModal
+          setShowDetails={setShowDetails}
+          clickedPayout={clickedPayout}
+        />
+      )}
     </div>
   );
 };

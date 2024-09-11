@@ -60,7 +60,6 @@ const GenerateWallet = ({
         setShowGenerateButton(true);
         setShowProceedButton(false);
       }
-      toast.success("Wallet fetched ...");
     }
   }, [data, success1]);
 
@@ -145,33 +144,35 @@ const GenerateWallet = ({
         <h4 className="text-gray-800 dark:text-gray-100 mt-4 font-semibold text-[20px]">
           Sell {coin}
         </h4>
-        <div className="w-full mt-8">
-          <h4 className="dark:text-gray-400 text-gray-800 mt-2 font-medium text-[12px]">
-            Network
-          </h4>
-          <select
-            value={network}
-            className="w-full bg-transparent outline-none dark:text-white text-gray-800 text-[12px] h-[48px] rounded-xl mt-2 px-4 border border-gray-300 dark:bg-transparent dark:border-gray-700 bg-[#F1F1F1]"
-            onChange={(e) => {
-              //   queryClient.invalidateQueries({
-              //     queryKey: ["get-wallet-address"],
-              //   });
-              setWalletAddy("");
-              setNetwork(e.target.value);
-            }}
-          >
-            <option value="">Select Network</option>
-            {coin === "USDT" || coin === "ETH" ? (
-              <>
-                <option value="bep20">BEP-20</option>
-                <option value="erc20">ERC-20</option>
-              </>
-            ) : null}
-            {coin === "USDT" && <option value="trc20">TRC-20</option>}{" "}
-            {coin === "SOL" && <option value="bep20">Solana</option>}{" "}
-            {coin === "BTC" && <option value="btc">Bitcoin</option>}{" "}
-          </select>
-        </div>
+        {coin === "USDT" || coin === "ETH" ? (
+          <div className="w-full mt-8">
+            <h4 className="dark:text-gray-400 text-gray-800 mt-2 font-medium text-[12px]">
+              Network
+            </h4>
+            <select
+              value={network}
+              className="w-full bg-transparent outline-none dark:text-white text-gray-800 text-[12px] h-[48px] rounded-xl mt-2 px-4 border border-gray-300 dark:bg-transparent dark:border-gray-700 bg-[#F1F1F1]"
+              onChange={(e) => {
+                //   queryClient.invalidateQueries({
+                //     queryKey: ["get-wallet-address"],
+                //   });
+                setWalletAddy("");
+                setNetwork(e.target.value);
+              }}
+            >
+              <option value="">Select Network</option>
+              {coin === "USDT" || coin === "ETH" ? (
+                <>
+                  <option value="bep20">BEP-20</option>
+                  <option value="erc20">ERC-20</option>
+                </>
+              ) : null}
+              {coin === "USDT" && <option value="trc20">TRC-20</option>}{" "}
+              {/* {coin === "SOL" && <option value="bep20">Solana</option>}{" "}
+            {coin === "BTC" && <option value="btc">Bitcoin</option>}{" "} */}
+            </select>
+          </div>
+        ) : null}
         {walletAddy && (
           <div className="w-full h-[52px] flex justify-start px-4 items-center rounded-xl border border-gray-300 bg-[#F1F1F1] dark:bg-transparent dark:border-gray-700 mt-4">
             <h4 className="dark:text-white text-gray-800  font-medium text-[12px]">

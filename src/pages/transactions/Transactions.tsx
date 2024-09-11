@@ -1,12 +1,57 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { Link } from "react-router-dom";
 import { IoClose } from "react-icons/io5";
 import TransactionCard from "../dashboard/transactionList/TransactionCard";
 import TransactionDetails from "./TransactionDetails";
+import { cryptpay, darkCrypt } from "../../assets/images";
+import { useUser } from "../../context/user-context";
+import { getFormattedDate } from "../../utils/formatDate";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { API } from "../../constants/api";
+import { errorMessage } from "../../utils/errorMessage";
+import useAuthAxios from "../../utils/baseAxios";
 
 const Transactions = () => {
   const [showHistory, setShowHistory] = useState<boolean>(false);
+  const [clickedPayout, setClickedPayout] = useState<any[]>([]);
+  const { theme } = useUser();
+  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const axiosInstance = useAuthAxios();
+  const getThemeBasedImage = () => {
+    if (theme === "dark") {
+      return cryptpay;
+    } else if (theme === "light") {
+      return darkCrypt;
+    } else if (theme === "system") {
+      return darkQuery.matches ? cryptpay : darkCrypt;
+    }
+    return darkCrypt; // fallback in case of an unexpected value
+  };
+  const getPayouts = async () => {
+    const response = await axiosInstance.get(API.getTransactions);
+    return response.data.data;
+  };
+  const { data: payouts, error: error3 } = useQuery({
+    queryKey: ["get-payouts"],
+    queryFn: getPayouts,
+    retry: 1,
+  });
+  useEffect(() => {
+    if (error3) {
+      const newError = error3 as any;
+      toast.error(errorMessage(newError?.message || newError?.data?.message));
+    }
+  }, [error3]);
+  console.log(payouts);
+
+  const sortedPayouts = payouts?.sort((a: any, b: any) => {
+    return (
+      new Date(b.transaction_date).getTime() -
+      new Date(a.transaction_date).getTime()
+    );
+  });
   return (
     <div
       className={` w-full font-sora h-screen pb-16 lgss:pb-0 bg-white dark:bg-primary_dark `}
@@ -32,24 +77,33 @@ const Transactions = () => {
           </Link>
         </div>
         {showHistory ? (
-          <TransactionDetails status="Pending" />
+          <TransactionDetails clickedPayout={clickedPayout} />
         ) : (
-          <div className="h-[300px] lgss:h-[400px] mt-8 flex-col flex gap-6 py-4">
-            <TransactionCard
-              type="Deposit"
-              status="Pending"
-              nairaAmount={300}
-              coin="Solana"
-              coinAmount={200}
-              onClick={() => setShowHistory(true)}
-            />
-            <TransactionCard
-              type="Payout"
-              status="Successful"
-              nairaAmount={156092}
-              coin="Bitcoin"
-              coinAmount={0.05}
-            />
+          <div className="h-[600px] lgss:h-[700px] overflow-auto mt-4 flex-col flex gap-6 py-4">
+            {sortedPayouts?.length >= 1 ? (
+              sortedPayouts.map((payout: any, index: any) => (
+                <div
+                  onClick={() => {
+                    setClickedPayout(payout);
+                    setShowHistory(true);
+                  }}
+                  key={index}
+                  className="w-full"
+                >
+                  <h4 className="text-gray-500 text-left mb-4 text-[12px]">
+                    {getFormattedDate(payout.transaction_date)}
+                  </h4>
+                  <TransactionCard payouts={payout} />
+                </div>
+              ))
+            ) : (
+              <div className="w-full flex flex-col h-full px-12   justify-start mt-12 items-center">
+                <img src={getThemeBasedImage()} alt="" />
+                <h4 className="text-[14px] mt-10 text-center text-gray-800 dark:text-gray-500">
+                  There are no transaction available yet
+                </h4>
+              </div>
+            )}
           </div>
         )}
       </div>
