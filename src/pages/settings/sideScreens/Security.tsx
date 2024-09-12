@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { API } from "../../../constants/api";
 import { useUser } from "../../../context/user-context";
 import useAuthAxios from "../../../utils/baseAxios";

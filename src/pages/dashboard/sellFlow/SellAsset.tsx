@@ -9,7 +9,7 @@ import { truncateWord } from "../../../utils/wordFunctions";
 import QRCode from "react-qr-code";
 import { useUser } from "../../../context/user-context";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { API } from "../../../constants/api";
 import { errorMessage } from "../../../utils/errorMessage";
 import useAuthAxios from "../../../utils/baseAxios";

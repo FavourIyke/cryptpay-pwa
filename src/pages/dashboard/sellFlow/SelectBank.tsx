@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IoAddOutline, IoClose } from "react-icons/io5";
 import { SlArrowLeft } from "react-icons/sl";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { API } from "../../../constants/api";
 import useAuthAxios from "../../../utils/baseAxios";
 import { errorMessage } from "../../../utils/errorMessage";
@@ -14,6 +14,7 @@ const SelectBank = ({
   setGenerateAddyModal,
   setAddBankModal,
   setSelectedBankDetails,
+  selectedBankDetails,
 }: any) => {
   const axiosInstance = useAuthAxios();
   const queryClient = useQueryClient();
@@ -78,6 +79,14 @@ const SelectBank = ({
       setLoadingIndex(null);
     },
   });
+  useEffect(() => {
+    // Check for banks with `is_default` set to true
+    const filteredBanks = userBanks?.filter((bank: any) => bank.is_default);
+    // Set the banks with `is_default: true` to state
+    if (filteredBanks && filteredBanks.length > 0) {
+      setSelectedBankDetails(filteredBanks[0]);
+    }
+  }, [userBanks]);
 
   return (
     <div className="fixed inset-0  flex font-sora justify-start items-start pt-24 bg-white dark:bg-primary_dark   backdrop-blur-sm">
@@ -127,9 +136,6 @@ const SelectBank = ({
                 key={index}
                 onClick={() => {
                   if (bank.is_default) {
-                    setSelectBankModal(false);
-                    setGenerateAddyModal(true);
-                    setSelectedBankDetails(bank);
                   } else {
                     setBankId(bank.id);
                     setLoadingIndex(index);
@@ -189,16 +195,25 @@ const SelectBank = ({
             ))}
         </div>
 
-        <div className="w-full mt-12">
+        <div className="w-full flex justify-between items-center gap-3 mt-12">
           <button
             onClick={() => {
               setSelectBankModal(false);
               setAddBankModal(true);
             }}
-            className="w-4/5 xs:w-3/5 mds:w-1/2 mx-auto flex gap-3 items-center justify-center h-[40px] text-[12px] font-medium rounded-xl text-[#3A66FF] border-text_blue border "
+            className="w-1/2 mx-auto flex gap-3 items-center justify-center h-[48px] text-[12px] font-medium rounded-xl text-[#3A66FF] border-text_blue border "
           >
             <IoAddOutline className="text-[24px] " />
             <h4>Add Bank Account</h4>
+          </button>
+          <button
+            onClick={() => {
+              setSelectBankModal(false);
+              setGenerateAddyModal(true);
+            }}
+            className="w-1/2 mx-auto flex  items-center justify-center h-[48px] text-[12px] font-medium rounded-xl bg-[#3A66FF] text-gray-100 "
+          >
+            <h4>Proceed</h4>
           </button>
         </div>
       </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SlArrowLeft } from "react-icons/sl";
 import { Link, useNavigate } from "react-router-dom";
 import AuthNav from "./AuthNav";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import useAuthAxios from "../utils/baseAxios";
 import { API } from "../constants/api";
 import { useMutation } from "@tanstack/react-query";
@@ -15,14 +15,14 @@ const ForgotPassword = () => {
   const axiosInstance = useAuthAxios();
   const validateEmail = (mail: string) => {
     if (!mail) {
-      toast("Kindly tell us your mail", { type: "error" });
+      toast.error("Kindly tell us your mail");
       return false;
     }
 
     const emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     if (!emailRegex.test(mail)) {
-      toast("Your email is not in the correct format", { type: "error" });
+      toast.error("Your email is not in the correct format");
       return false;
     }
 
@@ -38,7 +38,7 @@ const ForgotPassword = () => {
     mutationFn: handleForgotPassword,
     onSuccess: (r) => {
       toast.success(r.message);
-      navigate("/reset-password", {
+      navigate("/verify-reset", {
         state: {
           email: email,
         },

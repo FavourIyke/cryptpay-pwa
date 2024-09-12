@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { SlArrowRight } from "react-icons/sl";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { API } from "../../constants/api";
 import { errorMessage } from "../../utils/errorMessage";
 import useAuthAxios from "../../utils/baseAxios";

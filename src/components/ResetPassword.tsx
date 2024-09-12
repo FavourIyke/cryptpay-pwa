@@ -5,11 +5,10 @@ import { validateCreatePassword } from "../utils/validations";
 import AuthNav from "./AuthNav";
 import { SlArrowLeft } from "react-icons/sl";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import OtpInputField from "./utils/OtpInput";
 import useAuthAxios from "../utils/baseAxios";
 import { API } from "../constants/api";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { errorMessage } from "../utils/errorMessage";
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -18,15 +17,10 @@ const ResetPassword = () => {
   const [showCPassword, setShowCPassword] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const [passwordC, setPasswordC] = useState<string>("");
-  const [otp, setOtp] = useState<string>("");
   const axiosInstance = useAuthAxios();
   const location = useLocation();
   const info = location.state;
   const navigate = useNavigate();
-
-  const handleChange = (otp: React.SetStateAction<string>) => {
-    setOtp(otp);
-  };
 
   const handleResetPassword = async ({
     email,
@@ -64,7 +58,7 @@ const ResetPassword = () => {
     }
     const data = {
       email: info.email,
-      reset_code: otp,
+      reset_code: info.otpPassword,
       password: password,
       password_confirmation: passwordC,
     };
@@ -89,7 +83,6 @@ const ResetPassword = () => {
         <h4 className="text-gray-800 dark:text-gray-100 mt-4 mb-6 font-semibold text-[20px]">
           Create New Password
         </h4>
-        <OtpInputField otp={otp} setOtp={setOtp} handleChange={handleChange} />
 
         <div className="mt-4 w-full">
           <div className="w-full">
@@ -181,7 +174,7 @@ const ResetPassword = () => {
             disabled={
               !password ||
               !passwordC ||
-              otp.length !== 6 ||
+              info.otpPassword.length !== 6 ||
               completeResetPassword.isPending
             }
             className={`w-full h-[52px] rounded-[18px] mt-12 ${

@@ -10,12 +10,21 @@ import InvitedFriends from "./sideScreens/InvitedFriends";
 import Leaderboard from "./sideScreens/Leaderboard";
 import Security from "./sideScreens/Security";
 import TransactionPin from "./sideScreens/TransactionPin";
+import BankDetails from "./sideScreens/BankDetails";
+import AddBankScreen from "./sideScreens/AddBankScreen";
+import AccountUpgrade from "./sideScreens/AccountUpgrade";
+import SupportCenter from "./sideScreens/SupportCenter";
+import ContactSupport from "./sideScreens/ContactSupport";
+import UserFeedback from "./sideScreens/UserFeedback";
+import FAQ from "./sideScreens/FAQ";
 
 const SidePage = ({ setSidePage, setScreen, screen }: any) => {
   const { theme } = useUser();
   const [mode, setMode] = useState<number>(1);
   const [secScreen, setSecScreen] = useState<number>(1);
   const [refMode, setRefMode] = useState<number>(1);
+  const [bankMode, setBankMode] = useState<number>(1);
+  const [supportMode, setSupportMode] = useState<number>(1);
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
   const getThemeBasedImage = () => {
@@ -82,6 +91,36 @@ const SidePage = ({ setSidePage, setScreen, screen }: any) => {
                 <InvitedFriends setRefMode={setRefMode} />
               ) : refMode === 3 ? (
                 <Leaderboard setRefMode={setRefMode} />
+              ) : null}
+            </div>
+          ) : screen === 3 ? (
+            <div>
+              {bankMode === 1 ? (
+                <BankDetails
+                  setSidePage={setSidePage}
+                  setScreen={setScreen}
+                  setBankMode={setBankMode}
+                />
+              ) : bankMode === 2 ? (
+                <AddBankScreen setBankMode={setBankMode} />
+              ) : null}
+            </div>
+          ) : screen === 2 ? (
+            <AccountUpgrade setSidePage={setSidePage} setScreen={setScreen} />
+          ) : screen === 7 ? (
+            <div>
+              {supportMode === 1 ? (
+                <SupportCenter
+                  setSidePage={setSidePage}
+                  setScreen={setScreen}
+                  setSupportMode={setSupportMode}
+                />
+              ) : supportMode === 2 ? (
+                <ContactSupport setSupportMode={setSupportMode} />
+              ) : supportMode === 3 ? (
+                <UserFeedback setSupportMode={setSupportMode} />
+              ) : supportMode === 4 ? (
+                <FAQ setSupportMode={setSupportMode} />
               ) : null}
             </div>
           ) : null}

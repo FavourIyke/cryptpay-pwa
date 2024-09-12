@@ -1,20 +1,20 @@
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
  export const validateLoginDetails = (email: string, password: string): boolean => {
     if (!email) {
-      toast("Kindly tell us your mail", { type: "error" ,});
+      toast.error("Kindly tell us your mail");
       return false;
     }
 
     const emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     if (!emailRegex.test(email)) {
-      toast("Your email is not in the correct format", { type: "error" });
+      toast.error("Your email is not in the correct format");
       return false;
     }
 
     if (!password) {
-      toast("We need your password to proceed", { type: "error" });
+      toast.error("We need your password to proceed");
       return false;
     }
 
@@ -22,14 +22,14 @@ import { toast } from "react-toastify";
   };
  export const validateForgotPassword = (email: string, ): boolean => {
     if (!email) {
-      toast("Kindly tell us your mail", { type: "error" });
+      toast.error("Kindly tell us your mail");
       return false;
     }
 
     const emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     if (!emailRegex.test(email)) {
-      toast("Your email is not in the correct format", { type: "error" });
+      toast.error("Your email is not in the correct format");
       return false;
     }
 
@@ -40,27 +40,27 @@ import { toast } from "react-toastify";
     // check if password is empty
     if (!password) {
       
-            toast("kindly add your desired password", { type: "error" });
+            toast.error("kindly add your desired password");
 
       return false;
     }
     const passwordRegex =/[!@#_$%^&*(),.?":{}|<>]/
     if (!passwordRegex.test(password)) {
      
-      toast("Password must contain atleast 8 characters, 1 uppercase, 1 lowercase and 1 special character", { type: "error" });
+      toast.error("Password must contain atleast 8 characters, 1 uppercase, 1 lowercase and 1 special character");
 
       return false;
     }
     // check if confirmed password is empty
     if (!confirmPassword) {
      
-            toast("Retype your password in the field above", { type: "error" });
+            toast.error("Retype your password in the field above");
 
       return false;
     }
 
     if (confirmPassword !== password) {
-            toast("Oops!!! Your passwords do not match", { type: "error" });
+            toast.error("Oops!!! Your passwords do not match");
 
       return false;
     }
@@ -69,18 +69,18 @@ import { toast } from "react-toastify";
   export  const validateSignUp = (email:string, username: string, ) => {
     // check if password is empty
      if (!email) {
-      toast("Kindly tell us your mail", { type: "error" });
+      toast.error("Kindly tell us your mail");
       return false;
     }
      if (!username) {
-      toast("Kindly tell us your username", { type: "error" });
+      toast.error("Kindly tell us your username");
       return false;
     }
 
     const emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     if (!emailRegex.test(email)) {
-      toast("Your email is not in the correct format", { type: "error" });
+      toast.error("Your email is not in the correct format");
       return false;
     }
 
@@ -89,11 +89,11 @@ import { toast } from "react-toastify";
   export  const validateSaveDetails = (username:string, fullname: string, ) => {
     // check if password is empty
      if (!username) {
-      toast("Kindly tell us your username", { type: "error" });
+      toast.error("Kindly tell us your username");
       return false;
     }
      if (!fullname) {
-      toast("Kindly tell us your full name", { type: "error" });
+      toast.error("Kindly tell us your full name");
       return false;
     }
 
@@ -103,16 +103,16 @@ import { toast } from "react-toastify";
 
   export const validateBvn = (bvnno: string, surnamee: string) => {
     if (!bvnno) {
-      toast("Enter your BVN", { type: "error" });
+      toast.error("Enter your BVN");
       return false;
     }
     if (!surnamee) {
-      toast("Enter your surname", { type: "error" });
+      toast.error("Enter your surname");
       return false;
     }
     const bvnRegex = /^[0-9]{11}$/;
     if (!bvnRegex.test(bvnno)) {
-      toast("This BVN is not correct", { type: "error" });
+      toast.error("This BVN is not correct");
       return false;
     }
 
