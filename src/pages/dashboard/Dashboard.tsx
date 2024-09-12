@@ -97,7 +97,7 @@ const Dashboard = () => {
     queryFn: getKycStatus,
     retry: 1,
   });
-  console.log(payouts);
+  // console.log(payouts);
 
   useEffect(() => {
     if (error2) {
