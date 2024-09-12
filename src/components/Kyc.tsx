@@ -6,7 +6,7 @@ import { SlArrowLeft } from "react-icons/sl";
 import { Link, useNavigate } from "react-router-dom";
 import { validateBvn } from "../utils/validations";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { API } from "../constants/api";
 import useAuthAxios from "../utils/baseAxios";
 import { errorMessage } from "../utils/errorMessage";

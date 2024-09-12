@@ -3,7 +3,7 @@ import React from "react";
 import { RiErrorWarningFill } from "react-icons/ri";
 import { API } from "../../constants/api";
 import useAuthAxios from "../../utils/baseAxios";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { errorMessage } from "../../utils/errorMessage";
 import { useAuth } from "../../context/auth-context";
 import ClipLoader from "react-spinners/ClipLoader";

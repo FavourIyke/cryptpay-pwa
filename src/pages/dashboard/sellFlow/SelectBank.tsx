@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IoAddOutline, IoClose } from "react-icons/io5";
 import { SlArrowLeft } from "react-icons/sl";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { API } from "../../../constants/api";
 import useAuthAxios from "../../../utils/baseAxios";
 import { errorMessage } from "../../../utils/errorMessage";

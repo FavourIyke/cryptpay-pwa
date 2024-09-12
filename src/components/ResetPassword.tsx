@@ -8,7 +8,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuthAxios from "../utils/baseAxios";
 import { API } from "../constants/api";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { errorMessage } from "../utils/errorMessage";
 import ClipLoader from "react-spinners/ClipLoader";
 

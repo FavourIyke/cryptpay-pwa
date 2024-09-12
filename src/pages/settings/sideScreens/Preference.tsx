@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { PiCurrencyCircleDollarBold } from "react-icons/pi";
 import { SlArrowLeft } from "react-icons/sl";
 import { useUser } from "../../../context/user-context";
@@ -6,8 +6,8 @@ import { IoMoonSharp } from "react-icons/io5";
 import { RiSunFill } from "react-icons/ri";
 import useAuthAxios from "../../../utils/baseAxios";
 import { API } from "../../../constants/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
 import { errorMessage } from "../../../utils/errorMessage";
 
 const Preference = ({ setSidePage, setScreen, setMode }: any) => {

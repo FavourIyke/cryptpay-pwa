@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { SlArrowLeft } from "react-icons/sl";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { API } from "../constants/api";
 import { useAuth } from "../context/auth-context";
 import useAuthAxios from "../utils/baseAxios";

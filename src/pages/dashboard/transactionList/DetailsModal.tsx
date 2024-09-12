@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { FiClipboard, FiCopy } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
-import { Link } from "react-router-dom";
 import { formatAmount } from "../../../utils/formatDate";
 import { truncateWord } from "../../../utils/wordFunctions";
 

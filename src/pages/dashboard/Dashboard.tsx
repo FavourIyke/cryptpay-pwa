@@ -21,7 +21,7 @@ import { SlArrowRight } from "react-icons/sl";
 import { TiWarning } from "react-icons/ti";
 import GenerateWallet from "./sellFlow/GenerateWallet";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { API } from "../../constants/api";
 import { errorMessage } from "../../utils/errorMessage";
 import useAuthAxios from "../../utils/baseAxios";
@@ -97,6 +97,7 @@ const Dashboard = () => {
     queryFn: getKycStatus,
     retry: 1,
   });
+  console.log(payouts);
 
   useEffect(() => {
     if (error2) {

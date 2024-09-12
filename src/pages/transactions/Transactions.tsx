@@ -8,7 +8,7 @@ import { cryptpay, darkCrypt } from "../../assets/images";
 import { useUser } from "../../context/user-context";
 import { getFormattedDate } from "../../utils/formatDate";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { API } from "../../constants/api";
 import { errorMessage } from "../../utils/errorMessage";
 import useAuthAxios from "../../utils/baseAxios";
