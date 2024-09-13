@@ -13,6 +13,7 @@ import { toast } from "react-hot-toast";
 import { API } from "../../../constants/api";
 import { errorMessage } from "../../../utils/errorMessage";
 import useAuthAxios from "../../../utils/baseAxios";
+import { useStatusBarHeight } from "../../../components/utils/StatusBarH";
 
 const SellAsset = ({
   setSellAssetModal,
@@ -39,6 +40,8 @@ const SellAsset = ({
     return "dark"; // fallback in case of an unexpected value
   };
 
+  const statusBarHeight = useStatusBarHeight();
+
   const userTheme = getThemeBasedImage();
   const getAllBanks = async () => {
     const response = await axiosInstance.get(API.getAllBanks);
@@ -58,9 +61,12 @@ const SellAsset = ({
   }, [error2]);
 
   return (
-    <div className="fixed inset-0  flex font-sora justify-start items-start pt-10 bg-white dark:bg-primary_dark   backdrop-blur-sm">
+    <div
+      style={{ paddingTop: `${statusBarHeight + 80}px ` }}
+      className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start  bg-white dark:bg-primary_dark overflow-auto pb-12 lgss:pb-4  backdrop-blur-sm"
+    >
       <div
-        className={` w-11/12 mds:w-9/12 md:6/12 lgss:w-1/2 xxl:w-[35%] xxxl:w-[25%] border  dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-6 dark:bg-[#1F1F1F] mt-12   `}
+        className={` w-[96%] mds:w-9/12 md:6/12 lgss:w-1/2 xxl:w-[35%] xxxl:w-[25%] border  dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-4 mds:p-6  dark:bg-[#1F1F1F]   `}
       >
         <div className="w-full flex justify-between items-center">
           <button

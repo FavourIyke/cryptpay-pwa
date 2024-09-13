@@ -36,7 +36,7 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
     retry: 1,
   });
 
-  console.log(userDetails);
+  // console.log(userDetails);
 
   useEffect(() => {
     if (error1) {

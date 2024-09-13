@@ -135,7 +135,13 @@ const BankDetails = ({ setSidePage, setScreen, setBankMode }: any) => {
         Your bank to receive payout
       </h4>
       <div className="w-full flex flex-col mt-8 justify-between gap-24 items-center">
-        <div className="w-full h-[500px] lgss:h-[400px] overflow-auto pb-10">
+        <div
+          className={
+            userBanks?.length >= 3
+              ? "w-full h-[500px] lgss:h-[400px] overflow-auto pb-10"
+              : "w-full h-[300px] lgss:h-[400px] overflow-auto pb-10"
+          }
+        >
           {userBanks
             ?.sort((a: any, b: any) => b.is_default - a.is_default)
             .map((bank: any, index: any) => (

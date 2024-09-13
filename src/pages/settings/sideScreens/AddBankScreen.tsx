@@ -218,7 +218,11 @@ const AddBankScreen = ({ setBankMode }: any) => {
                 }
                 completeAddBank.mutate(requestData);
               }}
-              className={`w-full h-[52px] rounded-[18px] mt-[300px] lgss:mt-[200px] ${
+              className={`${
+                dropDown
+                  ? "w-full h-[52px] rounded-[18px] mt-[300px] lgss:mt-[200px]"
+                  : "w-full h-[52px] rounded-[18px] mt-[100px] lgss:mt-[200px]"
+              }  ${
                 disabled
                   ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
                   : "bg-text_blue text-white"

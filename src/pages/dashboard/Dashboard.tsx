@@ -179,7 +179,7 @@ const Dashboard = () => {
                   </h4>
                 )}
               </div>
-              <div className="flex gap-6 xxs:gap-10 mds:gap-16 justify-center items-center">
+              <div className="flex gap-8 xxs:gap-10 mds:gap-16 justify-center items-center">
                 <div>
                   <button
                     onClick={() => {
@@ -243,7 +243,7 @@ const Dashboard = () => {
               <SlArrowRight className="text-white text-[16px]" />
             </Link>
           ) : null}
-          <div className="flex w-[70%] xs:w-3/5 mds:w-1/2 mt-8 px-2 bg-[#F1F1F1] dark:bg-[#1C1C1C] h-[56px] rounded-2xl items-center">
+          <div className="flex w-full md:w-1/2 mx-auto lgss:mx-0 mt-8 px-2 bg-[#F1F1F1] dark:bg-[#1C1C1C] h-[56px] rounded-2xl items-center">
             <button
               onClick={() => setSellRateFlow(false)}
               className={
