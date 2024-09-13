@@ -23,7 +23,7 @@ const ContactSupport = ({ setSupportMode }: any) => {
       <h4 className="text-gray-800 dark:text-gray-100 mt-12 lgss:mt-8 font-semibold text-[18px]">
         Contact Support
       </h4>
-      <h4 className="text-gray-500 dark:text-gray-400 mt-2  font-medium text-[14px]">
+      <h4 className="text-gray-500 dark:text-white mt-2  font-medium text-[14px]">
         Contact us through the platforms below, and our team will reach out to
         you shortly.
       </h4>
@@ -35,7 +35,7 @@ const ContactSupport = ({ setSupportMode }: any) => {
                 <BiSupport className="text-[16px] text-white dark:text-gray-800" />
               </div>
               <div>
-                <h4 className="text-gray-600 text-left dark:text-gray-400 text-[12px]">
+                <h4 className="text-gray-600 text-left dark:text-white text-[12px]">
                   Phone Number
                 </h4>
                 <h4 className="text-gray-800  dark:text-gray-50 text-left text-[14px]">
@@ -50,7 +50,7 @@ const ContactSupport = ({ setSupportMode }: any) => {
                 <BiSupport className="text-[16px] text-white dark:text-gray-800" />
               </div>
               <div>
-                <h4 className="text-gray-600 text-left dark:text-gray-400 text-[12px]">
+                <h4 className="text-gray-600 text-left dark:text-white text-[12px]">
                   Email Address
                 </h4>
                 <a
@@ -77,7 +77,7 @@ const ContactSupport = ({ setSupportMode }: any) => {
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             placeholder="Enter Full Name"
-            className="w-full dark:text-gray-400 text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 rounded-xl "
+            className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 rounded-xl "
           />
         </div>
         <div className="w-full mt-6 ">
@@ -97,7 +97,7 @@ const ContactSupport = ({ setSupportMode }: any) => {
             value={header}
             onChange={(e) => setHeader(e.target.value)}
             placeholder="Enter Header for your complaint"
-            className="w-full dark:text-gray-400 text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+            className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
           />
         </div>
         <div className="w-full mt-6">
@@ -108,7 +108,7 @@ const ContactSupport = ({ setSupportMode }: any) => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Enter Message"
-            className="w-full dark:text-gray-400 text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[100px] pt-2 mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+            className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[100px] pt-2 mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
           />
         </div>
         <button className="w-full bg-text_blue mt-10 h-[44px] rounded-xl text-[14px] font-semibold text-white">

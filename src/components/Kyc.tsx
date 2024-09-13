@@ -84,7 +84,7 @@ const Kyc = () => {
               value={bvn}
               onChange={(e) => setBvn(e.target.value)}
               placeholder="Enter your BVN"
-              className="w-full dark:text-gray-400 text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+              className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
             />
             <h4 className="text-gray-800 dark:text-gray-300  text-[11px] mt-2">
               Dial *565*0# to check for your BVN
@@ -94,7 +94,7 @@ const Kyc = () => {
             <label className="text-gray-800 text-[14px] dark:text-white">
               Surname
             </label>
-            <div className="w-full flex justify-between px-4  items-center dark:text-gray-400 text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border border-gray-300 bg-transparent  spin-button-none rounded-xl">
+            <div className="w-full flex justify-between px-4  items-center dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border border-gray-300 bg-transparent  spin-button-none rounded-xl">
               <input
                 type="text"
                 value={surname}
@@ -128,7 +128,7 @@ const Kyc = () => {
             disabled={!bvn || !surname}
             className={`w-full h-[52px] rounded-[18px] mt-8 ${
               !bvn || !surname
-                ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
+                ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
                 : "bg-text_blue text-white"
             }  flex justify-center items-center  font-semibold`}
           >

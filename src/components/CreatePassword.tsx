@@ -92,7 +92,7 @@ const CreatePassword = () => {
             <label className="text-gray-800 text-[14px]  dark:text-white">
               Password
             </label>
-            <div className="w-full dark:text-gray-400 text-gray-800 flex justify-between items-center dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl">
+            <div className="w-full dark:text-white text-gray-800 flex justify-between items-center dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl">
               <input
                 type={showPassword ? "text" : "password"}
                 onChange={(e) => setPassword(e.target.value)}
@@ -116,7 +116,7 @@ const CreatePassword = () => {
             <label className="text-gray-800 text-[14px]  dark:text-white">
               Confirm Password
             </label>
-            <div className="w-full dark:text-gray-400 text-gray-800 flex justify-between items-center dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl">
+            <div className="w-full dark:text-white text-gray-800 flex justify-between items-center dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl">
               <input
                 type={showCPassword ? "text" : "password"}
                 value={passwordC}
@@ -177,7 +177,7 @@ const CreatePassword = () => {
             disabled={!password || !passwordC || completeSignIn.isPending}
             className={`w-full h-[52px] rounded-[18px] mt-12 ${
               !password || !passwordC
-                ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
+                ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
                 : "bg-text_blue text-white"
             }  flex justify-center items-center  font-semibold`}
           >

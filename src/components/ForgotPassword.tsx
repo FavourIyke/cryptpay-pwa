@@ -91,7 +91,7 @@ const ForgotPassword = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value.toLowerCase())}
               placeholder="eg: johndoe@example.com"
-              className="w-full dark:text-gray-400 text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+              className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
             />
           </div>
         </div>
@@ -100,7 +100,7 @@ const ForgotPassword = () => {
           disabled={!email || completeForgotP.isPending}
           className={`w-full h-[52px] rounded-[18px] mt-12 ${
             !email
-              ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
+              ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
               : "bg-text_blue text-white"
           }  flex justify-center items-center  font-semibold`}
         >

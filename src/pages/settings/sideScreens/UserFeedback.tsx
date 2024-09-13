@@ -45,7 +45,7 @@ const UserFeedback = ({ setSupportMode }: any) => {
       <h4 className="text-gray-800 dark:text-gray-100 mt-12 lgss:mt-8 font-semibold text-[18px]">
         User Feedback
       </h4>
-      <h4 className="text-gray-500 dark:text-gray-400 mt-2  font-medium text-[14px]">
+      <h4 className="text-gray-500 dark:text-white mt-2  font-medium text-[14px]">
         Got an idea to elevate CryptPay? Share it with us and help shape the
         future!
       </h4>
@@ -64,7 +64,7 @@ const UserFeedback = ({ setSupportMode }: any) => {
               className={
                 feedbackNo === num + 1
                   ? "px-1 py-2 rounded-xl flex justify-center items-center bg-text_blue text-gray-200"
-                  : "px-1 py-2 rounded-xl flex justify-center items-center border border-gray-300 text-gray-800 dark:border-gray-400 dark:text-gray-400"
+                  : "px-1 py-2 rounded-xl flex justify-center items-center border border-gray-300 text-gray-800 dark:border-gray-400 dark:text-white"
               }
             >
               {num + 1}
@@ -72,10 +72,10 @@ const UserFeedback = ({ setSupportMode }: any) => {
           ))}
         </div>
         <div className="flex justify-between mt-2 items-center">
-          <h4 className="text-gray-500 dark:text-gray-400 mt-2  font-medium text-[12px]">
+          <h4 className="text-gray-500 dark:text-white mt-2  font-medium text-[12px]">
             1 - Not Likely at all
           </h4>
-          <h4 className="text-gray-500 dark:text-gray-400 mt-2  font-medium text-[12px]">
+          <h4 className="text-gray-500 dark:text-white mt-2  font-medium text-[12px]">
             10 - Extremely Likely
           </h4>
         </div>
@@ -88,7 +88,7 @@ const UserFeedback = ({ setSupportMode }: any) => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Enter Message"
-            className="w-full dark:text-gray-400 text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[100px] pt-2 mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+            className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[100px] pt-2 mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
           />
         </div>
         <div className="mt-4 flex justify-between gap-4 items-center">
@@ -109,7 +109,7 @@ const UserFeedback = ({ setSupportMode }: any) => {
               className="absolute w-40 top-4 left-3 opacity-0 bg-red-700 h-20"
             />
           </div>
-          <h4 className="text-gray-500 dark:text-gray-400  font-medium text-[12px]">
+          <h4 className="text-gray-500 dark:text-white  font-medium text-[12px]">
             Upload any attachments you have (Optional)
           </h4>
         </div>
