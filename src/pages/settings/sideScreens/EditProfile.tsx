@@ -130,7 +130,7 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder={userDetails?.data?.profile.username}
-            className="w-full dark:text-gray-400 text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+            className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
           />
         </div>
 
@@ -139,7 +139,7 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
           disabled={!fullName || !username}
           className={`w-full h-[52px] rounded-[18px] mt-28 lgss:mt-20 ${
             !fullName || !username
-              ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
+              ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
               : "bg-text_blue text-white"
           }  flex justify-center items-center  font-semibold`}
         >

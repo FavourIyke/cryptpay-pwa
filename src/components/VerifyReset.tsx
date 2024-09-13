@@ -49,7 +49,7 @@ const VerifyReset = () => {
           disabled={otp.length !== 6}
           className={`w-full h-[52px] rounded-[18px] mt-12 ${
             otp.length !== 6
-              ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
+              ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
               : "bg-text_blue text-white"
           }  flex justify-center items-center  font-semibold`}
         >

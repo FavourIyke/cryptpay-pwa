@@ -144,7 +144,7 @@ const AddBankModal = ({
             </label>
             <div
               onClick={() => setDropDown((prev) => !prev)}
-              className="w-full cursor-pointer dark:text-gray-400 text-gray-800 bg-[#FAFAFA] dark:bg-transparent dark:border-gray-400 h-[52px] mt-2 flex justify-between items-center  outline-none text-[14px] border border-gray-300 bg-transparent px-4  rounded-xl "
+              className="w-full cursor-pointer dark:text-white text-gray-800 bg-[#FAFAFA] dark:bg-transparent dark:border-gray-400 h-[52px] mt-2 flex justify-between items-center  outline-none text-[14px] border border-gray-300 bg-transparent px-4  rounded-xl "
             >
               <h4 className="text-[14px] dark:text-gray-200 text-gray-500">
                 {bankName ? bankName : "Select bank"}
@@ -157,7 +157,7 @@ const AddBankModal = ({
               <h4 className="text-[20px] dark:text-white text-gray-800">
                 Choose Bank
               </h4>
-              <div className="w-full dark:text-gray-50 text-gray-8000  bg-[#FAFAFA] dark:bg-transparent dark:border-[#484848] h-[42px] gap-2 mt-4   outline-none text-[14px] border border-gray-300 bg-transparent px-4 flex items-center spin-button-none rounded-lg ">
+              <div className="w-full dark:text-white text-gray-8000  bg-[#FAFAFA] dark:bg-transparent dark:border-[#484848] h-[42px] gap-2 mt-4   outline-none text-[14px] border border-gray-300 bg-transparent px-4 flex items-center spin-button-none rounded-lg ">
                 <CiSearch className="text-[20px]" />
                 <input
                   type="text"
@@ -208,9 +208,9 @@ const AddBankModal = ({
                 value={bankNumber}
                 onChange={(e) => setBankNumber(e.target.value)}
                 placeholder="Enter 10 digit account number"
-                className="w-full dark:text-gray-400 text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+                className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
               />
-              <h4 className="text-[13px] font-semibold mt-4 dark:text-gray-400 text-gray-800">
+              <h4 className="text-[13px] font-semibold mt-4 dark:text-white text-gray-800">
                 {userBankName && userBankName}
               </h4>
               {userBankName && (
@@ -221,7 +221,7 @@ const AddBankModal = ({
                     onChange={(e) => setIsChecked(e.target.checked)}
                     className="h-[18px] w-[18px]"
                   />
-                  <h4 className="text-[13px] text-gray-600 dark:text-gray-400 font-sora font-semibold">
+                  <h4 className="text-[13px] text-gray-600 dark:text-white font-sora font-semibold">
                     Make default bank
                   </h4>
                 </div>
@@ -242,7 +242,7 @@ const AddBankModal = ({
                 }}
                 className={`w-full h-[52px] rounded-[18px] mt-8 ${
                   disabled
-                    ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
+                    ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
                     : "bg-text_blue text-white"
                 }  flex justify-center items-center  font-semibold`}
               >
