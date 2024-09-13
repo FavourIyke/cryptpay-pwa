@@ -44,12 +44,13 @@ const RateBoard = ({
                 setCoin(coin.symbol);
                 setNetworks(coin.networks);
                 setSelectNetworkModal(true);
-              } else {
-                setSellRate(false);
-                setCoin(coin.symbol);
-                setNetworks(coin.networks);
-                setSelectNetworkModal(true);
               }
+              // else {
+              //   setSellRate(false);
+              //   setCoin(coin.symbol);
+              //   setNetworks(coin.networks);
+              //   setSelectNetworkModal(true);
+              // }
             }}
             className="flex cursor-pointer justify-between px-4 dark:bg-[#1C1C1C] bg-[#F1F1F1] rounded-xl h-[58px] items-center"
           >

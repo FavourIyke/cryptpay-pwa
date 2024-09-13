@@ -37,7 +37,7 @@ const SelectBank = ({
       toast.error(errorMessage(newError?.message || newError?.data?.message));
     }
   }, [error2]);
-
+  const hasDefaultBank = userBanks?.some((bank: any) => bank.is_default);
   const getAllBanks = async () => {
     const response = await axiosInstance.get(API.getAllBanks);
     return response.data;
@@ -89,9 +89,9 @@ const SelectBank = ({
   }, [userBanks]);
 
   return (
-    <div className="fixed inset-0  flex font-sora justify-start items-start pt-24 bg-white dark:bg-primary_dark   backdrop-blur-sm">
+    <div className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12 lgss:pb-4  backdrop-blur-sm">
       <div
-        className={` w-10/12 mds:w-8/12 md:7/12 border dark:border-[#303030] border-[#E6E6E6]  rounded-xl mx-auto p-6 dark:bg-[#1F1F1F] mt-12  lgss:w-2/5 xxl:w-1/3 `}
+        className={` w-[96%] mds:w-9/12 md:6/12 lgss:w-1/2 xxl:w-[35%] xxxl:w-[25%] border  dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-4 mds:p-6  dark:bg-[#1F1F1F] mt-6 lgss:mt-12   `}
       >
         <div className="w-full flex justify-between items-center">
           <button
@@ -201,17 +201,22 @@ const SelectBank = ({
               setSelectBankModal(false);
               setAddBankModal(true);
             }}
-            className="w-1/2 mx-auto flex gap-3 items-center justify-center h-[48px] text-[12px] font-medium rounded-xl text-[#3A66FF] border-text_blue border "
+            className="w-1/2 mx-auto flex gap-3 items-center justify-center h-[48px] text-[10px] xs:text-[12px] font-medium rounded-xl text-[#3A66FF] border-text_blue border "
           >
             <IoAddOutline className="text-[24px] " />
             <h4>Add Bank Account</h4>
           </button>
           <button
+            disabled={userBanks?.length < 1 || !hasDefaultBank}
             onClick={() => {
               setSelectBankModal(false);
               setGenerateAddyModal(true);
             }}
-            className="w-1/2 mx-auto flex  items-center justify-center h-[48px] text-[12px] font-medium rounded-xl bg-[#3A66FF] text-gray-100 "
+            className={
+              userBanks?.length < 1 || !hasDefaultBank
+                ? "w-1/2 mx-auto flex  items-center justify-center h-[48px] text-[12px] font-medium rounded-xl bg-gray-400 text-gray-100 "
+                : "w-1/2 mx-auto flex  items-center justify-center h-[48px] text-[12px] font-medium rounded-xl bg-[#3A66FF] text-gray-100 "
+            }
           >
             <h4>Proceed</h4>
           </button>

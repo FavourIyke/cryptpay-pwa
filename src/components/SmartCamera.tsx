@@ -48,7 +48,7 @@ const SmartCameraComponent: React.FC<SmartCameraComponentProps> = ({
   }, []);
 
   return (
-    <div className="bg-white w-full fixed flex flex-col justify-start items-center pt-20 inset-0 top-20 dark:bg-primary_dark backdrop-blur-sm">
+    <div className="bg-white w-full fixed flex flex-col justify-start items-center pt-12  inset-0  lgss:top-16  pb-12 dark:bg-primary_dark backdrop-blur-sm">
       <div className="flex w-10/12 mds:w-8/12 md:7/12   lgss:w-2/5 xxl:w-1/3  justify-end mb-6  items-center">
         {/* <IoIosArrowBack
           onClick={() => {
@@ -62,7 +62,7 @@ const SmartCameraComponent: React.FC<SmartCameraComponentProps> = ({
           className="text-paragraph text-[24px] dark:text-white cursor-pointer"
         />
       </div>
-      <div className="bg-white border w-10/12 mds:w-8/12 md:7/12 border-gray-400 rounded-xl py-12  lgss:w-2/5 xxl:w-1/3  flex justify-center items-center">
+      <div className="bg-white border w-11/12 overflow-auto mds:w-8/12 md:7/12 border-gray-400 rounded-xl pt-12 py-6 lgss:py-12  lgss:w-2/5 xxl:w-1/3  flex flex-col justify-center items-center">
         <smart-camera-web></smart-camera-web>
       </div>
     </div>
