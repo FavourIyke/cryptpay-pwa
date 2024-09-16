@@ -97,7 +97,7 @@ const Dashboard = () => {
     queryFn: getKycStatus,
     retry: 1,
   });
-  // console.log(payouts);
+  // console.log(kycStatus);
 
   useEffect(() => {
     if (error2) {
@@ -219,7 +219,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          {kycStatus?.data.kyc_level === "0" ||
+          {kycStatus?.data.kyc_level === "000" ||
           kycStatus?.data.kyc_status === null ? (
             <Link
               to="/kyc"
