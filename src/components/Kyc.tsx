@@ -11,6 +11,7 @@ import { API } from "../constants/api";
 import useAuthAxios from "../utils/baseAxios";
 import { errorMessage } from "../utils/errorMessage";
 import ClipLoader from "react-spinners/ClipLoader";
+import { FaCheckCircle } from "react-icons/fa";
 
 const Kyc = () => {
   const [partnerParams, setPartnerParams] = useState<string>("");
@@ -71,76 +72,100 @@ const Kyc = () => {
             Skip
           </h4>
         </Link>
-        <h4 className="text-gray-800 dark:text-gray-100 mt-6 font-semibold text-[20px]">
-          Verify
-        </h4>
-        <div className="w-full mt-8">
-          <div className="w-full">
-            <label className="text-gray-800 text-[14px]  dark:text-white">
-              BVN Number
-            </label>
-            <input
-              type="number"
-              value={bvn}
-              onChange={(e) => setBvn(e.target.value)}
-              placeholder="Enter your BVN"
-              className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
-            />
-            <h4 className="text-gray-800 dark:text-gray-300  text-[11px] mt-2">
-              Dial *565*0# to check for your BVN
-            </h4>
-          </div>
-          <div className="w-full mt-6">
-            <label className="text-gray-800 text-[14px] dark:text-white">
-              Surname
-            </label>
-            <div className="w-full flex justify-between px-4  items-center dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border border-gray-300 bg-transparent  spin-button-none rounded-xl">
-              <input
-                type="text"
-                value={surname}
-                onChange={(e) => setSurname(e.target.value)}
-                placeholder="eg: Chidi"
-                className="w-10/12   outline-none bg-transparent "
-              />
-            </div>
-          </div>
-          {isImageCaptured && (
-            <SmartCameraComponent
-              setIsImageCaptured={setIsImageCaptured}
-              setSubmit={setSubmit}
-              setPartnerParams={setPartnerParams}
-              setImages={setImages}
-            />
-          )}
 
-          <button
-            onClick={() => {
-              if (submit === 0) {
-                handleVerify();
-              } else if (submit === 1) {
+        {submit === 1 ? (
+          <div>
+            <div className="mt-8 flex flex-col px-8 justify-center items-center ">
+              <FaCheckCircle className="text-text_blue text-[44px]" />
+              <h4 className="text-gray-800 dark:text-gray-100 text-center mt-4 font-semibold text-[20px]">
+                Selfie capture complete
+              </h4>
+              <h4 className="text-gray-700 dark:text-gray-400 text-center  font-medium text-[14px]">
+                Your selfie was successfully taken, you can now proceed.
+              </h4>
+            </div>
+            <button
+              onClick={() => {
                 completeKyc.mutate({
                   id_number: bvn,
                   last_name: surname,
                   liveliness_image: images,
                 });
-              }
-            }}
-            disabled={!bvn || !surname}
-            className={`w-full h-[52px] rounded-[18px] mt-8 ${
-              !bvn || !surname
-                ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
-                : "bg-text_blue text-white"
-            }  flex justify-center items-center  font-semibold`}
-          >
-            {submit === 0 ? (
-              " Next"
-            ) : submit === 1 && completeKyc.isPending ? (
-              <ClipLoader color="#FFFFFF" size={30} />
-            ) : (
-              "Submit"
+              }}
+              disabled={!bvn || !surname}
+              className={`w-full h-[52px] rounded-[18px] mt-12 ${
+                !bvn || !surname
+                  ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
+                  : "bg-text_blue text-white"
+              }  flex justify-center items-center  font-semibold`}
+            >
+              {completeKyc.isPending ? (
+                <ClipLoader color="#FFFFFF" size={30} />
+              ) : (
+                "Submit"
+              )}
+            </button>
+          </div>
+        ) : (
+          <div className="w-full mt-6 ">
+            <h4 className="text-gray-800 dark:text-gray-100 font-semibold text-[20px]">
+              Verify
+            </h4>
+            <div className="w-full mt-8">
+              <label className="text-gray-800 text-[14px]  dark:text-white">
+                BVN Number
+              </label>
+              <input
+                type="number"
+                value={bvn}
+                onChange={(e) => setBvn(e.target.value)}
+                placeholder="Enter your BVN"
+                className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+              />
+              <h4 className="text-gray-800 dark:text-gray-300  text-[11px] mt-2">
+                Dial *565*0# to check for your BVN
+              </h4>
+            </div>
+            <div className="w-full mt-6">
+              <label className="text-gray-800 text-[14px] dark:text-white">
+                Surname
+              </label>
+              <div className="w-full flex justify-between px-4  items-center dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border border-gray-300 bg-transparent  spin-button-none rounded-xl">
+                <input
+                  type="text"
+                  value={surname}
+                  onChange={(e) => setSurname(e.target.value)}
+                  placeholder="eg: Chidi"
+                  className="w-10/12   outline-none bg-transparent "
+                />
+              </div>
+            </div>
+            {isImageCaptured && (
+              <SmartCameraComponent
+                setIsImageCaptured={setIsImageCaptured}
+                setSubmit={setSubmit}
+                setPartnerParams={setPartnerParams}
+                setImages={setImages}
+              />
             )}
-          </button>
-        </div>
+
+            <button
+              onClick={() => {
+                if (submit === 0) {
+                  handleVerify();
+                }
+              }}
+              disabled={!bvn || !surname}
+              className={`w-full h-[52px] rounded-[18px] mt-8 ${
+                !bvn || !surname
+                  ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
+                  : "bg-text_blue text-white"
+              }  flex justify-center items-center  font-semibold`}
+            >
+              {submit === 0 ? " Next" : "Submit"}
+            </button>
+          </div>
+        )}
         <h4 className="text-[14px] mt-8 text-gray-800 text-center dark:text-gray-300 font-medium">
           I will do this later{" "}
           <Link to="/dashboard" className="text-text_blue">
