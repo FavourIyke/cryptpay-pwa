@@ -91,20 +91,32 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value.toLowerCase())}
               placeholder="eg: johndoe@example.com"
-              className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+              className={
+                email
+                  ? "w-full dark:text-white border-text_blue text-gray-800   bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border  bg-transparent px-4 spin-button-none rounded-xl "
+                  : "w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+              }
             />
           </div>
           <div className="w-full mt-8">
             <label className="text-gray-800 text-[14px] dark:text-white">
               Password
             </label>
-            <div className="w-full flex justify-between px-4  items-center dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border border-gray-300 bg-transparent  spin-button-none rounded-xl">
+            <div
+              className={`w-full flex justify-between px-4 items-center dark:text-white text-gray-800 dark:border-gray-400 
+      bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border spin-button-none rounded-xl
+      ${
+        password
+          ? "border-text_blue dark:border-text_blue" // Border color when input is not empty
+          : "border-gray-300" // Reset to default border color when input is empty
+      }`}
+            >
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter Password"
-                className="w-10/12   outline-none bg-transparent "
+                className="w-10/12  outline-none bg-transparent "
               />
               {showPassword ? (
                 <VscEyeClosed
@@ -120,7 +132,7 @@ const Login = () => {
             </div>
           </div>
           <Link to="/forgot-password">
-            <h4 className="text-[13px] text-text_blue  mt-2 ">
+            <h4 className="text-[14px] text-text_blue  mt-2 ">
               Forget Password
             </h4>
           </Link>
@@ -139,7 +151,7 @@ const Login = () => {
               "Login"
             )}
           </button>
-          <h4 className="dark:text-white text-center text-gray-800 mt-4 text-[12px] ">
+          <h4 className="dark:text-white text-center text-gray-800 mt-4 text-[14px] ">
             Don't have an account yet?{" "}
             <span
               onClick={() => navigate("/sign-up")}

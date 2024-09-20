@@ -8,6 +8,7 @@ import useAuthAxios from "../../../utils/baseAxios";
 import { errorMessage } from "../../../utils/errorMessage";
 import { useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import { BsBank } from "react-icons/bs";
 
 const BankDetails = ({ setSidePage, setScreen, setBankMode }: any) => {
   const axiosInstance = useAuthAxios();
@@ -166,26 +167,37 @@ const BankDetails = ({ setSidePage, setScreen, setBankMode }: any) => {
                     </div>
                   )}
                   <div className="flex justify-between items-center">
-                    <div className="">
-                      <h4 className="dark:text-gray-100 text-gray-900 capitalize  font-medium text-[14px]">
-                        {bank.account_name}
-                      </h4>
-                      <div className="flex justify-start mt-1 items-center gap-3">
-                        {allBanks?.data
-                          .filter((banki: any) => banki.code === bank.bank_code)
-                          .map((bankk: any, index: any) => (
-                            <h4
-                              key={index}
-                              className="dark:text-gray-400 text-gray-500 capitalize   text-[12px]"
-                            >
-                              {bankk.name}
-                            </h4>
-                          ))}
-
-                        <div className="w-[4px] h-[4px] rounded-full bg-[#D9D9D9] " />
-                        <h4 className="dark:text-gray-400 text-gray-500 capitalize   text-[12px]">
-                          {bank.account_number}
+                    <div className="flex justify-start items-center gap-4">
+                      <BsBank
+                        className={
+                          bank.is_default
+                            ? "text-text_blue text-[28px]"
+                            : "dark:text-gray-100 text-gray-900 text-[28px]"
+                        }
+                      />
+                      <div>
+                        <h4 className="dark:text-gray-100 text-gray-900 capitalize  font-medium text-[13px]">
+                          {bank.account_name}
                         </h4>
+                        <div className="flex justify-start mt-1 items-center gap-3">
+                          {allBanks?.data
+                            .filter(
+                              (banki: any) => banki.code === bank.bank_code
+                            )
+                            .map((bankk: any, index: any) => (
+                              <h4
+                                key={index}
+                                className="dark:text-gray-400 text-gray-500 capitalize   text-[11px]"
+                              >
+                                {bankk.name}
+                              </h4>
+                            ))}
+
+                          <div className="w-[4px] h-[4px] rounded-full bg-[#D9D9D9] " />
+                          <h4 className="dark:text-gray-400 text-gray-500 capitalize   text-[12px]">
+                            {bank.account_number}
+                          </h4>
+                        </div>
                       </div>
                     </div>
                     <div className="bg-gray-100 dark:bg-[#2B2B2B] flex justify-center items-center h-[32px] w-[32px] rounded-full">

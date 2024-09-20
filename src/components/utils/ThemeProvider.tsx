@@ -22,7 +22,7 @@ const ThemeProvider = () => {
       position="top-right"
       gutter={4}
       toastOptions={{
-        duration: 2000,
+        duration: 3000,
         success: {
           iconTheme: {
             primary: "#0F29C4",

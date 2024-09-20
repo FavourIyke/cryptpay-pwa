@@ -12,6 +12,10 @@ const SelectCoin = ({
   setSelectNetworkModal,
   setCoin,
   setNetworks,
+  setSelectBankModal,
+  setNetwork,
+  sellRateFlow,
+  setSellRateFlow,
 }: any) => {
   const axiosInstance = useAuthAxios();
   const getCoins = async () => {
@@ -57,11 +61,31 @@ const SelectCoin = ({
             <IoClose className="text-black dark:text-white text-[14px]" />
           </button>
         </div>
-        <h4 className="text-gray-800 mt-4 dark:text-gray-100 font-semibold text-[20px]">
-          Select Coin
-        </h4>
+
+        <div className="flex w-full  mt-4 mb-6   rounded-2xl items-center">
+          <button
+            onClick={() => setSellRateFlow(false)}
+            className={
+              sellRateFlow
+                ? "py-4 w-[50%]  border-b-2 dark:border-[#645D5D] dark:text-[#645D5D] border-[#B7AFAF]  font-semibold text-[14px] text-[#B7AFAF] flex justify-center items-center"
+                : "py-4 w-[50%]  text-gray-900 dark:text-white font-semibold text-[14px] border-b-2 border-text_blue  flex justify-center items-center"
+            }
+          >
+            Buy Rate
+          </button>
+          <button
+            onClick={() => setSellRateFlow(true)}
+            className={
+              !sellRateFlow
+                ? "py-4 w-[50%]  border-b-2 dark:border-[#645D5D] dark:text-[#645D5D] border-[#B7AFAF]  font-semibold text-[14px] text-[#B7AFAF] flex justify-center items-center"
+                : "py-4 w-[50%]  text-gray-900 dark:text-white font-semibold text-[14px] border-b-2 border-text_blue  flex justify-center items-center"
+            }
+          >
+            Sell Rate
+          </button>
+        </div>
         <h4 className="text-black dark:text-gray-300 mt-2  text-[14px]">
-          Select an asset to start trading
+          These are the rates you will be selling a specific asset.
         </h4>
         <div className="w-full font-sora mt-6 flex-col flex gap-4">
           {coins?.cryptocurrencies.length >= 1 ? (
@@ -69,12 +93,20 @@ const SelectCoin = ({
               <div
                 key={index}
                 onClick={() => {
-                  setCoin(coin.symbol);
-                  setNetworks(coin.networks);
-                  setSelectCoinModal(false);
-                  setSelectNetworkModal(true);
+                  if (coin.networks.length === 1) {
+                    setCoin(coin.symbol);
+                    setNetworks(coin.networks);
+                    setSelectCoinModal(false);
+                    setSelectBankModal(true);
+                    setNetwork(coin.networks[0].code);
+                  } else {
+                    setCoin(coin.symbol);
+                    setNetworks(coin.networks);
+                    setSelectCoinModal(false);
+                    setSelectNetworkModal(true);
+                  }
                 }}
-                className="flex cursor-pointer justify-between py-4  rounded-xl h-[58px] items-center"
+                className="flex cursor-pointer justify-between px-4  dark:bg-[#292929] bg-[#f6f5f5] rounded-xl h-[58px] items-center"
               >
                 <div className="flex  items-center gap-3">
                   <div className="w-[32px] h-[32px]  rounded-full ">
@@ -90,9 +122,8 @@ const SelectCoin = ({
                 </div>
                 <div className="flex items-center gap-3">
                   <h4 className="dark:text-gray-400 text-black font-medium text-[15px]">
-                    {coin.sell_rate}/$
+                    {Math.round(coin.sell_rate).toLocaleString()}/$
                   </h4>
-                  <SlArrowRight className="text-black dark:text-white text-[14px]" />
                 </div>
               </div>
             ))

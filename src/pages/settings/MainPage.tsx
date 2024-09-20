@@ -34,7 +34,9 @@ const MainPage = ({ setScreen, setSidePage, setLogout }: any) => {
             }}
           >
             {onCopyID ? (
-              <FiClipboard className="text-[12px] text-gray-500 dark:text-gray-300" />
+              <h4 className="text-[11px] text-gray-500 dark:text-gray-300">
+                copied
+              </h4>
             ) : (
               <FiCopy className="text-[12px] text-gray-500 dark:text-gray-300" />
             )}
@@ -46,7 +48,7 @@ const MainPage = ({ setScreen, setSidePage, setLogout }: any) => {
             setSidePage(true);
             setScreen(1);
           }}
-          className="mt-4  text-[#3A66FF] text-[11px]"
+          className="mt-2  text-[#3A66FF] text-[11px]"
         >
           Edit Profile
         </button>

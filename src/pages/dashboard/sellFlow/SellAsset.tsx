@@ -202,8 +202,8 @@ const SellAsset = ({
         <div className="px-6 py-4 bg-[#DD900D] rounded-xl mt-6">
           <h4 className="text-white text-[14px]">Note</h4>
           <p className="text-gray-50 text-[12px] mt-2">
-            Please ensure to send only Bitcoin (BTC) to this address or you may
-            lose your funds.
+            Please ensure to send only Bitcoin ({coin}) to this address or you
+            may lose your funds.
           </p>
         </div>
         <button

@@ -5,12 +5,14 @@ import { avatar } from "../../../assets/images";
 import { FaCamera } from "react-icons/fa6";
 import { validateSaveDetails } from "../../../utils/validations";
 import { useUser } from "../../../context/user-context";
+import { convertDateFormat } from "../../../utils/formatDate";
 
 const EditProfile = ({ setSidePage, setScreen }: any) => {
   const { userDetails } = useUser();
 
   const [fullName, setFullName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
   const [showWebcam, setShowWebcam] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const webcamRef = useRef<Webcam>(null);
@@ -23,7 +25,7 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
       document.getElementById("fileInput")?.click();
     }
   };
-  // console.log(imageSrc);
+  console.log(userDetails);
   const handleCapture = () => {
     const image = webcamRef.current?.getScreenshot();
     if (image) {
@@ -73,7 +75,7 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
           </button>
         </div>
       ) : (
-        <div className="flex justify-start mt-12 items-end">
+        <div className="flex justify-start mt-6 items-end">
           <div
             className={
               imageSrc
@@ -88,12 +90,12 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
             />
           </div>
 
-          <div
+          {/* <div
             onClick={handleImageChoice}
             className="w-[32px] h-[32px] relative right-5 flex justify-center items-center cursor-pointer rounded-full dark:bg-[#424242]  bg-text_blue text-white text-[16px]"
           >
             <FaCamera />
-          </div>
+          </div> */}
           <input
             type="file"
             id="fileInput"
@@ -104,7 +106,23 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
         </div>
       )}
       <div className="w-full mt-8">
-        <div className="w-full">
+        <div className="w-full ">
+          <label className="text-gray-800 text-[14px]  dark:text-white">
+            Username
+          </label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder={userDetails?.data?.profile.username}
+            className={
+              username
+                ? "w-full dark:text-white border-text_blue text-gray-800   bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border  bg-transparent px-4 spin-button-none rounded-xl "
+                : "w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+            }
+          />
+        </div>
+        <div className="w-full mt-6">
           <label className="text-gray-800 text-[14px]  dark:text-white">
             Full Name
           </label>
@@ -123,21 +141,37 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
         </div>
         <div className="w-full mt-6">
           <label className="text-gray-800 text-[14px]  dark:text-white">
-            Username
+            Phone number
           </label>
           <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder={userDetails?.data?.profile.username}
-            className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder={
+              userDetails?.data?.profile.phone_number
+                ? userDetails?.data?.profile.phone_number
+                : "Enter your phone number"
+            }
+            className={
+              phone
+                ? "w-full dark:text-white border-text_blue text-gray-800   bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border  bg-transparent px-4 spin-button-none rounded-xl "
+                : "w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+            }
           />
+        </div>
+        <div className="w-full mt-6 ">
+          <label className="text-gray-800 text-[14px]  dark:text-white">
+            Date of Birth
+          </label>
+          <div className="w-full  mt-2  h-[52px] flex justify-start items-center dark:text-gray-500 text-gray-600 outline-none text-[14px] bg-[#D2D2D2] dark:bg-[#2B2B2B] bg-transparent px-4  rounded-xl ">
+            {convertDateFormat(userDetails?.data?.profile.birthday)}
+          </div>
         </div>
 
         <button
           onClick={handleSave}
           disabled={!fullName || !username}
-          className={`w-full h-[52px] rounded-[18px] mt-28 lgss:mt-20 ${
+          className={`w-full h-[52px] rounded-[18px] mt-20 lgss:mt-10 ${
             !fullName || !username
               ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
               : "bg-text_blue text-white"

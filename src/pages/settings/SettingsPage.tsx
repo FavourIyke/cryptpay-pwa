@@ -1,14 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { paddingX } from "../../constants";
 import Navbar from "../../components/Navbar";
 import SidePage from "./SidePage";
 import MainPage from "./MainPage";
 import LogoutModal from "./LogoutModal";
+import { useLocation } from "react-router-dom";
 
 const SettingsPage = () => {
   const [sidePage, setSidePage] = useState<boolean>(false);
   const [screen, setScreen] = useState<number>(0);
   const [logout, setLogout] = useState<boolean>(false);
+  const location = useLocation();
+  const setScreenn = location.state?.setScreen;
+
+  useEffect(() => {
+    if (setScreenn) {
+      setSidePage(true);
+      setScreen(setScreenn);
+    }
+  }, [setScreenn]);
   return (
     <div
       className={` w-full font-sora h-screen overflow-auto pb-16  bg-white dark:bg-primary_dark `}

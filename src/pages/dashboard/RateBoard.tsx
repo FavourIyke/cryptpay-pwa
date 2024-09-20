@@ -33,7 +33,7 @@ const RateBoard = ({
   }, [error2]);
 
   return (
-    <div className="w-full font-sora mt-12 flex-col flex gap-4">
+    <div className="w-full font-sora mt-6 flex-col flex gap-4">
       {coins?.cryptocurrencies.length >= 1 ? (
         coins?.cryptocurrencies.map((coin: any, index: any) => (
           <div
@@ -68,9 +68,9 @@ const RateBoard = ({
             </div>
             <div className="flex items-center gap-3">
               <h4 className="dark:text-gray-400 text-black font-medium text-[15px]">
-                {coin.sell_rate}/$
+                {Math.round(coin.sell_rate).toLocaleString()}/$
               </h4>
-              <SlArrowRight className="text-black dark:text-white text-[14px]" />
+              {/* <SlArrowRight className="text-black dark:text-white text-[14px]" /> */}
             </div>
           </div>
         ))
