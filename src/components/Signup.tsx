@@ -41,7 +41,11 @@ const Signup = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value.toLowerCase())}
               placeholder="eg: johndoe@example.com"
-              className={`w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl `}
+              className={
+                email
+                  ? "w-full dark:text-white border-text_blue text-gray-800   bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border  bg-transparent px-4 spin-button-none rounded-xl "
+                  : "w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+              }
             />
           </div>
           <div className="w-full mt-6">
@@ -53,7 +57,11 @@ const Signup = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="eg: johndoe"
-              className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+              className={
+                username
+                  ? "w-full dark:text-white border-text_blue text-gray-800   bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border  bg-transparent px-4 spin-button-none rounded-xl "
+                  : "w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+              }
             />
           </div>
           <div className="w-full mt-6">
@@ -65,7 +73,11 @@ const Signup = () => {
               value={referralCode}
               onChange={(e) => setReferralCode(e.target.value)}
               placeholder="Enter Referral code"
-              className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+              className={
+                referralCode
+                  ? "w-full dark:text-white border-text_blue text-gray-800   bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border  bg-transparent px-4 spin-button-none rounded-xl "
+                  : "w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+              }
             />
           </div>
 
@@ -80,7 +92,7 @@ const Signup = () => {
           >
             Continue
           </button>
-          <h4 className="dark:text-white text-center text-gray-800 mt-4 text-[12px] ">
+          <h4 className="dark:text-white text-center text-gray-800 mt-4 text-[14px] ">
             Already a user?{" "}
             <span
               onClick={() => navigate("/login")}

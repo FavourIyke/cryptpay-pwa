@@ -46,7 +46,20 @@ const GenerateWallet = ({
       setShowGenerateButton(true);
       setShowProceedButton(false);
       const newError = error1 as any;
-      toast.error(errorMessage(newError?.message || newError?.data?.message));
+      toast(errorMessage(newError?.message || newError?.data?.message), {
+        duration: 3000,
+        icon: "🚫",
+        iconTheme: {
+          primary: "#ffffff",
+          secondary: "#DD900D",
+        },
+        style: {
+          color: "#ffffff",
+          backgroundColor: "#DD900D",
+          fontSize: "14px",
+          fontWeight: "600",
+        },
+      });
     }
   }, [error1]);
   useEffect(() => {
@@ -229,8 +242,11 @@ const GenerateWallet = ({
         <div className="px-6 py-4 bg-[#DD900D] rounded-xl mt-6">
           <h4 className="text-white text-[14px]">Note</h4>
           <p className="text-gray-50 text-[12px] mt-2">
-            Please ensure to send only {coin} to this address or you may lose
+            1. Please ensure to send only {coin} to this address or you may lose
             your funds.
+            <br />
+            {showProceedButton &&
+              "2. Click the proceed button below to view your detailed sell order and copy your wallet address"}
           </p>
         </div>
         {showProceedButton && (

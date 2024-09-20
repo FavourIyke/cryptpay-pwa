@@ -120,7 +120,7 @@ const Kyc = () => {
                 value={bvn}
                 onChange={(e) => setBvn(e.target.value)}
                 placeholder="Enter your BVN"
-                className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+                className="w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
               />
               <h4 className="text-gray-800 dark:text-gray-300  text-[11px] mt-2">
                 Dial *565*0# to check for your BVN
@@ -136,7 +136,7 @@ const Kyc = () => {
                   value={surname}
                   onChange={(e) => setSurname(e.target.value)}
                   placeholder="eg: Chidi"
-                  className="w-10/12   outline-none bg-transparent "
+                  className="w-10/12  focus:border-text_blue dark:focus:border-text_blue outline-none bg-transparent "
                 />
               </div>
             </div>

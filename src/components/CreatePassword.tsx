@@ -92,12 +92,20 @@ const CreatePassword = () => {
             <label className="text-gray-800 text-[14px]  dark:text-white">
               Password
             </label>
-            <div className="w-full dark:text-white text-gray-800 flex justify-between items-center dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl">
+            <div
+              className={`w-full flex justify-between px-4 items-center dark:text-white text-gray-800 dark:border-gray-400 
+      bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border spin-button-none rounded-xl
+      ${
+        password
+          ? "border-text_blue dark:border-text_blue" // Border color when input is not empty
+          : "border-gray-300" // Reset to default border color when input is empty
+      }`}
+            >
               <input
                 type={showPassword ? "text" : "password"}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter Password"
-                className="   outline-none active:bg-transparent w-10/12 bg-transparent "
+                className="   outline-none focus:border-text_blue dark:focus:border-text_blue active:bg-transparent w-10/12 bg-transparent "
               />
               {showPassword ? (
                 <VscEyeClosed
@@ -116,13 +124,21 @@ const CreatePassword = () => {
             <label className="text-gray-800 text-[14px]  dark:text-white">
               Confirm Password
             </label>
-            <div className="w-full dark:text-white text-gray-800 flex justify-between items-center dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl">
+            <div
+              className={`w-full flex justify-between px-4 items-center dark:text-white text-gray-800 dark:border-gray-400 
+      bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border spin-button-none rounded-xl
+      ${
+        passwordC
+          ? "border-text_blue dark:border-text_blue" // Border color when input is not empty
+          : "border-gray-300" // Reset to default border color when input is empty
+      }`}
+            >
               <input
                 type={showCPassword ? "text" : "password"}
                 value={passwordC}
                 onChange={(e) => setPasswordC(e.target.value)}
                 placeholder="Enter Password"
-                className="   outline-none  w-10/12 bg-transparent "
+                className="   outline-none focus:border-text_blue dark:focus:border-text_blue  w-10/12 bg-transparent "
               />
               {showCPassword ? (
                 <VscEyeClosed

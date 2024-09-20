@@ -131,7 +131,7 @@ const AddBankScreen = ({ setBankMode }: any) => {
           </div>
         </div>
         {dropDown ? (
-          <div className="mt-8 px-4">
+          <div className="mt-8 ">
             <h4 className="text-[18px] dark:text-white text-gray-800">
               Choose Bank
             </h4>
@@ -142,7 +142,7 @@ const AddBankScreen = ({ setBankMode }: any) => {
                 value={bankQuery}
                 onChange={(e) => setBankQuery(e.target.value.toLowerCase())}
                 placeholder="Search for banks"
-                className="w-10/12 outline-none placeholder:text-[12px] bg-transparent"
+                className="w-10/12 outline-none focus:border-text_blue dark:focus:border-text_blue placeholder:text-[12px] bg-transparent"
               />
             </div>
             <div className="w-full mt-4 h-[300px]  overflow-auto">
@@ -186,7 +186,7 @@ const AddBankScreen = ({ setBankMode }: any) => {
               value={bankNumber}
               onChange={(e) => setBankNumber(e.target.value)}
               placeholder="Enter 10 digit account number"
-              className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+              className="w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
             />
             <h4 className="text-[13px] font-semibold mt-4 dark:text-white text-gray-800">
               {userBankName && userBankName}

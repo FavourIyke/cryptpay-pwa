@@ -53,28 +53,6 @@ const Security = ({ setSidePage, setScreen, setSecScreen }: any) => {
         Security
       </h4>
       <div className="flex flex-col gap-12 mt-12 w-full">
-        {/* <button
-          onClick={() => {
-            setSecScreen(2);
-          }}
-          className="w-full flex  justify-between items-center  bg-transparent"
-        >
-          <div className="flex items-start gap-3">
-            <div className="flex justify-center items-center  w-[32px] h-[32px] rounded-full dark:bg-gray-200 dark:text-gray-800 bg-text_blue text-white">
-              <GoLock className="text-[16px] text-white dark:text-gray-800" />
-            </div>
-            <div>
-              <h4 className="text-gray-800 text-left dark:text-gray-50 text-[14px]">
-                Transaction PIN
-              </h4>
-              <h4 className="text-gray-500  dark:text-gray-400 text-left text-[11px]">
-                Setup and change your PIN for added security
-              </h4>
-            </div>
-          </div>
-          <SlArrowRight className="text-gray-400 dark:text-gray-200 text-[15px]" />
-        </button> */}
-
         <button
           onClick={() => {}}
           className="w-full flex  justify-between items-center  bg-transparent"
@@ -112,6 +90,27 @@ const Security = ({ setSidePage, setScreen, setSecScreen }: any) => {
               ></span>
             </div>
           </div>
+        </button>
+        <button
+          onClick={() => {
+            setSecScreen(2);
+          }}
+          className="w-full flex  justify-between items-center  bg-transparent"
+        >
+          <div className="flex items-start gap-3">
+            <div className="flex justify-center items-center  w-[32px] h-[32px] rounded-full dark:bg-gray-200 dark:text-gray-800 bg-text_blue text-white">
+              <GoLock className="text-[16px] text-white dark:text-gray-800" />
+            </div>
+            <div>
+              <h4 className="text-gray-800 text-left dark:text-gray-50 text-[14px]">
+                Transaction PIN
+              </h4>
+              <h4 className="text-gray-500  dark:text-gray-400 text-left text-[11px]">
+                Setup and change your PIN for added security
+              </h4>
+            </div>
+          </div>
+          <SlArrowRight className="text-gray-400 dark:text-gray-200 text-[15px]" />
         </button>
       </div>
     </div>

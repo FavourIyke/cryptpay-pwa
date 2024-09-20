@@ -164,7 +164,7 @@ const AddBankModal = ({
                   value={bankQuery}
                   onChange={(e) => setBankQuery(e.target.value.toLowerCase())}
                   placeholder="Search for banks"
-                  className="w-10/12 outline-none placeholder:text-[12px] bg-transparent"
+                  className="w-10/12 focus:border-text_blue dark:focus:border-text_blue outline-none placeholder:text-[12px] bg-transparent"
                 />
               </div>
               <div className="w-full mt-4 h-[200px]  overflow-auto">
@@ -208,7 +208,7 @@ const AddBankModal = ({
                 value={bankNumber}
                 onChange={(e) => setBankNumber(e.target.value)}
                 placeholder="Enter 10 digit account number"
-                className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+                className="w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
               />
               <h4 className="text-[13px] font-semibold mt-4 dark:text-white text-gray-800">
                 {userBankName && userBankName}
@@ -221,7 +221,7 @@ const AddBankModal = ({
                     onChange={(e) => setIsChecked(e.target.checked)}
                     className="h-[18px] w-[18px]"
                   />
-                  <h4 className="text-[13px] text-gray-600 dark:text-white font-sora font-semibold">
+                  <h4 className="text-[13px] focus:border-text_blue dark:focus:border-text_blue text-gray-600 dark:text-white font-sora font-semibold">
                     Make default bank
                   </h4>
                 </div>

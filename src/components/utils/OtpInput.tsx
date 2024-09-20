@@ -5,6 +5,7 @@ import OtpInput from "react18-input-otp";
 interface OtpInputFieldProps {
   otp: string;
   setOtp: any;
+  input?: number; // make input optional
   handleChange: (otp: string) => void;
   shouldAutoFocus?: boolean;
 }
@@ -13,6 +14,7 @@ const OtpInputField: React.FC<OtpInputFieldProps> = ({
   otp,
   setOtp,
   handleChange,
+  input = 6, // default to 6 if input is not provided
   shouldAutoFocus = true,
 }) => {
   const { theme } = useUser();
@@ -94,7 +96,7 @@ const OtpInputField: React.FC<OtpInputFieldProps> = ({
       <OtpInput
         value={otp}
         onChange={handleChange}
-        numInputs={6}
+        numInputs={input}
         isInputNum
         inputStyle={styles.inputStyle}
         focusStyle={styles.focusStyle}

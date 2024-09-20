@@ -40,16 +40,14 @@ const Referral = ({ setSidePage, setScreen, setRefMode }: any) => {
       <div className="mt-4 flex justify-center gap-4">
         <div className="bg-text_blue w-1/2 rounded-xl p-3 pb-8">
           <h4 className="text-white   font-medium text-[12px]">Earnings</h4>
-          <h4 className="text-white mt-2  font-semibold text-[24px]">
-            ₦300,000
-          </h4>
+          <h4 className="text-white mt-2  font-semibold text-[24px]">₦0</h4>
         </div>
         <div className="dark:bg-[#292929] bg-[#E3E3E3] w-1/2 rounded-xl p-3 pb-8">
           <h4 className="text-gray-800 dark:text-gray-400    font-medium text-[12px]">
             Number of Invites
           </h4>
           <h4 className="dark:text-white text-gray-800  mt-2  font-semibold text-[24px]">
-            130
+            0
           </h4>
         </div>
       </div>

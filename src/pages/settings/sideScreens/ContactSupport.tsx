@@ -77,7 +77,7 @@ const ContactSupport = ({ setSupportMode }: any) => {
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             placeholder="Enter Full Name"
-            className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 rounded-xl "
+            className="w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 rounded-xl "
           />
         </div>
         <div className="w-full mt-6 ">
@@ -97,7 +97,7 @@ const ContactSupport = ({ setSupportMode }: any) => {
             value={header}
             onChange={(e) => setHeader(e.target.value)}
             placeholder="Enter Header for your complaint"
-            className="w-full dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+            className="w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
           />
         </div>
         <div className="w-full mt-6">

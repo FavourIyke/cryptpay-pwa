@@ -14,7 +14,8 @@ const SelectBank = ({
   setGenerateAddyModal,
   setAddBankModal,
   setSelectedBankDetails,
-  selectedBankDetails,
+  setSelectCoinModal,
+  networks,
 }: any) => {
   const axiosInstance = useAuthAxios();
   const queryClient = useQueryClient();
@@ -96,8 +97,13 @@ const SelectBank = ({
         <div className="w-full flex justify-between items-center">
           <button
             onClick={() => {
-              setSelectBankModal(false);
-              setSelectNetworkModal(true);
+              if (networks.length <= 1) {
+                setSelectBankModal(false);
+                setSelectCoinModal(true);
+              } else {
+                setSelectBankModal(false);
+                setSelectNetworkModal(true);
+              }
             }}
             className="flex items-center gap-2 "
           >
@@ -201,10 +207,10 @@ const SelectBank = ({
               setSelectBankModal(false);
               setAddBankModal(true);
             }}
-            className="w-1/2 mx-auto flex gap-3 items-center justify-center h-[48px] text-[10px] xs:text-[12px] font-medium rounded-xl text-[#3A66FF] border-text_blue border "
+            className="w-1/2 mx-auto flex gap-3 items-center justify-center h-[48px] text-[14px] xs:text-[14px] font-medium rounded-xl text-[#3A66FF] border-text_blue border "
           >
             <IoAddOutline className="text-[24px] " />
-            <h4>Add Bank Account</h4>
+            <h4>Add Bank</h4>
           </button>
           <button
             disabled={userBanks?.length < 1 || !hasDefaultBank}
@@ -214,8 +220,8 @@ const SelectBank = ({
             }}
             className={
               userBanks?.length < 1 || !hasDefaultBank
-                ? "w-1/2 mx-auto flex  items-center justify-center h-[48px] text-[12px] font-medium rounded-xl bg-gray-400 text-gray-100 "
-                : "w-1/2 mx-auto flex  items-center justify-center h-[48px] text-[12px] font-medium rounded-xl bg-[#3A66FF] text-gray-100 "
+                ? "w-1/2 mx-auto flex  items-center justify-center h-[48px] text-[14px] font-medium rounded-xl bg-gray-400 text-gray-100 "
+                : "w-1/2 mx-auto flex  items-center justify-center h-[48px] text-[14px] font-medium rounded-xl bg-[#3A66FF] text-gray-100 "
             }
           >
             <h4>Proceed</h4>

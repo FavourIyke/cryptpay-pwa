@@ -6,6 +6,7 @@ export const API = {
   logout: `${BASE_URL}/api/logout`,
   signup: `${BASE_URL}/api/register`,
   verifyMail: `${BASE_URL}/api/verify-email`,
+  setTransactionPin: `${BASE_URL}/api/set-transaction-pin`,
   verifyLoginMail: `${BASE_URL}/api/verify-login-otp`,
   getCoins: `${BASE_URL}/api/cryptocurrencies`,
 

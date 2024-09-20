@@ -6,7 +6,7 @@ import { BsArrowDown, BsArrowUp } from "react-icons/bs";
 import { IoIosMore } from "react-icons/io";
 import RateBoard from "./RateBoard";
 import TransactionCard from "./transactionList/TransactionCard";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SelectCoin from "./sellFlow/SelectCoin";
 import SelectNetwork from "./sellFlow/SelectNetwork";
 import SelectBank from "./sellFlow/SelectBank";
@@ -29,6 +29,8 @@ import KycModal from "./KycModal";
 import { cryptpay, darkCrypt } from "../../assets/images";
 import { formatAmount, getFormattedDate } from "../../utils/formatDate";
 import DetailsModal from "./transactionList/DetailsModal";
+import MoreModal from "./MoreModal";
+import { MdPending } from "react-icons/md";
 
 const Dashboard = () => {
   const { theme } = useUser();
@@ -69,7 +71,8 @@ const Dashboard = () => {
   const [networks, setNetworks] = useState<any[]>([]);
   const [kycModal, setKycModal] = useState<boolean>(false);
   const [selectedBankDetails, setSelectedBankDetails] = useState<any[]>([]);
-
+  const [openMore, setOpenMore] = useState<boolean>(false);
+  const navigate = useNavigate();
   const getPayoutsSummary = async () => {
     const response = await axiosInstance.get(API.getSummary);
     return response.data.data;
@@ -157,12 +160,12 @@ const Dashboard = () => {
                   {showBalance ? (
                     <VscEyeClosed
                       onClick={() => setShowBalance((prev) => !prev)}
-                      className="text-white cursor-pointer text-[16px]"
+                      className="text-white cursor-pointer text-[24px]"
                     />
                   ) : (
                     <VscEye
                       onClick={() => setShowBalance((prev) => !prev)}
-                      className="text-white cursor-pointer text-[16px]"
+                      className="text-white cursor-pointer text-[24px]"
                     />
                   )}
                 </div>
@@ -175,7 +178,7 @@ const Dashboard = () => {
                   </h4>
                 ) : (
                   <h4 className="mt-1 text-center text-white  text-[12px]  ">
-                    ~ *****
+                    *****
                   </h4>
                 )}
               </div>
@@ -209,7 +212,12 @@ const Dashboard = () => {
                   </h4>
                 </div>
                 <div>
-                  <button className="w-[45px] h-[45px] rounded-full bg-[#2F2F2F] flex justify-center items-center">
+                  <button
+                    onClick={() => {
+                      setOpenMore(true);
+                    }}
+                    className="w-[45px] h-[45px] rounded-full bg-[#2F2F2F] flex justify-center items-center"
+                  >
                     <IoIosMore className="text-[24px] text-white" />
                   </button>
                   <h4 className="text-white mt-1 text-[14px] text-center">
@@ -219,8 +227,33 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          {kycStatus?.data.kyc_level === "000" ||
-          kycStatus?.data.kyc_status === null ? (
+          {kycStatus?.data.kyc_status === "pending" ? (
+            <div className="w-full  flex justify-between items-start gap-4 py-3 mt-6 bg-[#E9F4FF] rounded-2xl text-gray-900 ">
+              <div className="flex  w-full items-start gap-6 px-4">
+                <div>
+                  <MdPending className="text-[38px]" />
+                </div>
+
+                <div>
+                  <h4 className=" font-bold text-[18px]">
+                    Verification is in Progress
+                  </h4>
+                  <h4 className="  text-[14px] mt-1 text-left pr-6 mds:pr-12 md:pr-16 xl:pr-20 xxxl:pr-32">
+                    Your KYC verification is currently being processed. Please
+                    allow some time for confirmation
+                  </h4>
+                  <button
+                    onClick={() => navigate("/dashboard")}
+                    className="px-4 mt-4 py-4 rounded-xl bg-gray-900 text-white text-[14px]"
+                  >
+                    Click here to refresh
+                  </button>
+                </div>
+              </div>
+              {/* <SlArrowRight className="text-white text-[16px]" /> */}
+            </div>
+          ) : kycStatus?.data.kyc_level === "000" ||
+            kycStatus?.data.kyc_status === null ? (
             <Link
               to="/kyc"
               className="w-full flex justify-between items-center gap-4 px-4 py-3 mt-6 bg-[#664101] rounded-2xl text-[#F5B546] "
@@ -243,13 +276,14 @@ const Dashboard = () => {
               <SlArrowRight className="text-white text-[16px]" />
             </Link>
           ) : null}
-          <div className="flex w-full md:w-1/2 mx-auto lgss:mx-0 mt-8 px-2 bg-[#F1F1F1] dark:bg-[#1C1C1C] h-[56px] rounded-2xl items-center">
+
+          <div className="flex w-full  mx-auto lgss:mx-0 mt-8 px-2  h-[56px] rounded-2xl items-center">
             <button
               onClick={() => setSellRateFlow(false)}
               className={
                 sellRateFlow
-                  ? "h-[40px] w-[48%] rounded-full  font-semibold text-[14px] text-[#797979] dark:text-[#A0A0A0] flex justify-center items-center"
-                  : "h-[40px] w-[48%] rounded-full text-white font-semibold text-[14px] bg-text_blue flex justify-center items-center"
+                  ? "py-4 w-[50%]  border-b-2 dark:border-[#645D5D] dark:text-[#645D5D] border-[#B7AFAF]  font-semibold text-[14px] text-[#B7AFAF] flex justify-center items-center"
+                  : "py-4 w-[50%]  text-gray-900 dark:text-white font-semibold text-[14px] border-b-2 border-text_blue  flex justify-center items-center"
               }
             >
               Buy Rate
@@ -258,8 +292,8 @@ const Dashboard = () => {
               onClick={() => setSellRateFlow(true)}
               className={
                 !sellRateFlow
-                  ? "h-[40px] w-[48%] rounded-full  font-semibold text-[14px] text-[#A0A0A0] flex justify-center items-center"
-                  : "h-[40px] w-[48%] rounded-full text-white font-semibold text-[14px] bg-text_blue flex justify-center items-center"
+                  ? "py-4 w-[50%]  border-b-2 dark:border-[#645D5D] dark:text-[#645D5D] border-[#B7AFAF]  font-semibold text-[14px] text-[#B7AFAF] flex justify-center items-center"
+                  : "py-4 w-[50%]  text-gray-900 dark:text-white font-semibold text-[14px] border-b-2 border-text_blue  flex justify-center items-center"
               }
             >
               Sell Rate
@@ -314,12 +348,22 @@ const Dashboard = () => {
             )}
           </div>
         </div>
+        {openMore && (
+          <MoreModal
+            setOpenMore={setOpenMore}
+            setSelectCoinModal={setSelectCoinModal}
+          />
+        )}
         {selectCoinModal && (
           <SelectCoin
             setSelectCoinModal={setSelectCoinModal}
             setCoin={setCoin}
             setSelectNetworkModal={setSelectNetworkModal}
             setNetworks={setNetworks}
+            setNetwork={setNetwork}
+            setSelectBankModal={setSelectBankModal}
+            sellRateFlow={sellRateFlow}
+            setSellRateFlow={setSellRateFlow}
           />
         )}
       </div>
@@ -342,6 +386,8 @@ const Dashboard = () => {
           setSelectNetworkModal={setSelectNetworkModal}
           setGenerateAddyModal={setGenerateAddyModal}
           setAddBankModal={setAddBankModal}
+          networks={networks}
+          setSelectCoinModal={setSelectCoinModal}
           setSelectedBankDetails={setSelectedBankDetails}
           selectedBankDetails={selectedBankDetails}
         />

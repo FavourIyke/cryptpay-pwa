@@ -20,7 +20,10 @@ export const formatTime =(transactionDate: any)  => {
   // Return formatted time string
   return `${hours}:${formattedMinutes}${ampm}`;
 }
-
+export const convertDateFormat = (dateString: string): string => {
+    const [year, month, day] = dateString.split('-');
+    return `${day} - ${month} - ${year}`;
+  };
 export const getFormattedDate = (dateStr: string) => {
   const date = new Date(dateStr);
   const today = new Date();

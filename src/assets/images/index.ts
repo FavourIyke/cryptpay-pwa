@@ -19,7 +19,9 @@ import darkCrypt from "./darkCrypt.svg"
 import naijaLogo from "./naijaLogo.svg"
 import feedback from "./feedB.svg"
 import trx from "./trx.png"
+import verifyBadge from "./verifyBadge.svg"
 export  {
+    verifyBadge,
     trx,
     feedback,
     naijaLogo,
