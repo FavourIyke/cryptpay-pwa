@@ -70,3 +70,30 @@ export const getFormattedDate = (dateStr: string) => {
     // Return '0.00' for zero value
     return "0.00";
   }
+
+  export const formatDateAndTime = (utcDateString: string) => {
+  const date = new Date(utcDateString + 'Z'); // Parse UTC string
+  
+  // Extract the day with ordinal suffix
+  const day = date.getDate();
+  const ordinalDay = `${day}${getOrdinalSuffix(day)}`;
+
+  // Format the date (e.g., Aug 26th, 2024)
+  const monthAndYear = `${date.toLocaleString('default', { month: 'short' })} ${ordinalDay}, ${date.getFullYear()}`;
+  
+  // Extract the time part (e.g., 9:00am)
+  const timeOptions: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+  const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
+
+  return { monthAndYear, formattedTime };
+};
+
+const getOrdinalSuffix = (day: number) => {
+  if (day > 3 && day < 21) return 'th'; // Covers the exception for numbers ending in 11-13
+  switch (day % 10) {
+    case 1: return 'st';
+    case 2: return 'nd';
+    case 3: return 'rd';
+    default: return 'th';
+  }
+};

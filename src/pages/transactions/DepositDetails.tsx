@@ -5,25 +5,23 @@ import { Link } from "react-router-dom";
 import { formatAmount, formatDateAndTime } from "../../utils/formatDate";
 import { truncateWord } from "../../utils/wordFunctions";
 
-const TransactionDetails = ({ clickedPayout }: any) => {
+const DepositDetails = ({ clickedPayout }: any) => {
   const [onCopyRef, setOnCopyRef] = useState<boolean>(false);
-  const [onCopyTxnId, setOnCopyTxnId] = useState<boolean>(false);
-  const [onCopyMerchantname, setOnCopyMerchantname] = useState<boolean>(false);
-  const [onCopyBank, setOnCopyBank] = useState<boolean>(false);
-  const [onCopyAccountNo, setOnCopyAccountNo] = useState<boolean>(false);
+
   const { monthAndYear, formattedTime } = formatDateAndTime(
     clickedPayout.transaction_date
   );
+
   return (
     <div className="w-full font-sora mt-8">
       <div className="w-full flex flex-col justify-center items-center">
         <h4 className="text-gray-800  dark:text-gray-400 text-[12px] ">
-          Payout
+          Deposit
         </h4>
         <h4 className="dark:text-pending text-[#F3A218] font-semibold text-[18px] mt-1 ">
-          {formatAmount(Number(clickedPayout?.fiat_amount))}{" "}
+          {formatAmount(Number(clickedPayout?.asset_amount))}{" "}
           <span className="text-gray-800 dark:dark:text-white  font-normal">
-            NGN
+            {clickedPayout.crypto_currency}
           </span>
         </h4>
         <div className="flex justify-center items-center mt-2 gap-2">
@@ -66,7 +64,7 @@ const TransactionDetails = ({ clickedPayout }: any) => {
       <h4 className="dark:text-white text-gray-700 text-[14px] mt-8">
         Payment Details
       </h4>
-      <div className="w-full mt-4 rounded-xl  p-4 bg-[#F1F1F1] dark:bg-[#2f2e2e]">
+      <div className="w-full mt-4 rounded-xl p-4  bg-[#F1F1F1] dark:bg-[#2f2e2e]">
         <div className="w-full  flex justify-between items-center">
           <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
             Status
@@ -122,11 +120,11 @@ const TransactionDetails = ({ clickedPayout }: any) => {
             {formatAmount(Number(clickedPayout?.sell_rate))}/$
           </h4>
         </div>
-        <div className="w-full mt-4 flex justify-between items-center">
+        {/* <div className="w-full mt-4 flex justify-between items-center">
           <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
             Transaction ID
           </h4>
-          <div className="flex items-center  gap-2">
+          <div className="flex items-center gap-2">
             <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
               {truncateWord(clickedPayout.transaction_id)}
             </h4>
@@ -146,82 +144,7 @@ const TransactionDetails = ({ clickedPayout }: any) => {
               )}
             </CopyToClipboard>
           </div>
-        </div>
-        <div className="w-full  mt-4 flex justify-between items-center">
-          <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
-            Merchant Name
-          </h4>
-          <div className="flex items-center justify-end gap-2">
-            <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
-              {clickedPayout.receiver_account_name}
-            </h4>
-            <CopyToClipboard
-              text={clickedPayout.receiver_account_name}
-              onCopy={() => {
-                setOnCopyMerchantname(true);
-                setTimeout(() => {
-                  setOnCopyMerchantname(false);
-                }, 2500);
-              }}
-            >
-              {onCopyMerchantname ? (
-                <FiClipboard className="text-[16px] dark:text-white text-gray-700" />
-              ) : (
-                <FiCopy className="text-[16px] dark:text-white text-gray-700" />
-              )}
-            </CopyToClipboard>
-          </div>
-        </div>
-        <div className="w-full mt-4 flex justify-between items-center">
-          <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
-            Bank Name
-          </h4>
-          <div className="flex items-center gap-2">
-            <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
-              {clickedPayout.receiver_bank_name}
-            </h4>
-            <CopyToClipboard
-              text={clickedPayout.receiver_bank_name}
-              onCopy={() => {
-                setOnCopyBank(true);
-                setTimeout(() => {
-                  setOnCopyBank(false);
-                }, 2500);
-              }}
-            >
-              {onCopyBank ? (
-                <FiClipboard className="text-[16px] dark:text-white text-gray-700" />
-              ) : (
-                <FiCopy className="text-[16px] dark:text-white text-gray-700" />
-              )}
-            </CopyToClipboard>
-          </div>
-        </div>
-        <div className="w-full mt-4 flex justify-between items-center">
-          <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
-            Account Number
-          </h4>
-          <div className="flex items-center gap-2">
-            <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
-              {clickedPayout.receiver_account_number}
-            </h4>
-            <CopyToClipboard
-              text={clickedPayout.receiver_account_number}
-              onCopy={() => {
-                setOnCopyAccountNo(true);
-                setTimeout(() => {
-                  setOnCopyAccountNo(false);
-                }, 2500);
-              }}
-            >
-              {onCopyAccountNo ? (
-                <FiClipboard className="text-[16px] dark:text-white text-gray-700" />
-              ) : (
-                <FiCopy className="text-[16px] dark:text-white text-gray-700" />
-              )}
-            </CopyToClipboard>
-          </div>
-        </div>
+        </div> */}
       </div>
       <div className="mt-8 flex  gap-4 h-[52px] justify-center w-full items-center">
         <button className="w-1/2 flex h-full justify-center items-center border border-[#3A66FF] rounded-3xl text-[14px] text-[#3A66FF]">
@@ -238,4 +161,4 @@ const TransactionDetails = ({ clickedPayout }: any) => {
   );
 };
 
-export default TransactionDetails;
+export default DepositDetails;

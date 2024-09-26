@@ -12,9 +12,10 @@ import { toast } from "react-hot-toast";
 import { API } from "../../constants/api";
 import { errorMessage } from "../../utils/errorMessage";
 import useAuthAxios from "../../utils/baseAxios";
+import DepositDetails from "./DepositDetails";
 
 const Transactions = () => {
-  const [showHistory, setShowHistory] = useState<boolean>(false);
+  const [showHistory, setShowHistory] = useState<number>(1);
   const [clickedPayout, setClickedPayout] = useState<any[]>([]);
   const { theme } = useUser();
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -44,7 +45,7 @@ const Transactions = () => {
       toast.error(errorMessage(newError?.message || newError?.data?.message));
     }
   }, [error3]);
-  console.log(payouts);
+  // console.log(payouts);
 
   const sortedPayouts = payouts?.sort((a: any, b: any) => {
     return (
@@ -54,46 +55,53 @@ const Transactions = () => {
   });
   return (
     <div
-      className={` w-full font-sora h-screen pb-16 lgss:pb-0 bg-white dark:bg-primary_dark `}
+      className={` w-full font-sora overflow-auto h-screen pb-16 lgss:pb-0 bg-white dark:bg-primary_dark `}
     >
       <Navbar />
       <div
-        className={` w-10/12 mds:w-8/12 md:7/12 border shadow-lg dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-6 dark:bg-[#1F1F1F] mt-12  lgss:w-2/5 xxl:w-1/3 `}
+        className={` w-[96%] mds:w-9/12 md:6/12 lgss:w-1/2 xxl:w-[35%] xxxl:w-[25%] border  dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-4 mds:p-6  dark:bg-[#1F1F1F] mt-6 lgss:mt-12   `}
       >
         <div className="w-full flex justify-between items-center">
           <h4 className="text-gray-800 dark:text-gray-100 font-semibold text-[20px]">
             All Transactions
           </h4>
-          <Link
-            to={showHistory ? "/transactions" : "/dashboard"}
-            onClick={() => {
-              if (showHistory) {
-                setShowHistory(false);
-              }
-            }}
-            className="w-[40px] h-[40px] rounded-full bg-[#007AFF] bg-opacity-10 dark:bg-opacity-100 dark:bg-[#3D3D3D] flex justify-center items-center"
-          >
-            <IoClose className="text-black dark:text-white text-[14px]" />
-          </Link>
+          {showHistory === 2 || showHistory === 3 ? (
+            <Link
+              to={showHistory ? "/transactions" : "/dashboard"}
+              onClick={() => {
+                if (showHistory === 2 || showHistory === 3) {
+                  setShowHistory(1);
+                }
+              }}
+              className="w-[40px] h-[40px] rounded-full bg-[#007AFF] bg-opacity-10 dark:bg-opacity-100 dark:bg-[#3D3D3D] flex justify-center items-center"
+            >
+              <IoClose className="text-black dark:text-white text-[14px]" />
+            </Link>
+          ) : null}
         </div>
-        {showHistory ? (
+        {showHistory === 2 ? (
           <TransactionDetails clickedPayout={clickedPayout} />
+        ) : showHistory === 3 ? (
+          <DepositDetails clickedPayout={clickedPayout} />
         ) : (
           <div className="h-[600px] lgss:h-[700px] overflow-auto mt-4 flex-col flex gap-6 py-4">
             {sortedPayouts?.length >= 1 ? (
               sortedPayouts.map((payout: any, index: any) => (
-                <div
-                  onClick={() => {
-                    setClickedPayout(payout);
-                    setShowHistory(true);
-                  }}
-                  key={index}
-                  className="w-full"
-                >
+                <div onClick={() => {}} key={index} className="w-full">
                   <h4 className="text-gray-500 text-left mb-4 text-[12px]">
                     {getFormattedDate(payout.transaction_date)}
                   </h4>
-                  <TransactionCard payouts={payout} />
+                  <TransactionCard
+                    payouts={payout}
+                    onClick1={() => {
+                      setClickedPayout(payout);
+                      setShowHistory(2);
+                    }}
+                    onClick2={() => {
+                      setClickedPayout(payout);
+                      setShowHistory(3);
+                    }}
+                  />
                 </div>
               ))
             ) : (

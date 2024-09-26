@@ -16,6 +16,7 @@ const SelectCoin = ({
   setNetwork,
   sellRateFlow,
   setSellRateFlow,
+  openMore,
 }: any) => {
   const axiosInstance = useAuthAxios();
   const getCoins = async () => {
