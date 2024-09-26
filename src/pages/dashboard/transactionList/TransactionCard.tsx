@@ -1,15 +1,16 @@
 import React from "react";
 import { btc, eth, naijaLogo, solana, trx, usdt } from "../../../assets/images";
 import { useUser } from "../../../context/user-context";
-import { formatAmount, formatTime } from "../../../utils/formatDate";
+import { formatAmount, formatDateAndTime } from "../../../utils/formatDate";
 
-const TransactionCard = ({ payouts, onClick }: any) => {
+const TransactionCard = ({ payouts, onClick1, onClick2 }: any) => {
   const { theme } = useUser();
+  const { formattedTime } = formatDateAndTime(payouts?.transaction_date);
 
   return (
     <div className="w-full flex-col gap-4 flex">
       <div
-        onClick={onClick}
+        onClick={onClick1}
         className="font-sora cursor-pointer w-full border-b border-gray-200 dark:border-gray-800 py-4 flex justify-between items-center"
       >
         <div className="flex items-center gap-2">
@@ -73,12 +74,12 @@ const TransactionCard = ({ payouts, onClick }: any) => {
             ₦{formatAmount(Number(payouts?.fiat_amount))}
           </h4>
           <h4 className="text-gray-400 dark:text-gray-500 text-right mt-1 text-[14px]">
-            {formatTime(payouts.transaction_date)}
+            {formattedTime}
           </h4>
         </div>
       </div>
       <div
-        onClick={onClick}
+        onClick={onClick2}
         className="font-sora cursor-pointer w-full flex justify-between items-center"
       >
         <div className="flex items-center gap-2">
@@ -155,7 +156,7 @@ const TransactionCard = ({ payouts, onClick }: any) => {
             {payouts.crypto_currency}
           </h4>
           <h4 className="text-gray-400 dark:text-gray-500 text-right mt-1 text-[14px]">
-            {formatTime(payouts.transaction_date)}
+            {formattedTime}
           </h4>
         </div>
       </div>

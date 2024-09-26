@@ -97,7 +97,11 @@ const AddBankScreen = ({ setBankMode }: any) => {
     } else {
       setDisabled(false);
     }
+    if (bankNumber.length !== 10) {
+      setUserBankName("");
+    }
   }, [bankName, bankNumber.length, userBankName]);
+
   return (
     <div className="w-full font-sora">
       <button
@@ -124,7 +128,7 @@ const AddBankScreen = ({ setBankMode }: any) => {
             onClick={() => setDropDown((prev) => !prev)}
             className="w-full cursor-pointer dark:text-white text-gray-800 bg-[#FAFAFA] dark:bg-transparent dark:border-gray-400 h-[52px] mt-2 flex justify-between items-center  outline-none text-[14px] border border-gray-300 bg-transparent px-4  rounded-xl "
           >
-            <h4 className="text-[14px] dark:text-gray-200 text-gray-500">
+            <h4 className="text-[14px] dark:text-gray-200 text-gray-800">
               {bankName ? bankName : "Select bank"}
             </h4>
             <SlArrowDown className="dark:text-white text-gray-800 txt-[24px]" />
@@ -140,7 +144,9 @@ const AddBankScreen = ({ setBankMode }: any) => {
               <input
                 type="text"
                 value={bankQuery}
-                onChange={(e) => setBankQuery(e.target.value.toLowerCase())}
+                onChange={(e) => {
+                  setBankQuery(e.target.value.toLowerCase());
+                }}
                 placeholder="Search for banks"
                 className="w-10/12 outline-none focus:border-text_blue dark:focus:border-text_blue placeholder:text-[12px] bg-transparent"
               />
@@ -158,6 +164,8 @@ const AddBankScreen = ({ setBankMode }: any) => {
                     onClick={() => {
                       setBankName(bank.name);
                       setBankCode(bank.code);
+                      setBankNumber("");
+                      setUserBankName("");
                       setDropDown((prev) => !prev);
                     }}
                     className="flex w-full border-b border-[#FAFAFA] py-4 dark:border-[#484848]  cursor-pointer gap-2 items-center"

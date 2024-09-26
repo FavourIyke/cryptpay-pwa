@@ -3,8 +3,8 @@ export const truncateWord = (word: string): string => {
     return word; // No need to truncate if the word is already short
   }
 
-  const firstPart = word.slice(0, 10);
-  const lastPart = word.slice(-5);
+  const firstPart = word.slice(0, 6);
+  const lastPart = word.slice(-3);
 
   return `${firstPart}......${lastPart}`;
 };

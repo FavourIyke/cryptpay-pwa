@@ -103,6 +103,9 @@ const AddBankModal = ({
     } else {
       setDisabled(false);
     }
+    if (bankNumber.length !== 10) {
+      setUserBankName("");
+    }
   }, [bankName, bankNumber.length, userBankName]);
   return (
     <div className="fixed inset-0  flex font-sora justify-start items-start pt-24 bg-white dark:bg-primary_dark   backdrop-blur-sm">
@@ -180,6 +183,8 @@ const AddBankModal = ({
                       onClick={() => {
                         setBankName(bank.name);
                         setBankCode(bank.code);
+                        setBankNumber("");
+                        setUserBankName("");
                         setDropDown((prev) => !prev);
                       }}
                       className="flex w-full border-b border-[#FAFAFA] py-4 dark:border-[#484848]  cursor-pointer gap-2 items-center"

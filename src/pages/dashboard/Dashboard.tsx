@@ -31,6 +31,7 @@ import { formatAmount, getFormattedDate } from "../../utils/formatDate";
 import DetailsModal from "./transactionList/DetailsModal";
 import MoreModal from "./MoreModal";
 import { MdPending } from "react-icons/md";
+import DepositDetails from "./transactionList/DepositDetails";
 
 const Dashboard = () => {
   const { theme } = useUser();
@@ -47,6 +48,8 @@ const Dashboard = () => {
     return darkCrypt; // fallback in case of an unexpected value
   };
   const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [showdDepositDetails, setShowdDepositDetails] =
+    useState<boolean>(false);
   const [clickedPayout, setClickedPayout] = useState<any[]>([]);
 
   const [showBalance, setShowBalance] = useState<boolean>(false);
@@ -186,8 +189,16 @@ const Dashboard = () => {
                 <div>
                   <button
                     onClick={() => {
-                      setSellRate(true);
-                      setSelectCoinModal(true);
+                      if (
+                        kycStatus?.data.kyc_level === "000" ||
+                        kycStatus?.data.kyc_status === null ||
+                        kycStatus?.data.kyc_status === "pending"
+                      ) {
+                        setKycModal(true);
+                      } else {
+                        setSellRate(true);
+                        setSelectCoinModal(true);
+                      }
                     }}
                     className="w-[45px] h-[45px] rounded-full bg-[#2F2F2F] flex justify-center items-center"
                   >
@@ -197,7 +208,7 @@ const Dashboard = () => {
                     Sell
                   </h4>
                 </div>
-                <div>
+                {/* <div>
                   <button
                     onClick={() => {
                       setSellRate(false);
@@ -210,7 +221,7 @@ const Dashboard = () => {
                   <h4 className="text-white mt-1 text-[14px] text-center">
                     Buy
                   </h4>
-                </div>
+                </div> */}
                 <div>
                   <button
                     onClick={() => {
@@ -327,14 +338,18 @@ const Dashboard = () => {
                   <h4 className="text-gray-500 text-left mb-4 text-[12px]">
                     {getFormattedDate(payout.transaction_date)}
                   </h4>
-                  <div
-                    onClick={() => {
-                      setClickedPayout(payout);
-                      setShowDetails(true);
-                    }}
-                    className="cursor-pointer w-full"
-                  >
-                    <TransactionCard payouts={payout} />
+                  <div className="cursor-pointer w-full">
+                    <TransactionCard
+                      payouts={payout}
+                      onClick1={() => {
+                        setClickedPayout(payout);
+                        setShowDetails(true);
+                      }}
+                      onClick2={() => {
+                        setClickedPayout(payout);
+                        setShowdDepositDetails(true);
+                      }}
+                    />
                   </div>
                 </div>
               ))
@@ -364,6 +379,7 @@ const Dashboard = () => {
             setSelectBankModal={setSelectBankModal}
             sellRateFlow={sellRateFlow}
             setSellRateFlow={setSellRateFlow}
+            openMore={openMore}
           />
         )}
       </div>
@@ -466,6 +482,12 @@ const Dashboard = () => {
       {showDetails && (
         <DetailsModal
           setShowDetails={setShowDetails}
+          clickedPayout={clickedPayout}
+        />
+      )}
+      {showdDepositDetails && (
+        <DepositDetails
+          setShowdDepositDetails={setShowdDepositDetails}
           clickedPayout={clickedPayout}
         />
       )}

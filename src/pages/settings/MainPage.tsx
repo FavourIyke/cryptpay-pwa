@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { avatar } from "../../assets/images";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { FiArrowRightCircle, FiClipboard, FiCopy } from "react-icons/fi";
+import { FiArrowRightCircle, FiCopy } from "react-icons/fi";
 import ButtonConfig from "./ButtonConfig";
 import { SlArrowRight } from "react-icons/sl";
 import { useUser } from "../../context/user-context";

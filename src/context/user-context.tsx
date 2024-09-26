@@ -14,7 +14,7 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
   const [theme, setTheme] = useState<string | null>(
     localStorage.getItem("theme") || "system"
   );
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
   const [userCurrency, setUserCurrency] = useState<string>("NGN");
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
   const element = document.documentElement;
@@ -39,9 +39,12 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
   // console.log(userDetails);
 
   useEffect(() => {
+    const newError = error1 as any;
     if (error1) {
-      const newError = error1 as any;
       toast.error(errorMessage(newError?.message || newError?.data?.message));
+    }
+    if (newError?.data?.message === "Unauthenticated.") {
+      logout();
     }
   }, [error1]);
 
