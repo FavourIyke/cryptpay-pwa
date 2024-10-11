@@ -22,8 +22,13 @@ export const API = {
   generateWalletAddresses: `${BASE_URL}/api/wallet-addresses`,
   verifyKyc: `${BASE_URL}/api/kyc/1/verify`,
   getTransactions: `${BASE_URL}/api/transactions`,
+  getSingleTransaction: (id:string) =>  `${BASE_URL}/api/transactions/${id}`,
   getSummary: `${BASE_URL}/api/total-payouts`,
   checkKycStatus: `${BASE_URL}/api/check-verification-status`,
+  getNotifications: (page: number) => `${BASE_URL}/api/notifications/all?page=${page}`,
+  getUnreadNotifications: `${BASE_URL}/api/notifications/unread`,
+  markAllAsRead: `${BASE_URL}/api/notifications/read-all`,
+  markOneAsRead: (id:string) => `${BASE_URL}/api/notifications/${id}/read`,
   getWalletAddress: (coin:string, network:string) => `${BASE_URL}/api/wallet-address?crypto_type=${coin}&network=${network}`,
   setDefaultBank: (bankId:any, ) => `${BASE_URL}/api/banks/${bankId}/set-default`,
   deleteBank: (bankId:any, ) => `${BASE_URL}/api/bank/delete/${bankId}`

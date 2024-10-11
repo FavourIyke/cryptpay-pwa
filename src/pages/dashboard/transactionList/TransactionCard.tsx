@@ -104,7 +104,7 @@ const TransactionCard = ({ payouts, onClick1, onClick2 }: any) => {
           </div>
           <div>
             <h4 className="text-gray-900 dark:text-white  text-[14px]">
-              {payouts.transaction_type === "sell" ? "Deposit" : ""}
+              {payouts.transaction_type === "sell" ? "Deposit" : "Deposit"}
             </h4>
             <div
               className={`  rounded-md flex mt-1 justify-start items-center bg-opacity-30 dark:bg-opacity-10 ${
