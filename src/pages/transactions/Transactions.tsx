@@ -66,13 +66,20 @@ const Transactions = () => {
             All Transactions
           </h4>
           {showHistory === 2 || showHistory === 3 ? (
-            <Link
-              to={showHistory ? "/transactions" : "/dashboard"}
+            <button
               onClick={() => {
                 if (showHistory === 2 || showHistory === 3) {
                   setShowHistory(1);
                 }
               }}
+              className="w-[40px] h-[40px] rounded-full bg-[#007AFF] bg-opacity-10 dark:bg-opacity-100 dark:bg-[#3D3D3D] flex justify-center items-center"
+            >
+              <IoClose className="text-black dark:text-white text-[14px]" />
+            </button>
+          ) : null}
+          {showHistory === 1 ? (
+            <Link
+              to={"/dashboard"}
               className="w-[40px] h-[40px] rounded-full bg-[#007AFF] bg-opacity-10 dark:bg-opacity-100 dark:bg-[#3D3D3D] flex justify-center items-center"
             >
               <IoClose className="text-black dark:text-white text-[14px]" />

@@ -6,7 +6,7 @@ import { BsArrowDown, BsArrowUp } from "react-icons/bs";
 import { IoIosMore } from "react-icons/io";
 import RateBoard from "./RateBoard";
 import TransactionCard from "./transactionList/TransactionCard";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SelectCoin from "./sellFlow/SelectCoin";
 import SelectNetwork from "./sellFlow/SelectNetwork";
 import SelectBank from "./sellFlow/SelectBank";
@@ -34,7 +34,7 @@ import { MdPending } from "react-icons/md";
 import DepositDetails from "./transactionList/DepositDetails";
 
 const Dashboard = () => {
-  const { theme } = useUser();
+  const { theme, setShowDetails, showDetails } = useUser();
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
   const getThemeBasedImage = () => {
@@ -47,7 +47,6 @@ const Dashboard = () => {
     }
     return darkCrypt; // fallback in case of an unexpected value
   };
-  const [showDetails, setShowDetails] = useState<boolean>(false);
   const [showdDepositDetails, setShowdDepositDetails] =
     useState<boolean>(false);
   const [clickedPayout, setClickedPayout] = useState<any[]>([]);
@@ -121,7 +120,6 @@ const Dashboard = () => {
       toast.error(errorMessage(newError?.message || newError?.data?.message));
     }
   }, [error3, error4]);
-  // console.log(payouts);
 
   const sortedPayouts = payouts?.sort((a: any, b: any) => {
     return (
@@ -129,6 +127,16 @@ const Dashboard = () => {
       new Date(a.transaction_date).getTime()
     );
   });
+  const location = useLocation();
+  const showPay = location.state?.showPay;
+  useEffect(() => {
+    if (showPay) {
+      setShowDetails(true);
+
+      // Clear location.state to prevent re-triggering on refresh
+      navigate("/dashboard", { replace: true, state: {} });
+    }
+  }, [showPay, navigate]);
 
   return (
     <div
@@ -483,6 +491,7 @@ const Dashboard = () => {
         <DetailsModal
           setShowDetails={setShowDetails}
           clickedPayout={clickedPayout}
+          setClickedPayout={setClickedPayout}
         />
       )}
       {showdDepositDetails && (

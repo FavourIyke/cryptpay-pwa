@@ -3,7 +3,7 @@ import { ContextValueType, PropsType } from "../types/index";
 import useAuthAxios from "../utils/baseAxios";
 import { API } from "../constants/api";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { errorMessage } from "../utils/errorMessage";
 import { useAuth } from "./auth-context";
 
@@ -16,6 +16,10 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
   );
   const { token, logout } = useAuth();
   const [userCurrency, setUserCurrency] = useState<string>("NGN");
+  const [isNotified, setIsNotified] = useState<boolean>(false);
+  const [transactionID, setTransactionID] = useState<string>("");
+  const [showDetails, setShowDetails] = useState<boolean>(false);
+
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
   const element = document.documentElement;
   const axiosInstance = useAuthAxios();
@@ -134,6 +138,12 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
         userDetails,
         userPreferences,
         refetch2,
+        isNotified,
+        setIsNotified,
+        transactionID,
+        setTransactionID,
+        setShowDetails,
+        showDetails,
       }}
     >
       {children}
