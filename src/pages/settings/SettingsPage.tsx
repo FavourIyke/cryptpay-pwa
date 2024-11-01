@@ -4,14 +4,18 @@ import Navbar from "../../components/Navbar";
 import SidePage from "./SidePage";
 import MainPage from "./MainPage";
 import LogoutModal from "./LogoutModal";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const SettingsPage = () => {
   const [sidePage, setSidePage] = useState<boolean>(false);
   const [screen, setScreen] = useState<number>(0);
   const [logout, setLogout] = useState<boolean>(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const [openKyc2, setOpenKyc2] = useState<boolean>(false);
+
   const setScreenn = location.state?.setScreen;
+  const showKyc2 = location.state?.showKyc2;
 
   useEffect(() => {
     if (setScreenn) {
@@ -19,6 +23,14 @@ const SettingsPage = () => {
       setScreen(setScreenn);
     }
   }, [setScreenn]);
+  useEffect(() => {
+    if (showKyc2) {
+      setOpenKyc2(true);
+
+      // Clear location.state to prevent re-triggering on refresh
+      navigate("/settings", { replace: true, state: {} });
+    }
+  }, [showKyc2, navigate]);
   return (
     <div
       className={` w-full font-sora h-screen overflow-auto pb-16  bg-white dark:bg-primary_dark `}
@@ -31,6 +43,8 @@ const SettingsPage = () => {
               setSidePage={setSidePage}
               screen={screen}
               setScreen={setScreen}
+              openKyc2={openKyc2}
+              setOpenKyc2={setOpenKyc2}
             />
           </div>
         ) : (
@@ -54,6 +68,8 @@ const SettingsPage = () => {
             screen={screen}
             setSidePage={setSidePage}
             setScreen={setScreen}
+            openKyc2={openKyc2}
+            setOpenKyc2={setOpenKyc2}
           />
         </div>
       </div>

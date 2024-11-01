@@ -101,15 +101,12 @@ import { toast } from "react-hot-toast";
   };
 
 
-  export const validateBvn = (bvnno: string, surnamee: string) => {
+  export const validateBvn = (bvnno: string,) => {
     if (!bvnno) {
       toast.error("Enter your BVN");
       return false;
     }
-    if (!surnamee) {
-      toast.error("Enter your surname");
-      return false;
-    }
+   
     const bvnRegex = /^[0-9]{11}$/;
     if (!bvnRegex.test(bvnno)) {
       toast.error("This BVN is not correct");

@@ -16,9 +16,10 @@ const SelectCoin = ({
   setNetwork,
   sellRateFlow,
   setSellRateFlow,
-  openMore,
+  setBuyCoinModal,
 }: any) => {
   const axiosInstance = useAuthAxios();
+
   const getCoins = async () => {
     const response = await axiosInstance.get(API.getCoins);
     return response.data.data;
@@ -94,17 +95,24 @@ const SelectCoin = ({
               <div
                 key={index}
                 onClick={() => {
-                  if (coin.networks.length === 1) {
-                    setCoin(coin.symbol);
-                    setNetworks(coin.networks);
-                    setSelectCoinModal(false);
-                    setSelectBankModal(true);
-                    setNetwork(coin.networks[0].code);
+                  setCoin(coin.symbol);
+                  setNetworks(coin.networks);
+                  setSelectCoinModal(false); // Close the coin selection modal by default
+
+                  if (sellRateFlow) {
+                    if (coin.networks.length === 1) {
+                      setSelectBankModal(true); // Directly open the bank modal if only one network exists
+                      setNetwork(coin.networks[0].code); // Set the network automatically
+                    } else {
+                      setSelectNetworkModal(true); // Open network selection modal for multiple networks
+                    }
                   } else {
-                    setCoin(coin.symbol);
-                    setNetworks(coin.networks);
-                    setSelectCoinModal(false);
-                    setSelectNetworkModal(true);
+                    if (coin.networks.length === 1) {
+                      setBuyCoinModal(true); // Directly open the bank modal if only one network exists
+                      setNetwork(coin.networks[0].code); // Set the network automatically
+                    } else {
+                      setSelectNetworkModal(true); // Open network selection modal for multiple networks
+                    }
                   }
                 }}
                 className="flex cursor-pointer justify-between px-4  dark:bg-[#292929] bg-[#f6f5f5] rounded-xl h-[58px] items-center"
@@ -123,7 +131,10 @@ const SelectCoin = ({
                 </div>
                 <div className="flex items-center gap-3">
                   <h4 className="dark:text-gray-400 text-black font-medium text-[15px]">
-                    {Math.round(coin.sell_rate).toLocaleString()}/$
+                    {sellRateFlow
+                      ? Math.round(coin.sell_rate).toLocaleString()
+                      : Math.round(coin.buy_rate).toLocaleString()}
+                    /$
                   </h4>
                 </div>
               </div>

@@ -18,7 +18,13 @@ import ContactSupport from "./sideScreens/ContactSupport";
 import UserFeedback from "./sideScreens/UserFeedback";
 import FAQ from "./sideScreens/FAQ";
 
-const SidePage = ({ setSidePage, setScreen, screen }: any) => {
+const SidePage = ({
+  setSidePage,
+  setScreen,
+  screen,
+  openKyc2,
+  setOpenKyc2,
+}: any) => {
   const { theme } = useUser();
   const [mode, setMode] = useState<number>(1);
   const [secScreen, setSecScreen] = useState<number>(1);
@@ -106,7 +112,12 @@ const SidePage = ({ setSidePage, setScreen, screen }: any) => {
               ) : null}
             </div>
           ) : screen === 2 ? (
-            <AccountUpgrade setSidePage={setSidePage} setScreen={setScreen} />
+            <AccountUpgrade
+              setSidePage={setSidePage}
+              setScreen={setScreen}
+              openKyc2={openKyc2}
+              setOpenKyc2={setOpenKyc2}
+            />
           ) : screen === 7 ? (
             <div>
               {supportMode === 1 ? (

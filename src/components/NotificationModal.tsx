@@ -199,8 +199,14 @@ const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
               }}
               key={index}
             >
-              <div className="text-[13px] flex justify-between items-center gap-2 font-bold text-[#3A4852] dark:text-white">
-                {notification.data.title}
+              <div className="text-[13px] flex justify-between capitalize items-center gap-2 font-bold text-[#3A4852] dark:text-white">
+                {notification.data.title
+                  ? notification.data.title
+                  : `${
+                      notification.data.status
+                        ? `KYC ${notification.data.status}`
+                        : ""
+                    }`}
                 {loadingIndex === notification?.id ? (
                   <ClipLoader color="#3A66FF" size={15} />
                 ) : (
@@ -213,9 +219,11 @@ const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
               </div>
               <div className="w-full flex justify-between mt-3 items-center">
                 <h5 className="text-[13px] font-medium  text-[#617889] dark:text-white">
-                  {notification.data.message}
+                  {notification.data.message
+                    ? notification.data.message
+                    : notification.data.review_notes}
                 </h5>
-                {notification.data.title.toLowerCase().includes("payout") && (
+                {notification.data.title?.toLowerCase().includes("payout") && (
                   <SlArrowRight
                     onClick={() => {
                       setTransactionID(notification.data.action_id);

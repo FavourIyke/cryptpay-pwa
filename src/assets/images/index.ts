@@ -20,7 +20,21 @@ import naijaLogo from "./naijaLogo.svg"
 import feedback from "./feedB.svg"
 import trx from "./trx.png"
 import verifyBadge from "./verifyBadge.svg"
+import pause from "./pause.svg"
+import paylogoLight from "./payLogoLight.svg"
+import paylogoDark from "./payLogoDark.svg"
+import topupSuccess from "./topup-success.svg"
+import topupCancel from "./topup-cancel.svg"
+import verified from "./verified.svg"
+import noWalletTxn from "./noWalletTXN.svg"
 export  {
+    noWalletTxn,
+    verified,
+    paylogoDark,
+    topupCancel,
+    topupSuccess,
+    paylogoLight,
+    pause,
     verifyBadge,
     trx,
     feedback,
