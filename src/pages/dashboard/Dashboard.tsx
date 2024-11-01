@@ -30,8 +30,12 @@ import { cryptpay, darkCrypt } from "../../assets/images";
 import { formatAmount, getFormattedDate } from "../../utils/formatDate";
 import DetailsModal from "./transactionList/DetailsModal";
 import MoreModal from "./MoreModal";
-import { MdPending } from "react-icons/md";
+import { MdAdd, MdPending } from "react-icons/md";
 import DepositDetails from "./transactionList/DepositDetails";
+import AddWalletAddy from "./buyFlow/AddWalletAddy";
+import Wallet from "./top-up/Wallet";
+import Kyc2Modal from "./Kyc2Modal";
+import SetPin from "./buyFlow/SetPin";
 
 const Dashboard = () => {
   const { theme, setShowDetails, showDetails } = useUser();
@@ -59,6 +63,8 @@ const Dashboard = () => {
   const [selectBankModal, setSelectBankModal] = useState<boolean>(false);
   const [sellAssetModal, setSellAssetModal] = useState<boolean>(false);
   const [buyCoinModal, setBuyCoinModal] = useState<boolean>(false);
+  const [buyCoinAddy, setBuyCoinAddy] = useState<boolean>(false);
+  const [buyCoinPin, setBuyCoinPin] = useState<boolean>(false);
   const [buyReceiptModal, setBuyReceiptModal] = useState<boolean>(false);
   const [finalModal, setFinalModal] = useState<boolean>(false);
   const [coin, setCoin] = useState<string>("");
@@ -72,8 +78,17 @@ const Dashboard = () => {
   const axiosInstance = useAuthAxios();
   const [networks, setNetworks] = useState<any[]>([]);
   const [kycModal, setKycModal] = useState<boolean>(false);
+  const [kyc2Modal, setKyc2Modal] = useState<boolean>(false);
   const [selectedBankDetails, setSelectedBankDetails] = useState<any[]>([]);
   const [openMore, setOpenMore] = useState<boolean>(false);
+  //Buy
+  const [nairaAmount, setNairaAmount] = useState("");
+  const [walletAddyBuy, setWalletAddyBuy] = useState<string>("");
+  const [buySummary, setBuySummary] = useState<any[]>([]);
+
+  //
+  const [openWallet, setOpenWallet] = useState<boolean>(false);
+
   const navigate = useNavigate();
   const getPayoutsSummary = async () => {
     const response = await axiosInstance.get(API.getSummary);
@@ -193,18 +208,48 @@ const Dashboard = () => {
                   </h4>
                 )}
               </div>
-              <div className="flex gap-8 xxs:gap-10 mds:gap-16 justify-center items-center">
+              <div className="flex gap-8 xxs:gap-10 mds:gap-12 justify-center items-center">
                 <div>
                   <button
                     onClick={() => {
                       if (
                         kycStatus?.data.kyc_level === "000" ||
                         kycStatus?.data.kyc_status === null ||
-                        kycStatus?.data.kyc_status === "pending"
+                        (kycStatus?.data.kyc_level === "000" &&
+                          kycStatus?.data.kyc_status === "pending")
+                      ) {
+                        setKycModal(true);
+                      } else if (
+                        kycStatus?.data.kyc_level === "100" ||
+                        (kycStatus?.data.kyc_level === "100" &&
+                          kycStatus?.data.kyc_status === "pending")
+                      ) {
+                        setKyc2Modal(true);
+                      } else {
+                        setOpenWallet(true);
+                      }
+                    }}
+                    className="w-[45px] h-[45px] rounded-full bg-[#2F2F2F] flex justify-center items-center"
+                  >
+                    <MdAdd className="text-[24px] text-white" />
+                  </button>
+                  <h4 className="text-white mt-1 text-[14px] text-center">
+                    Top Up
+                  </h4>
+                </div>
+                <div>
+                  <button
+                    onClick={() => {
+                      if (
+                        kycStatus?.data.kyc_level === "000" ||
+                        kycStatus?.data.kyc_status === null ||
+                        (kycStatus?.data.kyc_level === "000" &&
+                          kycStatus?.data.kyc_status === "pending")
                       ) {
                         setKycModal(true);
                       } else {
                         setSellRate(true);
+                        setSellRateFlow(true);
                         setSelectCoinModal(true);
                       }
                     }}
@@ -216,11 +261,28 @@ const Dashboard = () => {
                     Sell
                   </h4>
                 </div>
-                {/* <div>
+
+                <div>
                   <button
                     onClick={() => {
-                      setSellRate(false);
-                      setSelectCoinModal(true);
+                      if (
+                        kycStatus?.data.kyc_level === "000" ||
+                        kycStatus?.data.kyc_status === null ||
+                        (kycStatus?.data.kyc_level === "000" &&
+                          kycStatus?.data.kyc_status === "pending")
+                      ) {
+                        setKycModal(true);
+                      } else if (
+                        kycStatus?.data.kyc_level === "100" ||
+                        (kycStatus?.data.kyc_level === "100" &&
+                          kycStatus?.data.kyc_status === "pending")
+                      ) {
+                        setKyc2Modal(true);
+                      } else {
+                        setSellRate(false);
+                        setSellRateFlow(false);
+                        setSelectCoinModal(true);
+                      }
                     }}
                     className="w-[45px] h-[45px] rounded-full bg-text_blue flex justify-center items-center"
                   >
@@ -229,7 +291,7 @@ const Dashboard = () => {
                   <h4 className="text-white mt-1 text-[14px] text-center">
                     Buy
                   </h4>
-                </div> */}
+                </div>
                 <div>
                   <button
                     onClick={() => {
@@ -258,8 +320,9 @@ const Dashboard = () => {
                     Verification is in Progress
                   </h4>
                   <h4 className="  text-[14px] mt-1 text-left pr-6 mds:pr-12 md:pr-16 xl:pr-20 xxxl:pr-32">
-                    Your KYC verification is currently being processed. Please
-                    allow some time for confirmation
+                    Your KYC {kycStatus?.data.kyc_level === "100" && "Level 2"}{" "}
+                    verification is currently being processed. Please allow some
+                    time for confirmation
                   </h4>
                   <button
                     onClick={() => navigate("/dashboard")}
@@ -328,6 +391,9 @@ const Dashboard = () => {
             setCoin={setCoin}
             networks={networks}
             setNetworks={setNetworks}
+            setNetwork={setNetwork}
+            setSelectBankModal={setSelectBankModal}
+            setBuyCoinModal={setBuyCoinModal}
           />
         </div>
         <div className="w-full lgss:w-2/5 mt-12 lgss:mt-6">
@@ -388,6 +454,7 @@ const Dashboard = () => {
             sellRateFlow={sellRateFlow}
             setSellRateFlow={setSellRateFlow}
             openMore={openMore}
+            setBuyCoinModal={setBuyCoinModal}
           />
         )}
       </div>
@@ -454,12 +521,32 @@ const Dashboard = () => {
       {buyCoinModal && (
         <BuyCoin
           setBuyCoinModal={setBuyCoinModal}
-          setBuyReceiptModal={setBuyReceiptModal}
+          setBuyCoinAddy={setBuyCoinAddy}
           coin={coin}
           network={network}
           setSelectNetworkModal={setSelectNetworkModal}
           coinAmount={coinAmount}
           setCoinAmount={setCoinAmount}
+          nairaAmount={nairaAmount}
+          setNairaAmount={setNairaAmount}
+        />
+      )}
+      {buyCoinAddy && (
+        <AddWalletAddy
+          setBuyCoinModal={setBuyCoinModal}
+          setBuyReceiptModal={setBuyReceiptModal}
+          coin={coin}
+          network={network}
+          setBuyCoinAddy={setBuyCoinAddy}
+          walletAddy={walletAddyBuy}
+          setWalletAddy={setWalletAddyBuy}
+          setBuySummary={setBuySummary}
+          nairaAmount={nairaAmount}
+          setBuyCoinPin={setBuyCoinPin}
+
+          // setSelectNetworkModal={setSelectNetworkModal}
+          // coinAmount={coinAmount}
+          // setCoinAmount={setCoinAmount}
         />
       )}
       {buyReceiptModal && (
@@ -468,8 +555,12 @@ const Dashboard = () => {
           setBuyReceiptModal={setBuyReceiptModal}
           coin={coin}
           network={network}
-          coinAmount={coinAmount}
+          walletAddy={walletAddyBuy}
           setFinalModal={setFinalModal}
+          setWalletAddy={setWalletAddyBuy}
+          setNairaAmount={setNairaAmount}
+          setBuySummary={setBuySummary}
+          buySummary={buySummary}
         />
       )}
       {addBankModal && (
@@ -500,7 +591,22 @@ const Dashboard = () => {
           clickedPayout={clickedPayout}
         />
       )}
+      {openWallet && (
+        <Wallet
+          setOpenWallet={setOpenWallet}
+          setBuyCoinModal={setSelectCoinModal}
+        />
+      )}
+      {buyCoinPin && (
+        <SetPin
+          setBuyCoinAddy={setBuyCoinAddy}
+          setBuyCoinPin={setBuyCoinPin}
+          setBuyReceiptModal={setBuyReceiptModal}
+        />
+      )}
+      {kyc2Modal && <Kyc2Modal setKyc2Modal={setKyc2Modal} />}
     </div>
+    // Top-up
   );
 };
 

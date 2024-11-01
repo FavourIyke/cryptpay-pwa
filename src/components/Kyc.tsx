@@ -21,18 +21,12 @@ const Kyc = () => {
   >([]);
 
   const [bvn, setBvn] = useState<string>("");
-  const [surname, setSurname] = useState<string>("");
   const [isImageCaptured, setIsImageCaptured] = useState<boolean>(false);
   const [submit, setSubmit] = useState(0);
   const axiosInstance = useAuthAxios();
-  const handlePostKyc = async ({
-    id_number,
-    last_name,
-    liveliness_image,
-  }: any) => {
+  const handlePostKyc = async ({ id_number, liveliness_image }: any) => {
     const response = await axiosInstance.post(API.verifyKyc, {
       id_number,
-      last_name,
       liveliness_image,
     });
     return response.data;
@@ -53,7 +47,7 @@ const Kyc = () => {
   });
 
   const handleVerify = () => {
-    if (!validateBvn(bvn, surname)) {
+    if (!validateBvn(bvn)) {
       return;
     }
     setIsImageCaptured(true);
@@ -88,13 +82,12 @@ const Kyc = () => {
               onClick={() => {
                 completeKyc.mutate({
                   id_number: bvn,
-                  last_name: surname,
                   liveliness_image: images,
                 });
               }}
-              disabled={!bvn || !surname}
+              disabled={!bvn}
               className={`w-full h-[52px] rounded-[18px] mt-12 ${
-                !bvn || !surname
+                !bvn
                   ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
                   : "bg-text_blue text-white"
               }  flex justify-center items-center  font-semibold`}
@@ -126,20 +119,7 @@ const Kyc = () => {
                 Dial *565*0# to check for your BVN
               </h4>
             </div>
-            <div className="w-full mt-6">
-              <label className="text-gray-800 text-[14px] dark:text-white">
-                Surname
-              </label>
-              <div className="w-full flex justify-between px-4  items-center dark:text-white text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2 text-[14px] border border-gray-300 bg-transparent  spin-button-none rounded-xl">
-                <input
-                  type="text"
-                  value={surname}
-                  onChange={(e) => setSurname(e.target.value)}
-                  placeholder="eg: Chidi"
-                  className="w-10/12  focus:border-text_blue dark:focus:border-text_blue outline-none bg-transparent "
-                />
-              </div>
-            </div>
+
             {isImageCaptured && (
               <SmartCameraComponent
                 setIsImageCaptured={setIsImageCaptured}
@@ -155,9 +135,9 @@ const Kyc = () => {
                   handleVerify();
                 }
               }}
-              disabled={!bvn || !surname}
+              disabled={!bvn}
               className={`w-full h-[52px] rounded-[18px] mt-8 ${
-                !bvn || !surname
+                !bvn
                   ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
                   : "bg-text_blue text-white"
               }  flex justify-center items-center  font-semibold`}

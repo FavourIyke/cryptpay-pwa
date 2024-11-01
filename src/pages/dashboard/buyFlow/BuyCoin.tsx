@@ -1,25 +1,52 @@
-import React, { useState } from "react";
-import { BsJournalBookmark } from "react-icons/bs";
+import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { SlArrowLeft } from "react-icons/sl";
-import { TbScan } from "react-icons/tb";
-import { PiWarningCircleFill } from "react-icons/pi";
-import { btc, eth, nigeriaFlag, solana, usdt } from "../../../assets/images";
+import { nigeriaFlag } from "../../../assets/images";
 import { CgArrowsExchangeAltV } from "react-icons/cg";
+import GetRates from "../../../components/utils/GetRates";
+import { formatAmount } from "../../../utils/formatDate";
+import { useUser } from "../../../context/user-context";
+import toast from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
+import { API } from "../../../constants/api";
+import useAuthAxios from "../../../utils/baseAxios";
+import { errorMessage } from "../../../utils/errorMessage";
 
 const BuyCoin = ({
   setBuyCoinModal,
-  setBuyReceiptModal,
+  setBuyCoinAddy,
   coin,
   setSelectNetworkModal,
   network,
   coinAmount,
   setCoinAmount,
+  nairaAmount,
+  setNairaAmount,
 }: any) => {
-  const [walletAddy, setWalletAddy] = useState<string>("");
-  const [nairaAmount, setNairaAmount] = useState("");
   const [isNairaToCoin, setIsNairaToCoin] = useState(true);
-  const rate = 20000;
+  const { userDetails } = useUser();
+  const rate = GetRates("USDT", "buy");
+  const axiosInstance = useAuthAxios();
+
+  const getCoins = async () => {
+    const response = await axiosInstance.get(API.getCoins);
+    return response.data.data;
+  };
+  const { data: coins, error: error2 } = useQuery({
+    queryKey: ["get-coins"],
+    queryFn: getCoins,
+    retry: 1,
+  });
+  const selectedCoin = coins?.cryptocurrencies.find(
+    (c: any) => c.symbol === coin
+  );
+
+  useEffect(() => {
+    if (error2) {
+      const newError = error2 as any;
+      toast.error(errorMessage(newError?.message || newError?.data?.message));
+    }
+  }, [error2]);
 
   const formatValue = (value: string) => {
     const number = parseFloat(value.replace(/,/g, ""));
@@ -50,11 +77,54 @@ const BuyCoin = ({
   const handleExchangeToggle = () => {
     setIsNairaToCoin(!isNairaToCoin);
   };
+  const fiatBalance = userDetails?.data?.profile?.fiat_balance;
+  // console.log(fiatBalance);
+  const validateAmount = (buyAmount: number) => {
+    if (buyAmount > fiatBalance) {
+      toast.error(`You don't have sufficient funds. Top up your balance`);
+      return false;
+    }
+    return true;
+  };
+
+  const handleProceed = () => {
+    if (!validateAmount(Number(nairaAmount))) {
+      return;
+    }
+    setBuyCoinModal(false);
+    setBuyCoinAddy(true);
+  };
+
+  const getCoinPrices = async () => {
+    const response = await axiosInstance.get(API.getCoinPrices);
+    return response.data.data;
+  };
+  const {
+    data: prices,
+    error: error3,
+    isLoading,
+  } = useQuery({
+    queryKey: ["get-coin-prices"],
+    queryFn: getCoinPrices,
+    retry: 1,
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
+    staleTime: 0,
+  });
+
+  useEffect(() => {
+    if (error3) {
+      const newError = error3 as any;
+      toast.error(errorMessage(newError?.message || newError?.data?.message));
+    }
+  }, [error3]);
+  const coinRate = prices?.cryptocurrencies[coin];
+  const calculatedRate = coinRate * rate;
 
   return (
-    <div className="fixed inset-0  flex font-sora justify-start items-start pt-12 bg-white dark:bg-primary_dark   backdrop-blur-sm">
+    <div className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12 lgss:pb-4  backdrop-blur-sm">
       <div
-        className={` w-10/12 mds:w-8/12 md:7/12 border dark:border-[#303030] border-[#E6E6E6]  rounded-xl mx-auto p-6 dark:bg-[#1F1F1F]   lgss:w-2/5 xxl:w-1/3 `}
+        className={` w-[96%] mds:w-9/12 md:6/12 lgss:w-1/2 xxl:w-[35%] xxxl:w-[25%] border  dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-4 mds:p-6  dark:bg-[#1F1F1F] mt-6 lgss:mt-12   `}
       >
         <div className="w-full flex justify-between items-center">
           <button
@@ -82,34 +152,6 @@ const BuyCoin = ({
           Buy {coin}
         </h4>
         <div className="w-full mt-8 ">
-          <div className="w-full">
-            <div className="flex justify-between items-center">
-              <h4 className="dark:text-white text-gray-800 font-medium text-[14px]">
-                Address
-              </h4>
-              <div className="flex items-center gap-4">
-                <BsJournalBookmark className="text-[16px] dark:text-white text-gray-800" />
-                <TbScan className="text-[20px] dark:text-white text-gray-800" />
-              </div>
-            </div>
-            <input
-              type="text"
-              placeholder="Wallet address"
-              value={walletAddy}
-              onChange={(e) => setWalletAddy(e.target.value.trim())}
-              className="w-full dark:bg-transparent bg-[#FAFAFA] border outline-none dark:border-gray-400 border-gray-300 rounded-xl h-[52px] px-4 text-[14px] text-gray-800 dark:text-[#F9FAFB]  mt-4"
-            />
-          </div>
-          <div className="flex w-full gap-2 mt-2 bg-[#F1F1F1] rounded-xl dark:bg-transparent p-4 items-start">
-            <PiWarningCircleFill className="text-gray-500 text-[32px]" />
-            <h4 className="text-gray-500 text-[13px] mt-1">
-              Please ensure that the receiving address supports the{" "}
-              <span className="dark:text-gray-100 text-[14px] text-black">
-                {network}{" "}
-              </span>
-              network
-            </h4>
-          </div>
           <div className="w-full mt-6">
             <div className="w-full">
               <div className="flex justify-between items-center">
@@ -122,21 +164,9 @@ const BuyCoin = ({
               <div className="w-full bg-transparent  flex justify-between items-center dark:bg-transparent bg-[#FAFAFA] border outline-none dark:border-gray-400 border-gray-300 rounded-xl h-[52px] px-4 text-[14px] text-gray-800 dark:text-[#F9FAFB] mt-4">
                 <div className="w-[24px] h-[24px]">
                   <img
-                    src={
-                      isNairaToCoin
-                        ? nigeriaFlag
-                        : coin === "USDT"
-                        ? usdt
-                        : coin === "BTC"
-                        ? btc
-                        : coin === "ETH"
-                        ? eth
-                        : coin === "SOL"
-                        ? solana
-                        : ""
-                    }
-                    className="w-full h-full bg-cover"
-                    alt=""
+                    src={isNairaToCoin ? nigeriaFlag : selectedCoin?.logo}
+                    alt={`${coin.name || "Currency"} logo`} // Fallback alt text
+                    className="w-full h-full bg-cover rounded-full"
                   />
                 </div>
                 <input
@@ -155,9 +185,15 @@ const BuyCoin = ({
                   className="outline-none w-10/12 bg-transparent text-right"
                 />
               </div>
-              <h4 className="text-gray-500 text-[13px] mt-1">
-                Minimum: NGN 1756 = 1 {coin}
-              </h4>
+              <div className="flex justify-between items-center mt-2 w-full">
+                <h4 className="dark:text-gray-400 text-gray-500 text-[12px] font-bold mt-1">
+                  NGN {isLoading ? "---" : formatAmount(calculatedRate)} = 1{" "}
+                  {coin}
+                </h4>
+                <h4 className="dark:text-gray-400 text-gray-500 text-[12px] font-bold mt-1">
+                  Wallet Balance: ₦{formatAmount(Number(fiatBalance))}
+                </h4>
+              </div>
             </div>
             <div
               className="w-[24px] h-[24px] flex justify-center mt-6 items-center mx-auto rounded-md border-2 bg-transparent border-[#5E91FF] text-[#5E91FF] cursor-pointer"
@@ -176,20 +212,8 @@ const BuyCoin = ({
               <div className="w-full bg-transparent  flex justify-between items-center dark:bg-transparent bg-[#FAFAFA] border outline-none dark:border-gray-400 border-gray-300 rounded-xl h-[52px] px-4 text-[14px] text-gray-800 dark:text-[#F9FAFB] mt-4">
                 <div className="w-[24px] h-[24px]">
                   <img
-                    src={
-                      isNairaToCoin
-                        ? coin === "USDT"
-                          ? usdt
-                          : coin === "BTC"
-                          ? btc
-                          : coin === "ETH"
-                          ? eth
-                          : coin === "SOL"
-                          ? solana
-                          : ""
-                        : nigeriaFlag
-                    }
-                    className="w-full h-full bg-cover"
+                    src={isNairaToCoin ? selectedCoin?.logo : nigeriaFlag}
+                    className="w-full h-full bg-cover rounded-full"
                     alt=""
                   />
                 </div>
@@ -205,10 +229,7 @@ const BuyCoin = ({
 
         <button
           disabled={!coinAmount}
-          onClick={() => {
-            setBuyCoinModal(false);
-            setBuyReceiptModal(true);
-          }}
+          onClick={handleProceed}
           className={`w-full h-[52px] rounded-[18px] mt-8 ${
             !coinAmount
               ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"

@@ -1,9 +1,9 @@
 import React from "react";
-import { progress } from "../../assets/images";
 import { IoClose } from "react-icons/io5";
+import { verified } from "../../assets/images";
 import { useNavigate } from "react-router-dom";
 
-const KycModal = ({ setKycModal }: any) => {
+const Kyc2Modal = ({ setKyc2Modal }: any) => {
   const navigate = useNavigate();
   return (
     <div className="fixed inset-0 top-20 flex font-sora justify-start items-start pt-12 bg-white dark:bg-primary_dark   backdrop-blur-sm">
@@ -13,7 +13,7 @@ const KycModal = ({ setKycModal }: any) => {
         <div className="w-full flex justify-end items-center">
           <button
             onClick={() => {
-              setKycModal(false);
+              setKyc2Modal(false);
             }}
             className="w-[40px] h-[40px] rounded-full bg-[#007AFF] bg-opacity-10 dark:bg-opacity-100 dark:bg-[#3D3D3D] flex justify-center items-center"
           >
@@ -22,18 +22,19 @@ const KycModal = ({ setKycModal }: any) => {
         </div>
         <div className="flex flex-col px-8 justify-center mt-6 gap-6 items-center">
           <div className="w-[72px] h-[72px]">
-            <img src={progress} className="w-full h-full bg-cover" alt="" />
+            <img src={verified} className="w-full h-full bg-cover" alt="" />
           </div>
           <h4 className="dark:text-white text-gray-800 text-[22px] font-semibold text-center">
-            KYC INCOMPLETE
+            Get Verified
           </h4>
           <p className="dark:text-white text-gray-800 text-[12px]  text-center">
-            It appears that you have not yet completed your Know Your Customer
-            (KYC) verification process.
+            To top up your wallet or buy coins, please upgrade your account to
+            level 2 access this feature. Click to complete the Account upgrade
+            process.
           </p>
           <button
             onClick={() => {
-              navigate("/kyc");
+              navigate("/settings", { state: { showKyc2: true } });
             }}
             className={`w-10/12 h-[52px] rounded-[18px] bg-text_blue mt-4 text-white flex justify-center items-center  font-semibold`}
           >
@@ -45,4 +46,4 @@ const KycModal = ({ setKycModal }: any) => {
   );
 };
 
-export default KycModal;
+export default Kyc2Modal;

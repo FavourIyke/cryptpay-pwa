@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { CiCircleCheck } from "react-icons/ci";
+import React, { useEffect, useState } from "react";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 import { SlArrowLeft } from "react-icons/sl";
 import { verifyBadge } from "../../../assets/images";
@@ -11,11 +10,19 @@ import { useNavigate } from "react-router-dom";
 import { API } from "../../../constants/api";
 import { errorMessage } from "../../../utils/errorMessage";
 import useAuthAxios from "../../../utils/baseAxios";
+import KYCmodal from "./kyc2/KYCmodal";
 
-const AccountUpgrade = ({ setSidePage, setScreen }: any) => {
+const AccountUpgrade = ({
+  setSidePage,
+  setScreen,
+  openKyc2,
+  setOpenKyc2,
+}: any) => {
   const { userDetails } = useUser();
   const navigate = useNavigate();
   const axiosInstance = useAuthAxios();
+  const [levels, setLevels] = useState<number>(1);
+  const [tier, setTier] = useState<number>(0);
 
   const getKycStatus = async () => {
     const response = await axiosInstance.get(API.checkKycStatus);
@@ -36,6 +43,11 @@ const AccountUpgrade = ({ setSidePage, setScreen }: any) => {
   }, [error2]);
   const email = userDetails?.data?.profile.email;
   const level = kycStatus?.data.kyc_level;
+  useEffect(() => {
+    if (level === "201" || level === "200") {
+      setLevels(2);
+    }
+  }, [level]);
   return (
     <div className="w-full font-sora">
       <button
@@ -61,14 +73,21 @@ const AccountUpgrade = ({ setSidePage, setScreen }: any) => {
               You are currently on
             </h4>
             <div className="px-3 py-1 bg-text_blue rounded-lg text-white text-[11px]">
-              Level {level === "100" ? 1 : 0}
+              Level{" "}
+              {level === "100" ? 1 : level === "200" || level === "201" ? 2 : 0}
             </div>
           </div>
-          <div className="w-full p-4 mt-3 mb-6  bg-[#E9F4FF] rounded-xl">
+          <div className="w-full p-4 mt-3 mb-6  dark:bg-[#E9F4FF] bg-[#D7EAFF] border-[#BCD5FF]  rounded-xl">
             <div className="w-full flex gap-4 justify-center items-center">
               <div>
                 <h4 className="font-bold text-[14px] ">
-                  Upgrade to Level {level === "100" ? 2 : 1}
+                  {level === "201"
+                    ? "Upgrade Completed"
+                    : level === "200"
+                    ? "Upgrade to Level Tier 2"
+                    : level === "100"
+                    ? "Upgrade to Level 2"
+                    : "Upgrade to Level 1"}
                 </h4>
                 <h4 className="mt-1 text-[#060B29] text-[12px]">
                   Complete your profile to start trading, depositing, and
@@ -82,97 +101,345 @@ const AccountUpgrade = ({ setSidePage, setScreen }: any) => {
                 {level === "100" && (
                   <div className="w-1/3 bg-text_blue rounded-l-full h-full" />
                 )}
+                {level === "200" && (
+                  <div className="w-2/3 bg-text_blue rounded-l-full h-full" />
+                )}
+                {level === "201" && (
+                  <div className="w-full bg-text_blue rounded-full h-full" />
+                )}
               </div>
               <h4 className=" text-black text-[14px]">
-                {level === "100" && "1"}/3
+                {level === "100"
+                  ? 1
+                  : level === "200"
+                  ? 2
+                  : level === "201"
+                  ? 3
+                  : 0}
+                /3
               </h4>
             </div>
           </div>
         </div>
         <div className="w-full relative  pt-3">
-          <div className="w-full  px-4 py-4   rounded-xl bg-[#ececec] dark:bg-[#262626]  ">
-            {/* <div className="w-[25%] py-1 absolute top-0  left-[6%]  flex justify-center items-center font-medium text-white bg-text_blue rounded-lg text-[12px] ">
+          {levels === 1 ? (
+            <div className="w-full  px-4 py-4   rounded-xl bg-[#ececec] dark:bg-[#262626]  ">
+              {/* <div className="w-[25%] py-1 absolute top-0  left-[6%]  flex justify-center items-center font-medium text-white bg-text_blue rounded-lg text-[12px] ">
               Current Tier
             </div> */}
-            <div className="w-full">
-              <div className="w-full mt-4">
-                <div className="w-full flex justify-between items-center">
-                  <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
-                    Daily Buy Limit
-                  </h4>
-                  <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
-                    Not available
-                  </h4>
-                </div>
-                <div className="w-full flex justify-between mt-4 items-center">
-                  <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
-                    Daily Sell Limit
-                  </h4>
-                  <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
-                    ₦1,000,000
-                  </h4>
-                </div>
+              <div className="w-full">
+                <div className="w-full mt-4">
+                  <div className="w-full flex justify-between items-center">
+                    <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
+                      Daily Buy Limit
+                    </h4>
+                    <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                      Not available
+                    </h4>
+                  </div>
+                  <div className="w-full flex justify-between mt-4 items-center">
+                    <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
+                      Daily Sell Limit
+                    </h4>
+                    <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                      ₦1,000,000
+                    </h4>
+                  </div>
 
-                <h4 className=" text-[14px] mt-2 text-gray-600 dark:text-gray-100">
-                  One Bank Account
+                  <h4 className=" text-[14px] mt-2 text-gray-600 dark:text-gray-100">
+                    One Bank Account
+                  </h4>
+                </div>
+                <h4 className="font-semibold text-[14px] mt-4 text-gray-900 dark:text-gray-50">
+                  Requirements
                 </h4>
+                <div className="w-full mt-4">
+                  <div className="w-full flex justify-start gap-2 items-center">
+                    {email ? (
+                      <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                    ) : (
+                      <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
+                    )}
+                    <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                      Email Address
+                    </h4>
+                  </div>
+                  <div className="w-full mt-2 flex justify-start gap-2 items-center">
+                    {level === "100" || level === "200" || level === "201" ? (
+                      <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                    ) : (
+                      <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
+                    )}{" "}
+                    <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                      Bank Verification Number
+                    </h4>
+                  </div>
+                  <div className="w-full mt-2 flex justify-start gap-2 items-center">
+                    {level === "100" || level === "200" || level === "201" ? (
+                      <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                    ) : (
+                      <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
+                    )}{" "}
+                    <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                      Liveness check
+                    </h4>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    if (level === "100") {
+                      setLevels(2);
+                    } else {
+                      navigate("/kyc");
+                    }
+                  }}
+                  className={
+                    "w-full bg-text_blue mt-6 h-[44px] rounded-xl text-[14px] font-semibold text-white"
+                  }
+                >
+                  {level === "100"
+                    ? "Upgrade to level 2"
+                    : "Click to start upgrade"}
+                </button>
               </div>
-              <h4 className="font-semibold text-[14px] mt-4 text-gray-900 dark:text-gray-50">
-                Requirements
-              </h4>
-              <div className="w-full mt-4">
-                <div className="w-full flex justify-start gap-2 items-center">
-                  {email ? (
-                    <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
-                  ) : (
-                    <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
-                  )}
-                  <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
-                    Email Address
+            </div>
+          ) : levels === 2 ? (
+            <>
+              <div
+                onClick={() => {
+                  if (level === "100") {
+                    setTier(2);
+                  }
+                }}
+                className="w-full    relative  "
+              >
+                <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
+                  Limitations at Level 2 - Tier 1
+                </h4>
+                {level === "200" ||
+                  (level === "100" && tier === 1 && (
+                    <div className="w-[25%] py-1 absolute top-6  right-[6%]   flex justify-center items-center font-medium text-white bg-text_blue rounded-lg text-[12px] ">
+                      {level === "200" ? "Current Tier" : "Selected"}
+                    </div>
+                  ))}
+                <div
+                  className={
+                    level === "200" || (level === "100" && tier === 1)
+                      ? "w-full rounded-xl px-4 py-4 border border-text_blue  mt-4 bg-[#ececec] dark:bg-[#262626]"
+                      : "w-full rounded-xl px-4 py-4  mt-4 bg-[#ececec] dark:bg-[#262626]"
+                  }
+                >
+                  <div className="w-full mt-4">
+                    <div className="w-full flex justify-between items-center">
+                      <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
+                        Daily Buy Limit
+                      </h4>
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        ₦1,000,000{" "}
+                      </h4>
+                    </div>
+                    <div className="w-full flex justify-between mt-4 items-center">
+                      <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
+                        Unlimited
+                      </h4>
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        ₦1,000,000
+                      </h4>
+                    </div>
+
+                    <h4 className=" text-[14px] mt-2 text-gray-600 dark:text-gray-100">
+                      Multiple Bank Account
+                    </h4>
+                  </div>
+                  <h4 className="font-semibold text-[14px] mt-4 text-gray-900 dark:text-gray-50">
+                    Requirements
                   </h4>
+                  <div className="w-full mt-4">
+                    <div className="w-full flex justify-start gap-2 items-center">
+                      {email ? (
+                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                      ) : (
+                        <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
+                      )}
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        Email Address
+                      </h4>
+                    </div>
+                    <div className="w-full flex justify-start gap-2 mt-2 items-center">
+                      {email ? (
+                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                      ) : (
+                        <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
+                      )}
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        Full name
+                      </h4>
+                    </div>
+                    <div className="w-full mt-2 flex justify-start gap-2 items-center">
+                      {level === "200" || level === "201" ? (
+                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                      ) : (
+                        <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
+                      )}{" "}
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        Bank Verification Number
+                      </h4>
+                    </div>
+                    <div className="w-full mt-2 flex justify-start gap-2 items-center">
+                      {level === "200" || level === "201" ? (
+                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                      ) : (
+                        <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
+                      )}{" "}
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        Government ID
+                      </h4>
+                    </div>
+                  </div>
                 </div>
-                <div className="w-full mt-2 flex justify-start gap-2 items-center">
-                  {level === "100" ? (
-                    <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
-                  ) : (
-                    <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
-                  )}{" "}
-                  <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
-                    Bank Verification Number
+              </div>
+              <div
+                onClick={() => {
+                  if (level === "200") {
+                    setTier(2);
+                  } else if (level === "100") {
+                    setTier(2);
+                  }
+                }}
+                className="w-full  relative  mt-6  "
+              >
+                <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
+                  Limitations at Level 2 - Tier 2
+                </h4>
+                {level === "201" ||
+                ((level === "100" || level === "200") && tier === 2) ? (
+                  <div className="w-[25%] py-1 absolute top-6  right-[6%]   flex justify-center items-center font-medium text-white bg-text_blue rounded-lg text-[12px] ">
+                    {level === "201" ? "Current Tier" : "Selected"}
+                  </div>
+                ) : null}
+                <div
+                  className={
+                    level === "201" ||
+                    ((level === "100" || level === "200") && tier === 2)
+                      ? "w-full rounded-xl px-4 py-4 border border-text_blue  mt-4 bg-[#ececec] dark:bg-[#262626]"
+                      : "w-full rounded-xl px-4 py-4  mt-4 bg-[#ececec] dark:bg-[#262626]"
+                  }
+                >
+                  <div className="w-full mt-4">
+                    <div className="w-full flex justify-between items-center">
+                      <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
+                        Daily Buy Limit
+                      </h4>
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        Unlimited
+                      </h4>
+                    </div>
+                    <div className="w-full flex justify-between mt-4 items-center">
+                      <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
+                        Daily Sell Limit
+                      </h4>
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        Unlimited
+                      </h4>
+                    </div>
+                    <div className="w-full flex justify-between mt-4 items-center">
+                      <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
+                        Daily Deposit
+                      </h4>
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        ₦1,000,000
+                      </h4>
+                    </div>
+
+                    <h4 className=" text-[14px] mt-2 text-gray-600 dark:text-gray-100">
+                      Multiple Bank Account (incl Business Acct)
+                    </h4>
+                  </div>
+                  <h4 className="font-semibold text-[14px] mt-4 text-gray-900 dark:text-gray-50">
+                    Requirements
                   </h4>
-                </div>
-                <div className="w-full mt-2 flex justify-start gap-2 items-center">
-                  {level === "100" ? (
-                    <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
-                  ) : (
-                    <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
-                  )}{" "}
-                  <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
-                    Liveness check
-                  </h4>
+                  <div className="w-full mt-4">
+                    <div className="w-full flex justify-start gap-2 items-center">
+                      {email ? (
+                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                      ) : (
+                        <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
+                      )}
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        Email Address
+                      </h4>
+                    </div>
+                    <div className="w-full flex justify-start gap-2 mt-2 items-center">
+                      {email ? (
+                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                      ) : (
+                        <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
+                      )}
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        Full name
+                      </h4>
+                    </div>
+                    <div className="w-full mt-2 flex justify-start gap-2 items-center">
+                      {level === "100" || level === "200" || level === "201" ? (
+                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                      ) : (
+                        <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
+                      )}{" "}
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        Bank Verification Number
+                      </h4>
+                    </div>
+                    <div className="w-full mt-2 flex justify-start gap-2 items-center">
+                      {level === "200" || level === "201" ? (
+                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                      ) : (
+                        <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
+                      )}{" "}
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        Government ID
+                      </h4>
+                    </div>
+                    <div className="w-full mt-2 flex justify-start gap-2 items-center">
+                      {level === "201" ? (
+                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                      ) : (
+                        <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
+                      )}{" "}
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        House Address
+                      </h4>
+                    </div>
+                  </div>
                 </div>
               </div>
               <button
+                disabled={level === "201" || (level === "200" && tier === 0)}
                 onClick={() => {
-                  if (level === "100") {
-                  } else {
-                    navigate("/kyc");
+                  if (level === "200") {
+                    setTier(2);
+                    setOpenKyc2(true);
+                  } else if (level === "201") {
                   }
                 }}
                 className={
-                  level === "100"
-                    ? "w-full bg-gray-500 mt-6 h-[44px] rounded-xl text-[14px] font-semibold text-gray-300"
-                    : "w-full bg-text_blue mt-6 h-[44px] rounded-xl text-[14px] font-semibold text-white"
+                  tier === 0
+                    ? "w-full bg-gray-500 mt-6 h-[48px] rounded-xl text-[14px] font-semibold text-gray-200"
+                    : "w-full bg-text_blue mt-6 h-[48px] rounded-xl text-[14px] font-semibold text-white"
                 }
               >
-                {level === "100"
-                  ? "Upgrade to level 2"
-                  : "Click to start upgrade"}
+                {level === "201"
+                  ? "Upgrade completed"
+                  : level === "200" && tier === 0
+                  ? "Proceed to tier 2"
+                  : level === "100" && tier === 0
+                  ? "Select one Tier & Proceed"
+                  : "Proceed"}
               </button>
-            </div>
-          </div>
+            </>
+          ) : null}
         </div>
       </div>
+      {openKyc2 && <KYCmodal setOpenKyc2={setOpenKyc2} tier={tier} />}
     </div>
   );
 };

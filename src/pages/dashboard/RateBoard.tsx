@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { SlArrowRight } from "react-icons/sl";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { API } from "../../constants/api";
@@ -13,6 +12,9 @@ const RateBoard = ({
   setSelectNetworkModal,
   networks,
   setNetworks,
+  setNetwork,
+  setSelectBankModal,
+  setBuyCoinModal,
 }: any) => {
   const axiosInstance = useAuthAxios();
   const getCoins = async () => {
@@ -31,6 +33,7 @@ const RateBoard = ({
       toast.error(errorMessage(newError?.message || newError?.data?.message));
     }
   }, [error2]);
+  // console.log(coins);
 
   return (
     <div className="w-full font-sora mt-6 flex-col flex gap-4">
@@ -38,19 +41,38 @@ const RateBoard = ({
         coins?.cryptocurrencies.map((coin: any, index: any) => (
           <div
             key={index}
+            // onClick={() => {
+            //   if (sellRateFlow) {
+            //     setSellRate(true);
+            //     setCoin(coin.symbol);
+            //     setNetworks(coin.networks);
+            //     setSelectNetworkModal(true);
+            //   } else {
+            //     setSellRate(false);
+            //     setCoin(coin.symbol);
+            //     setNetworks(coin.networks);
+            //     setSelectNetworkModal(true);
+            //   }
+            // }}
             onClick={() => {
+              setCoin(coin.symbol);
+              setNetworks(coin.networks);
+
               if (sellRateFlow) {
-                setSellRate(true);
-                setCoin(coin.symbol);
-                setNetworks(coin.networks);
-                setSelectNetworkModal(true);
+                if (coin.networks.length === 1) {
+                  setSelectBankModal(true); // Directly open the bank modal if only one network exists
+                  setNetwork(coin.networks[0].code); // Set the network automatically
+                } else {
+                  setSelectNetworkModal(true); // Open network selection modal for multiple networks
+                }
+              } else {
+                if (coin.networks.length === 1) {
+                  setBuyCoinModal(true); // Directly open the bank modal if only one network exists
+                  setNetwork(coin.networks[0].code); // Set the network automatically
+                } else {
+                  setSelectNetworkModal(true); // Open network selection modal for multiple networks
+                }
               }
-              // else {
-              //   setSellRate(false);
-              //   setCoin(coin.symbol);
-              //   setNetworks(coin.networks);
-              //   setSelectNetworkModal(true);
-              // }
             }}
             className="flex cursor-pointer justify-between px-4 dark:bg-[#1C1C1C] bg-[#F1F1F1] rounded-xl h-[58px] items-center"
           >
@@ -68,7 +90,10 @@ const RateBoard = ({
             </div>
             <div className="flex items-center gap-3">
               <h4 className="dark:text-gray-400 text-black font-medium text-[15px]">
-                {Math.round(coin.sell_rate).toLocaleString()}/$
+                {sellRateFlow
+                  ? Math.round(coin.sell_rate).toLocaleString()
+                  : Math.round(coin.buy_rate).toLocaleString()}
+                /$
               </h4>
               {/* <SlArrowRight className="text-black dark:text-white text-[14px]" /> */}
             </div>
