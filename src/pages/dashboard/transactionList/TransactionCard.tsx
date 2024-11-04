@@ -81,7 +81,7 @@ const TransactionCard = ({ payouts, onClick1, onClick2, kind = true }: any) => {
       {kind && (
         <div
           onClick={onClick2}
-          className="font-sora cursor-pointer w-full flex justify-between items-center"
+          className="font-sora cursor-pointer border-b border-gray-200 dark:border-gray-800 py-4 w-full flex justify-between items-center"
         >
           <div className="flex items-center gap-2">
             <div className="w-[32px] h-[32px] bg-white rounded-full ">

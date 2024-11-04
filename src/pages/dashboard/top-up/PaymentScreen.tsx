@@ -184,12 +184,12 @@ const PaymentScreen = ({
           <br />
           Account to the Bank Details below
         </h4>
-        <div className="rounded-xl w-full  py-5 px-4 mt-8 bg-[#F1F1F1] dark:bg-[#2a2929]">
+        <div className="rounded-xl w-full  py-5 px-2 xs:px-4 mt-8 bg-[#F1F1F1] dark:bg-[#2a2929]">
           <div className="w-full  flex justify-between gap-4 items-center">
             <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
               Account Number
             </h4>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-end gap-2">
               <h4 className="dark:text-white text-gray-900 text-[12px] ">
                 {bankDetails?.account_number}
               </h4>
@@ -208,7 +208,7 @@ const PaymentScreen = ({
               Bank Name
             </h4>
             <div className="flex items-center gap-2">
-              <h4 className="dark:text-white text-gray-900 text-[12px] ">
+              <h4 className="dark:text-white text-right text-gray-900 text-[12px] ">
                 {bankDetails?.bank_name}
               </h4>
             </div>
@@ -218,7 +218,7 @@ const PaymentScreen = ({
               Beneficiary
             </h4>
             <div className="flex items-center gap-2">
-              <h4 className="dark:text-white text-gray-900 text-[12px] ">
+              <h4 className="dark:text-white text-right text-gray-900 text-[10px] md:text-[12px] ">
                 {bankDetails?.account_name}
               </h4>
             </div>

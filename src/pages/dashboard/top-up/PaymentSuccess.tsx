@@ -13,6 +13,7 @@ const PaymentSuccess = ({
   setOpenPSuccess,
   setBuyCoinModal,
   setOpenWallet,
+  setSelectCoinModal,
 }: any) => {
   const { refetch1 } = useUser();
   const handleRefetch = () => {
@@ -110,7 +111,7 @@ const PaymentSuccess = ({
             <button
               onClick={() => {
                 setOpenPSuccess(false);
-                setBuyCoinModal(true);
+                setSelectCoinModal(true);
               }}
               className={`w-1/2 h-[52px] rounded-[18px] bg-text_blue  text-white flex justify-center items-center  font-semibold`}
             >

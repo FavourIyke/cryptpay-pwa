@@ -60,6 +60,7 @@ const OtpInputField: React.FC<OtpInputFieldProps> = ({
       transition: "all 0.15s ease-in-out",
       outline: "none",
       color: "#FFFFFF",
+      type: "password", // Added to mask input characters
     },
     focusStyle: {
       borderColor: "#3A66FF",
@@ -82,6 +83,7 @@ const OtpInputField: React.FC<OtpInputFieldProps> = ({
       transition: "all 0.15s ease-in-out",
       outline: "none",
       color: "#1D2739",
+      type: "password", // Added to mask input characters
     },
     focusStyle: {
       borderColor: "#3A66FF",
@@ -100,6 +102,7 @@ const OtpInputField: React.FC<OtpInputFieldProps> = ({
         isInputNum
         inputStyle={styles.inputStyle}
         focusStyle={styles.focusStyle}
+        isInputSecure
         shouldAutoFocus={shouldAutoFocus}
       />
       {/* <div className="w-full flex justify-center items-center">
