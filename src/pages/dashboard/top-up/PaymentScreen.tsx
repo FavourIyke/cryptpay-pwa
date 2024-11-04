@@ -54,6 +54,30 @@ const PaymentScreen = ({
       toast.error(errorMessage(err?.message || err?.data?.message));
     },
   });
+  const checkStatus = async (data: any) => {
+    const response = await axiosInstance.post(API.checkPayment, data);
+    return response.data;
+  };
+
+  const comfirmStatus = useMutation({
+    mutationFn: checkStatus,
+    onSuccess: (r) => {
+      // console.log(r);
+
+      toast.success(r.message);
+      if (r?.data?.is_received) {
+        setTimeout(() => {
+          setOpenPS(false);
+          setOpenPSuccess(true);
+        }, 1500);
+      }
+    },
+    onError: (e) => {
+      // console.log(e);
+      const err = e as any;
+      toast.error(errorMessage(err?.message || err?.data?.message));
+    },
+  });
   const getThemeBasedImage = () => {
     if (theme === "dark") {
       return paylogoDark;
@@ -84,7 +108,6 @@ const PaymentScreen = ({
 
     return () => clearInterval(interval);
   }, [accountExpiryDate, comfirmDetails, amount]);
-
   const FirstLoading = () => {
     return (
       <div className="mt-4 w-full flex flex-col justify-center items-center">
@@ -209,12 +232,18 @@ const PaymentScreen = ({
         </div>
         <button
           onClick={() => {
-            setOpenPS(false);
-            setOpenPSuccess(true);
+            const data = {
+              account_id: bankDetails?.id,
+            };
+            comfirmStatus.mutate(data);
           }}
           className={`w-full h-[52px] rounded-[18px] bg-text_blue mt-8 text-white flex justify-center items-center  font-semibold`}
         >
-          I’ve sent the money
+          {comfirmStatus?.isPending ? (
+            <ClipLoader color="#FFFFFF" size={30} />
+          ) : (
+            "I’ve sent the money"
+          )}
         </button>
         <div className="w-full flex justify-center items-center">
           <button
