@@ -108,6 +108,7 @@ const Transactions = () => {
                       setClickedPayout(payout);
                       setShowHistory(3);
                     }}
+                    kind={payout?.transaction_type === "topup" ? false : true}
                   />
                 </div>
               ))

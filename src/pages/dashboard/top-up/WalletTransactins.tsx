@@ -45,6 +45,7 @@ const WalletTransactins = () => {
                 payouts={payout}
                 onClick1={() => {}}
                 onClick2={() => {}}
+                kind={payout?.transaction_type === "topup" ? false : true}
               />
             </div>
           </div>

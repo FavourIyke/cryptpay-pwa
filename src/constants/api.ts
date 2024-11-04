@@ -33,6 +33,7 @@ export const API = {
   markAllAsRead: `${BASE_URL}/api/notifications/read-all`,
   buyCrypto: `${BASE_URL}/api/buy-crypto`,
   createPaymentAccount: `${BASE_URL}/api/create-payment-account`,
+  checkPayment: `${BASE_URL}/api/check-payment-status`,
   buyCryptoConfirm: `${BASE_URL}/api/buy-crypto/confirm`,
   markOneAsRead: (id:string) => `${BASE_URL}/api/notifications/${id}/read`,
   getWalletAddress: (coin:string, network:string) => `${BASE_URL}/api/wallet-address?crypto_type=${coin}&network=${network}`,

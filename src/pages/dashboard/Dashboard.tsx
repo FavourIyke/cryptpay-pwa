@@ -152,6 +152,7 @@ const Dashboard = () => {
       navigate("/dashboard", { replace: true, state: {} });
     }
   }, [showPay, navigate]);
+  // console.log(sortedPayouts);
 
   return (
     <div
@@ -425,6 +426,7 @@ const Dashboard = () => {
                         setClickedPayout(payout);
                         setShowdDepositDetails(true);
                       }}
+                      kind={payout?.transaction_type === "topup" ? false : true}
                     />
                   </div>
                 </div>
