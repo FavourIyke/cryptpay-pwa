@@ -32,7 +32,7 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
   const {
     data: userDetails,
     error: error1,
-    refetch,
+    refetch: refetch1,
   } = useQuery({
     queryKey: ["userDetails"],
     queryFn: getUserDetails,
@@ -60,6 +60,7 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
     data: userPreferences,
     error: error2,
     refetch: refetch2,
+    isLoading: userLoading,
   } = useQuery({
     queryKey: ["user-preferences"],
     queryFn: getPrefrences,
@@ -75,7 +76,7 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
   }, [error2]);
   useEffect(() => {
     if (token && token !== "none") {
-      refetch();
+      refetch1();
       refetch2();
     }
   }, [token]);
@@ -144,6 +145,8 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
         setTransactionID,
         setShowDetails,
         showDetails,
+        userLoading,
+        refetch1,
       }}
     >
       {children}

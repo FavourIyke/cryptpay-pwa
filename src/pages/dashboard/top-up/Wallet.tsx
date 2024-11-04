@@ -13,7 +13,7 @@ import PaymentCancelled from "./PaymentCancelled";
 import WalletTransactins from "./WalletTransactins";
 
 const Wallet = ({ setOpenWallet, setBuyCoinModal }: any) => {
-  const { userDetails } = useUser();
+  const { userDetails, refetch1 } = useUser();
   const [viewBalance, setViewBalance] = useState<boolean>(false);
   const [openNotice, setOpenNotice] = useState<boolean>(false);
   const [openDeposit, setOpenDeposit] = useState<boolean>(false);
@@ -24,6 +24,10 @@ const Wallet = ({ setOpenWallet, setBuyCoinModal }: any) => {
   const [bankDetails, setBankDetails] = useState<any>({});
 
   const fiatBalance = userDetails?.data?.profile?.fiat_balance;
+  const handleRefetch = () => {
+    // Trigger the refetch function for user details
+    refetch1();
+  };
 
   return (
     <div className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12 lgss:pb-4  backdrop-blur-sm">
@@ -70,7 +74,11 @@ const Wallet = ({ setOpenWallet, setBuyCoinModal }: any) => {
               </h4>
             </div>
           </div>
-          <div className="flex justify-center items-center rounded-full h-[32px] w-[32px] bg-[#83BF4F] font-bold text-white text-[16px]">
+
+          <div
+            onClick={handleRefetch}
+            className="flex justify-center items-center cursor-pointer rounded-full h-[32px] w-[32px] bg-[#83BF4F] font-bold text-white text-[16px]"
+          >
             ₦
           </div>
         </div>

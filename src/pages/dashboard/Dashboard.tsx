@@ -320,13 +320,15 @@ const Dashboard = () => {
                     Verification is in Progress
                   </h4>
                   <h4 className="  text-[14px] mt-1 text-left pr-6 mds:pr-12 md:pr-16 xl:pr-20 xxxl:pr-32">
-                    Your KYC {kycStatus?.data.kyc_level === "100" && "Level 2"}{" "}
+                    Your KYC {kycStatus?.data.kyc_level === "100" && "Level 2"}
+                    {kycStatus?.data.kyc_level === "201" &&
+                      "Level 2 Tier-2"}{" "}
                     verification is currently being processed. Please allow some
                     time for confirmation
                   </h4>
                   <button
                     onClick={() => navigate("/dashboard")}
-                    className="px-4 mt-4 py-4 rounded-xl bg-gray-900 text-white text-[14px]"
+                    className="p-2 mt-4  rounded-xl bg-gray-900 text-white font-medium text-[12px]"
                   >
                     Click here to refresh
                   </button>

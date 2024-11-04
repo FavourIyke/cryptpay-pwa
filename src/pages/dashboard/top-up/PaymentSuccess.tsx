@@ -14,7 +14,11 @@ const PaymentSuccess = ({
   setBuyCoinModal,
   setOpenWallet,
 }: any) => {
-  const { refetch2 } = useUser();
+  const { refetch1 } = useUser();
+  const handleRefetch = () => {
+    // Trigger the refetch function for user details
+    refetch1();
+  };
   return (
     <div className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12 lgss:pb-4  backdrop-blur-sm">
       <div
@@ -95,7 +99,7 @@ const PaymentSuccess = ({
           <div className="flex w-full justify-center items-center gap-4 mt-8">
             <button
               onClick={() => {
-                refetch2();
+                handleRefetch();
                 setOpenPSuccess(false);
                 setOpenWallet(true);
               }}

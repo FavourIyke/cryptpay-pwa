@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaRegImages, FaUser } from "react-icons/fa";
 import { FaCircleCheck, FaHouseChimney } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
@@ -8,6 +8,11 @@ import { MdEmail } from "react-icons/md";
 import GovernmentID from "./GovernmentID";
 import Kyc2success from "./Kyc2success";
 import HouseAddy from "./HouseAddy";
+import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { API } from "../../../../constants/api";
+import useAuthAxios from "../../../../utils/baseAxios";
+import { errorMessage } from "../../../../utils/errorMessage";
 
 const KYCmodal = ({ setOpenKyc2, tier }: any) => {
   const [openGovId, setOpenGovId] = useState<boolean>(false);
@@ -15,6 +20,26 @@ const KYCmodal = ({ setOpenKyc2, tier }: any) => {
   const [openSuccess, setOpenSuccess] = useState<boolean>(false);
   const [idNumber, setIdNumber] = useState<string>("");
   const [base64Image, setBase64Image] = useState<string | null>(null);
+  const axiosInstance = useAuthAxios();
+
+  const getKycStatus = async () => {
+    const response = await axiosInstance.get(API.checkKycStatus);
+    return response.data;
+  };
+  const { data: kycStatus, error: error2 } = useQuery({
+    queryKey: ["kyc-status"],
+    queryFn: getKycStatus,
+    retry: 1,
+  });
+  // console.log(kycStatus);
+
+  useEffect(() => {
+    if (error2) {
+      const newError = error2 as any;
+      toast.error(errorMessage(newError?.message || newError?.data?.message));
+    }
+  }, [error2]);
+  const level = kycStatus?.data.kyc_level;
 
   return (
     <div className="fixed inset-0 top-20 flex font-sora justify-start items-start pt-12 bg-white dark:bg-primary_dark   backdrop-blur-sm">
@@ -86,7 +111,13 @@ const KYCmodal = ({ setOpenKyc2, tier }: any) => {
           <FaCircleCheck className="text-[#5E91FF] text-[24px]" />
         </button>
         <button
-          onClick={() => setOpenGovId(true)}
+          onClick={() => {
+            if (level === "201") {
+              setOpenPOAId(true);
+            } else if (level === "100") {
+              setOpenGovId(true);
+            }
+          }}
           className="w-full flex bg-[#ececec] dark:bg-[#262626] mt-6 justify-between gap-4 items-center  p-4 rounded-lg  bg-transparent"
         >
           <div className="flex items-center gap-4">
@@ -99,7 +130,7 @@ const KYCmodal = ({ setOpenKyc2, tier }: any) => {
                 KYC level 2
               </h4>
               <h4 className="text-gray-500 mt-1 dark:text-gray-400 text-left text-[12px]">
-                Upload your official Governement ID{" "}
+                Upload your {level === "201" ? "" : "official Governement ID"}
                 {tier === 2 && "and Proof of house address"}
               </h4>
             </div>
@@ -126,6 +157,7 @@ const KYCmodal = ({ setOpenKyc2, tier }: any) => {
           setOpenPOAId={setOpenPOAId}
           setOpenSuccess={setOpenSuccess}
           setOpenGovId={setOpenGovId}
+          level={level}
         />
       )}
       {openSuccess && (
