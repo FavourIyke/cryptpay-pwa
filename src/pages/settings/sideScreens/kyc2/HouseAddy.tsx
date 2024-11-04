@@ -15,6 +15,7 @@ const HouseAddy = ({
   setOpenSuccess,
   setOpenPOAId,
   setOpenGovId,
+  level,
 }: any) => {
   const [base64ImageHouse, setBase64ImageHouse] = useState<string | null>(null);
 
@@ -43,7 +44,6 @@ const HouseAddy = ({
   const completeKyc = useMutation({
     mutationFn: handlePostKyc2,
     onSuccess: (r) => {
-      console.log(r);
       toast.success(r.message);
       setTimeout(() => {
         setOpenPOAId(false);
@@ -163,8 +163,11 @@ const HouseAddy = ({
               proof_of_address: base64ImageHouse,
               id_number: idNumber,
             };
+            const data2 = {
+              proof_of_address: base64ImageHouse,
+            };
 
-            completeKyc.mutate(data);
+            completeKyc.mutate(level === "201" ? data2 : data);
           }}
           disabled={!image}
           className={

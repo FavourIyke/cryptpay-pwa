@@ -44,7 +44,7 @@ const AccountUpgrade = ({
   const email = userDetails?.data?.profile.email;
   const level = kycStatus?.data.kyc_level;
   useEffect(() => {
-    if (level === "201" || level === "200") {
+    if (level === "202" || level === "201") {
       setLevels(2);
     }
   }, [level]);
@@ -74,16 +74,16 @@ const AccountUpgrade = ({
             </h4>
             <div className="px-3 py-1 bg-text_blue rounded-lg text-white text-[11px]">
               Level{" "}
-              {level === "100" ? 1 : level === "200" || level === "201" ? 2 : 0}
+              {level === "100" ? 1 : level === "201" || level === "202" ? 2 : 0}
             </div>
           </div>
           <div className="w-full p-4 mt-3 mb-6  dark:bg-[#E9F4FF] bg-[#D7EAFF] border-[#BCD5FF]  rounded-xl">
             <div className="w-full flex gap-4 justify-center items-center">
               <div>
                 <h4 className="font-bold text-[14px] ">
-                  {level === "201"
+                  {level === "202"
                     ? "Upgrade Completed"
-                    : level === "200"
+                    : level === "201"
                     ? "Upgrade to Level Tier 2"
                     : level === "100"
                     ? "Upgrade to Level 2"
@@ -101,19 +101,19 @@ const AccountUpgrade = ({
                 {level === "100" && (
                   <div className="w-1/3 bg-text_blue rounded-l-full h-full" />
                 )}
-                {level === "200" && (
+                {level === "201" && (
                   <div className="w-2/3 bg-text_blue rounded-l-full h-full" />
                 )}
-                {level === "201" && (
+                {level === "202" && (
                   <div className="w-full bg-text_blue rounded-full h-full" />
                 )}
               </div>
               <h4 className=" text-black text-[14px]">
                 {level === "100"
                   ? 1
-                  : level === "200"
-                  ? 2
                   : level === "201"
+                  ? 2
+                  : level === "202"
                   ? 3
                   : 0}
                 /3
@@ -165,7 +165,7 @@ const AccountUpgrade = ({
                     </h4>
                   </div>
                   <div className="w-full mt-2 flex justify-start gap-2 items-center">
-                    {level === "100" || level === "200" || level === "201" ? (
+                    {level === "100" || level === "201" || level === "202" ? (
                       <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
                     ) : (
                       <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
@@ -175,7 +175,7 @@ const AccountUpgrade = ({
                     </h4>
                   </div>
                   <div className="w-full mt-2 flex justify-start gap-2 items-center">
-                    {level === "100" || level === "200" || level === "201" ? (
+                    {level === "100" || level === "201" || level === "202" ? (
                       <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
                     ) : (
                       <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
@@ -216,15 +216,14 @@ const AccountUpgrade = ({
                 <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
                   Limitations at Level 2 - Tier 1
                 </h4>
-                {level === "200" ||
-                  (level === "100" && tier === 1 && (
-                    <div className="w-[25%] py-1 absolute top-6  right-[6%]   flex justify-center items-center font-medium text-white bg-text_blue rounded-lg text-[12px] ">
-                      {level === "200" ? "Current Tier" : "Selected"}
-                    </div>
-                  ))}
+                {level === "201" || (level === "100" && tier === 1) ? (
+                  <div className="w-[25%] py-1 absolute top-6  right-[6%]   flex justify-center items-center font-medium text-white bg-text_blue rounded-lg text-[12px] ">
+                    {level === "201" ? "Current Tier" : "Selected"}
+                  </div>
+                ) : null}
                 <div
                   className={
-                    level === "200" || (level === "100" && tier === 1)
+                    level === "201" || (level === "100" && tier === 1)
                       ? "w-full rounded-xl px-4 py-4 border border-text_blue  mt-4 bg-[#ececec] dark:bg-[#262626]"
                       : "w-full rounded-xl px-4 py-4  mt-4 bg-[#ececec] dark:bg-[#262626]"
                   }
@@ -276,7 +275,7 @@ const AccountUpgrade = ({
                       </h4>
                     </div>
                     <div className="w-full mt-2 flex justify-start gap-2 items-center">
-                      {level === "200" || level === "201" ? (
+                      {level === "201" || level === "202" ? (
                         <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
@@ -286,7 +285,7 @@ const AccountUpgrade = ({
                       </h4>
                     </div>
                     <div className="w-full mt-2 flex justify-start gap-2 items-center">
-                      {level === "200" || level === "201" ? (
+                      {level === "201" || level === "202" ? (
                         <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
@@ -300,7 +299,7 @@ const AccountUpgrade = ({
               </div>
               <div
                 onClick={() => {
-                  if (level === "200") {
+                  if (level === "201") {
                     setTier(2);
                   } else if (level === "100") {
                     setTier(2);
@@ -311,16 +310,16 @@ const AccountUpgrade = ({
                 <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
                   Limitations at Level 2 - Tier 2
                 </h4>
-                {level === "201" ||
-                ((level === "100" || level === "200") && tier === 2) ? (
+                {level === "202" ||
+                ((level === "100" || level === "201") && tier === 2) ? (
                   <div className="w-[25%] py-1 absolute top-6  right-[6%]   flex justify-center items-center font-medium text-white bg-text_blue rounded-lg text-[12px] ">
-                    {level === "201" ? "Current Tier" : "Selected"}
+                    {level === "202" ? "Current Tier" : "Selected"}
                   </div>
                 ) : null}
                 <div
                   className={
-                    level === "201" ||
-                    ((level === "100" || level === "200") && tier === 2)
+                    level === "202" ||
+                    ((level === "100" || level === "201") && tier === 2)
                       ? "w-full rounded-xl px-4 py-4 border border-text_blue  mt-4 bg-[#ececec] dark:bg-[#262626]"
                       : "w-full rounded-xl px-4 py-4  mt-4 bg-[#ececec] dark:bg-[#262626]"
                   }
@@ -380,7 +379,7 @@ const AccountUpgrade = ({
                       </h4>
                     </div>
                     <div className="w-full mt-2 flex justify-start gap-2 items-center">
-                      {level === "100" || level === "200" || level === "201" ? (
+                      {level === "100" || level === "201" || level === "202" ? (
                         <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
@@ -390,7 +389,7 @@ const AccountUpgrade = ({
                       </h4>
                     </div>
                     <div className="w-full mt-2 flex justify-start gap-2 items-center">
-                      {level === "200" || level === "201" ? (
+                      {level === "201" || level === "202" ? (
                         <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
@@ -400,7 +399,7 @@ const AccountUpgrade = ({
                       </h4>
                     </div>
                     <div className="w-full mt-2 flex justify-start gap-2 items-center">
-                      {level === "201" ? (
+                      {level === "202" ? (
                         <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
@@ -413,12 +412,12 @@ const AccountUpgrade = ({
                 </div>
               </div>
               <button
-                disabled={level === "201" || (level === "200" && tier === 0)}
+                disabled={level === "202" || (level === "201" && tier === 0)}
                 onClick={() => {
-                  if (level === "200") {
+                  if (level === "201") {
                     setTier(2);
                     setOpenKyc2(true);
-                  } else if (level === "201") {
+                  } else if (level === "202") {
                   }
                 }}
                 className={
@@ -427,9 +426,9 @@ const AccountUpgrade = ({
                     : "w-full bg-text_blue mt-6 h-[48px] rounded-xl text-[14px] font-semibold text-white"
                 }
               >
-                {level === "201"
+                {level === "202"
                   ? "Upgrade completed"
-                  : level === "200" && tier === 0
+                  : level === "201" && tier === 0
                   ? "Proceed to tier 2"
                   : level === "100" && tier === 0
                   ? "Select one Tier & Proceed"
