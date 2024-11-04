@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import useAuthAxios from "../../../utils/baseAxios";
 import { useQuery } from "@tanstack/react-query";
 import { API } from "../../../constants/api";
-import { getFormattedDate } from "../../../utils/formatDate";
 import TransactionCard from "../transactionList/TransactionCard";
 import toast from "react-hot-toast";
 import { errorMessage } from "../../../utils/errorMessage";
 import { noWalletTxn } from "../../../assets/images";
+import { format, isToday, isYesterday, parseISO } from "date-fns";
 
 const WalletTransactins = () => {
   const axiosInstance = useAuthAxios();
@@ -32,22 +32,51 @@ const WalletTransactins = () => {
       new Date(a.transaction_date).getTime()
     );
   });
+
+  const groupTransactionsByDate = (transactions: any[]) => {
+    const groupedTransactions: { [key: string]: any[] } = {};
+
+    transactions.forEach((transaction) => {
+      const transactionDate = parseISO(transaction.transaction_date);
+      let dateLabel = format(transactionDate, "MMMM d, yyyy");
+
+      if (isToday(transactionDate)) {
+        dateLabel = "Today";
+      } else if (isYesterday(transactionDate)) {
+        dateLabel = "Yesterday";
+      }
+
+      if (!groupedTransactions[dateLabel]) {
+        groupedTransactions[dateLabel] = [];
+      }
+      groupedTransactions[dateLabel].push(transaction);
+    });
+
+    return groupedTransactions;
+  };
+
+  const groupedPayouts = groupTransactionsByDate(sortedPayouts.slice() || []);
+
   return (
     <div className="h-[400px]  overflow-auto mt-4 flex-col flex gap-6 py-4">
       {sortedPayouts?.length >= 1 ? (
-        sortedPayouts.slice(0, 4).map((payout: any, index: number) => (
-          <div key={index} className="w-full">
+        Object.entries(groupedPayouts).map(([dateLabel, transactions]) => (
+          <div key={dateLabel} className="w-full">
             <h4 className="text-gray-500 text-left mb-4 text-[12px]">
-              {getFormattedDate(payout.transaction_date)}
+              {dateLabel}
             </h4>
-            <div className="cursor-pointer w-full">
-              <TransactionCard
-                payouts={payout}
-                onClick1={() => {}}
-                onClick2={() => {}}
-                kind={payout?.transaction_type === "topup" ? false : true}
-              />
-            </div>
+            {transactions.map((payout: any, index: number) => (
+              <div key={index} className="w-full">
+                <div className="cursor-pointer w-full">
+                  <TransactionCard
+                    payouts={payout}
+                    onClick1={() => {}}
+                    onClick2={() => {}}
+                    kind={payout?.transaction_type === "topup" ? false : true}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         ))
       ) : (

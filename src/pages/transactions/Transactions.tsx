@@ -6,13 +6,13 @@ import TransactionCard from "../dashboard/transactionList/TransactionCard";
 import TransactionDetails from "./TransactionDetails";
 import { cryptpay, darkCrypt } from "../../assets/images";
 import { useUser } from "../../context/user-context";
-import { getFormattedDate } from "../../utils/formatDate";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { API } from "../../constants/api";
 import { errorMessage } from "../../utils/errorMessage";
 import useAuthAxios from "../../utils/baseAxios";
 import DepositDetails from "./DepositDetails";
+import { format, isToday, isYesterday, parseISO } from "date-fns";
 
 const Transactions = () => {
   const [showHistory, setShowHistory] = useState<number>(1);
@@ -53,6 +53,29 @@ const Transactions = () => {
       new Date(a.transaction_date).getTime()
     );
   });
+  const groupTransactionsByDate = (transactions: any[]) => {
+    const groupedTransactions: { [key: string]: any[] } = {};
+
+    transactions.forEach((transaction) => {
+      const transactionDate = parseISO(transaction.transaction_date);
+      let dateLabel = format(transactionDate, "MMMM d, yyyy");
+
+      if (isToday(transactionDate)) {
+        dateLabel = "Today";
+      } else if (isYesterday(transactionDate)) {
+        dateLabel = "Yesterday";
+      }
+
+      if (!groupedTransactions[dateLabel]) {
+        groupedTransactions[dateLabel] = [];
+      }
+      groupedTransactions[dateLabel].push(transaction);
+    });
+
+    return groupedTransactions;
+  };
+
+  const groupedPayouts = groupTransactionsByDate(sortedPayouts.slice() || []);
   return (
     <div
       className={` w-full font-sora overflow-auto h-screen pb-16 lgss:pb-0 bg-white dark:bg-primary_dark `}
@@ -93,25 +116,37 @@ const Transactions = () => {
         ) : (
           <div className="h-[600px] lgss:h-[700px] overflow-auto mt-4 flex-col flex gap-6 py-4">
             {sortedPayouts?.length >= 1 ? (
-              sortedPayouts.map((payout: any, index: any) => (
-                <div onClick={() => {}} key={index} className="w-full">
-                  <h4 className="text-gray-500 text-left mb-4 text-[12px]">
-                    {getFormattedDate(payout.transaction_date)}
-                  </h4>
-                  <TransactionCard
-                    payouts={payout}
-                    onClick1={() => {
-                      setClickedPayout(payout);
-                      setShowHistory(2);
-                    }}
-                    onClick2={() => {
-                      setClickedPayout(payout);
-                      setShowHistory(3);
-                    }}
-                    kind={payout?.transaction_type === "topup" ? false : true}
-                  />
-                </div>
-              ))
+              Object.entries(groupedPayouts).map(
+                ([dateLabel, transactions]) => (
+                  <div key={dateLabel} className="w-full">
+                    <h4 className="text-gray-500 text-left mb-4 text-[12px]">
+                      {dateLabel}
+                    </h4>
+                    {transactions.map((payout: any, index: number) => (
+                      <div key={index} className="w-full">
+                        <div className="cursor-pointer w-full">
+                          <TransactionCard
+                            payouts={payout}
+                            onClick1={() => {
+                              setClickedPayout(payout);
+                              setShowHistory(2);
+                            }}
+                            onClick2={() => {
+                              setClickedPayout(payout);
+                              setShowHistory(3);
+                            }}
+                            kind={
+                              payout?.transaction_type === "topup"
+                                ? false
+                                : true
+                            }
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )
+              )
             ) : (
               <div className="w-full flex flex-col h-full px-12   justify-start mt-12 items-center">
                 <img src={getThemeBasedImage()} alt="" />

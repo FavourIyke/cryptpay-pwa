@@ -5,6 +5,7 @@ import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import { BsArrowDown, BsArrowUp } from "react-icons/bs";
 import { IoIosMore } from "react-icons/io";
 import RateBoard from "./RateBoard";
+import { format, isToday, isYesterday, parseISO } from "date-fns";
 import TransactionCard from "./transactionList/TransactionCard";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import SelectCoin from "./sellFlow/SelectCoin";
@@ -27,7 +28,7 @@ import { errorMessage } from "../../utils/errorMessage";
 import useAuthAxios from "../../utils/baseAxios";
 import KycModal from "./KycModal";
 import { cryptpay, darkCrypt } from "../../assets/images";
-import { formatAmount, getFormattedDate } from "../../utils/formatDate";
+import { formatAmount } from "../../utils/formatDate";
 import DetailsModal from "./transactionList/DetailsModal";
 import MoreModal from "./MoreModal";
 import { MdAdd, MdPending } from "react-icons/md";
@@ -36,6 +37,11 @@ import AddWalletAddy from "./buyFlow/AddWalletAddy";
 import Wallet from "./top-up/Wallet";
 import Kyc2Modal from "./Kyc2Modal";
 import SetPin from "./buyFlow/SetPin";
+import DepositModal from "./top-up/DepositModal";
+import NoticeModal from "./top-up/NoticeModal";
+import PaymentCancelled from "./top-up/PaymentCancelled";
+import PaymentScreen from "./top-up/PaymentScreen";
+import PaymentSuccess from "./top-up/PaymentSuccess";
 
 const Dashboard = () => {
   const { theme, setShowDetails, showDetails } = useUser();
@@ -86,8 +92,19 @@ const Dashboard = () => {
   const [walletAddyBuy, setWalletAddyBuy] = useState<string>("");
   const [buySummary, setBuySummary] = useState<any[]>([]);
 
-  //
+  //topup
   const [openWallet, setOpenWallet] = useState<boolean>(false);
+  const [openDeposit, setOpenDeposit] = useState<boolean>(false);
+  const [openNotice, setOpenNotice] = useState<boolean>(false);
+
+  const [openPS, setOpenPS] = useState<boolean>(false);
+
+  const [amount, setAmount] = useState<string>("");
+  const [openPSuccess, setOpenPSuccess] = useState<boolean>(false);
+
+  const [openPCancel, setOpenPCancel] = useState<boolean>(false);
+
+  const [bankDetails, setBankDetails] = useState<any>({});
 
   const navigate = useNavigate();
   const getPayoutsSummary = async () => {
@@ -142,6 +159,33 @@ const Dashboard = () => {
       new Date(a.transaction_date).getTime()
     );
   });
+
+  const groupTransactionsByDate = (transactions: any[]) => {
+    const groupedTransactions: { [key: string]: any[] } = {};
+
+    transactions.forEach((transaction) => {
+      const transactionDate = parseISO(transaction.transaction_date);
+      let dateLabel = format(transactionDate, "MMMM d, yyyy");
+
+      if (isToday(transactionDate)) {
+        dateLabel = "Today";
+      } else if (isYesterday(transactionDate)) {
+        dateLabel = "Yesterday";
+      }
+
+      if (!groupedTransactions[dateLabel]) {
+        groupedTransactions[dateLabel] = [];
+      }
+      groupedTransactions[dateLabel].push(transaction);
+    });
+
+    return groupedTransactions;
+  };
+
+  const groupedPayouts = groupTransactionsByDate(
+    sortedPayouts.slice(0, 5) || []
+  );
+
   const location = useLocation();
   const showPay = location.state?.showPay;
   useEffect(() => {
@@ -154,15 +198,57 @@ const Dashboard = () => {
   }, [showPay, navigate]);
   // console.log(sortedPayouts);
 
+  const fiatBalance = userDetails?.data?.profile?.fiat_balance;
+
   return (
     <div
       className={` w-full font-sora h-screen overflow-auto pb-16  bg-white dark:bg-primary_dark `}
     >
       <Navbar />
       <div className={`${paddingX}  w-full mt-12 lgss:flex lgss:gap-12 `}>
-        <div className="w-full lgss:w-3/5">
-          <div className="w-full  h-[401px] flex justify-center items-center">
-            <div className="w-full bg-dashboardBg bg-cover bg-center py-6 rounded-[40px] h-full flex flex-col gap-[70px] mds:gap-24 justify-end items-center">
+        <div className="w-full  lgss:w-3/5">
+          <div className="w-full h-[401px] mb-24 flex justify-center flex-col items-center relative">
+            {/* Blue background behind the image */}
+            <div className="py-3 bg-text_blue w-full -bottom-[76px] pt-12 rounded-b-[40px] absolute flex flex-col justify-center items-start px-10">
+              <div className="w-full flex justify-between items-center">
+                <div>
+                  <h4 className="uppercase text-start  text-white tracking-wider text-[12px]  ">
+                    Wallet Balance
+                  </h4>
+                  <h4 className="uppercase text-start mt-1  text-white tracking-wider text-[15px] font-semibold ">
+                    NGN {formatAmount(fiatBalance)}
+                  </h4>
+                </div>
+                <div
+                  onClick={() => {
+                    if (
+                      kycStatus?.data.kyc_level === "000" ||
+                      kycStatus?.data.kyc_status === null ||
+                      (kycStatus?.data.kyc_level === "000" &&
+                        kycStatus?.data.kyc_status === "pending")
+                    ) {
+                      setKycModal(true);
+                    } else if (
+                      kycStatus?.data.kyc_level === "100" ||
+                      (kycStatus?.data.kyc_level === "100" &&
+                        kycStatus?.data.kyc_status === "pending")
+                    ) {
+                      setKyc2Modal(true);
+                    } else {
+                      setOpenWallet(true);
+                    }
+                  }}
+                  className="w-[50px] h-[50px] p-[10px] cursor-pointer bg-blue-300 bg-opacity-50 rounded-full"
+                >
+                  <div className="w-full h-full flex justify-center p-1 bg-blue-500 rounded-full  items-center">
+                    <SlArrowRight className="text-white text-[14px]" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Main content container with rounded corners */}
+            <div className="w-full bg-dashboardBg bg-cover bg-center py-6 rounded-[40px] h-full flex flex-col gap-[70px] mds:gap-24 justify-end items-center relative ">
               <h4 className="mds:hidden text-[14px]  capitalize text-gray-100  font-medium ">
                 Hello, {userDetails?.data?.profile.username}
               </h4>
@@ -227,7 +313,7 @@ const Dashboard = () => {
                       ) {
                         setKyc2Modal(true);
                       } else {
-                        setOpenWallet(true);
+                        setOpenDeposit(true);
                       }
                     }}
                     className="w-[45px] h-[45px] rounded-full bg-[#2F2F2F] flex justify-center items-center"
@@ -410,27 +496,37 @@ const Dashboard = () => {
           </div>
           <div className="h-[600px] lgss:h-[800px] overflow-auto mt-4 flex-col flex gap-6 py-4">
             {sortedPayouts?.length >= 1 ? (
-              sortedPayouts.slice(0, 4).map((payout: any, index: number) => (
-                <div key={index} className="w-full">
-                  <h4 className="text-gray-500 text-left mb-4 text-[12px]">
-                    {getFormattedDate(payout.transaction_date)}
-                  </h4>
-                  <div className="cursor-pointer w-full">
-                    <TransactionCard
-                      payouts={payout}
-                      onClick1={() => {
-                        setClickedPayout(payout);
-                        setShowDetails(true);
-                      }}
-                      onClick2={() => {
-                        setClickedPayout(payout);
-                        setShowdDepositDetails(true);
-                      }}
-                      kind={payout?.transaction_type === "topup" ? false : true}
-                    />
+              Object.entries(groupedPayouts).map(
+                ([dateLabel, transactions]) => (
+                  <div key={dateLabel} className="w-full">
+                    <h4 className="text-gray-500 text-left mb-4 text-[12px]">
+                      {dateLabel}
+                    </h4>
+                    {transactions.map((payout: any, index: number) => (
+                      <div key={index} className="w-full">
+                        <div className="cursor-pointer w-full">
+                          <TransactionCard
+                            payouts={payout}
+                            onClick1={() => {
+                              setClickedPayout(payout);
+                              setShowDetails(true);
+                            }}
+                            onClick2={() => {
+                              setClickedPayout(payout);
+                              setShowdDepositDetails(true);
+                            }}
+                            kind={
+                              payout?.transaction_type === "topup"
+                                ? false
+                                : true
+                            }
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </div>
-              ))
+                )
+              )
             ) : (
               <div className="w-full flex flex-col h-full px-12   justify-start mt-12 items-center">
                 <img src={getThemeBasedImage()} alt="" />
@@ -599,6 +695,63 @@ const Dashboard = () => {
         <Wallet
           setOpenWallet={setOpenWallet}
           setBuyCoinModal={setSelectCoinModal}
+          openDeposit={openDeposit}
+          setOpenDeposit={setOpenDeposit}
+          openNotice={openNotice}
+          setOpenNotice={setOpenNotice}
+          openPS={openPS}
+          setOpenPS={setOpenPS}
+          amount={amount}
+          setAmount={setAmount}
+          openPSuccess={openPSuccess}
+          setOpenPSuccess={setOpenPSuccess}
+          openPCancel={openPCancel}
+          setOpenPCancel={setOpenPCancel}
+          bankDetails={bankDetails}
+          setBankDetails={setBankDetails}
+        />
+      )}
+      {openDeposit && (
+        <DepositModal
+          setOpenNotice={setOpenNotice}
+          setOpenDeposit={setOpenDeposit}
+          setOpenPS={setOpenPS}
+          amount={amount}
+          setAmount={setAmount}
+        />
+      )}
+      {openNotice && (
+        <NoticeModal
+          setOpenNotice={setOpenNotice}
+          setOpenWallet={setOpenWallet}
+          setOpenDeposit={setOpenDeposit}
+        />
+      )}
+      {openPS && (
+        <PaymentScreen
+          setOpenPS={setOpenPS}
+          setOpenDeposit={setOpenDeposit}
+          amount={amount}
+          bankDetails={bankDetails}
+          setBankDetails={setBankDetails}
+          setOpenPSuccess={setOpenPSuccess}
+          setOpenPCancel={setOpenPCancel}
+        />
+      )}
+      {openPSuccess && (
+        <PaymentSuccess
+          amount={amount}
+          bankDetails={bankDetails}
+          setOpenPSuccess={setOpenPSuccess}
+          setSelectCoinModal={setSelectCoinModal}
+          setOpenWallet={setOpenWallet}
+        />
+      )}
+      {openPCancel && (
+        <PaymentCancelled
+          setOpenWallet={setOpenWallet}
+          setOpenDeposit={setOpenDeposit}
+          setOpenPCancel={setOpenPCancel}
         />
       )}
       {buyCoinPin && (

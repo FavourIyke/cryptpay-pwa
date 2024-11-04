@@ -10,6 +10,18 @@ import { useNavigate } from "react-router-dom";
 
 const MoreModal = ({ setOpenMore, setSelectCoinModal }: any) => {
   const { theme, setTheme } = useUser();
+  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const getThemeBasedImage = () => {
+    if (theme === "dark") {
+      return "dark";
+    } else if (theme === "light") {
+      return "light";
+    } else if (theme === "system") {
+      return darkQuery.matches ? "dark" : "light";
+    }
+    return "light"; // fallback in case of an unexpected value
+  };
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
@@ -21,7 +33,7 @@ const MoreModal = ({ setOpenMore, setSelectCoinModal }: any) => {
     navigate("/settings", { state: { setScreen: 4 } });
   };
   return (
-    <div className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12 lgss:pb-4  backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12 lgss:pb-4  backdrop-blur-sm">
       <div
         className={` w-[96%] mds:w-9/12 md:6/12 lgss:w-1/2 xxl:w-[35%] xxxl:w-[25%] border  dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-4 mds:p-6  dark:bg-[#1F1F1F] mt-6 lgss:mt-12   `}
       >
@@ -128,7 +140,7 @@ const MoreModal = ({ setOpenMore, setSelectCoinModal }: any) => {
               </div>
               <div>
                 <h4 className="text-gray-800 text-left dark:text-gray-50 text-[14px]">
-                  Dark Theme
+                  {getThemeBasedImage() === "dark" ? "Dark" : "Light"} Theme
                 </h4>
                 <h4 className="text-gray-500 mt-1 dark:text-gray-400 text-[11px]">
                   Select the feel of your app
@@ -138,19 +150,21 @@ const MoreModal = ({ setOpenMore, setSelectCoinModal }: any) => {
             <div className="flex justify-center gap-2 lgss:gap-4 mx-4 lgss:mx-0 items-center flex-col lgss:flex-row">
               <div
                 onClick={() => {
-                  if (theme === "dark") {
+                  if (getThemeBasedImage() === "dark") {
                     setTheme("light");
-                  } else if (theme === "light") {
+                  } else if (getThemeBasedImage() === "light") {
                     setTheme("dark");
                   }
                 }}
                 className={`flex w-[52px] cursor-pointer h-8  rounded-full transition-all duration-500 ${
-                  theme === "dark" ? "bg-text_blue" : "bg-gray-600"
+                  getThemeBasedImage() === "dark"
+                    ? "bg-text_blue"
+                    : "bg-gray-600"
                 }`}
               >
                 <span
                   className={`h-8  w-8 rounded-full transition-all duration-500 bg-gray-100 ${
-                    theme === "dark" ? "ml-5" : ""
+                    getThemeBasedImage() === "dark" ? "ml-5" : ""
                   }`}
                 ></span>
               </div>

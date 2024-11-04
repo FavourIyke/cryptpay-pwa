@@ -12,16 +12,26 @@ import { formatAmount } from "../../../utils/formatDate";
 import PaymentCancelled from "./PaymentCancelled";
 import WalletTransactins from "./WalletTransactins";
 
-const Wallet = ({ setOpenWallet, setBuyCoinModal }: any) => {
+const Wallet = ({
+  setOpenWallet,
+  setBuyCoinModal,
+  openDeposit,
+  setOpenDeposit,
+  openNotice,
+  setOpenNotice,
+  openPS,
+  setOpenPS,
+  amount,
+  setAmount,
+  openPSuccess,
+  setOpenPSuccess,
+  openPCancel,
+  setOpenPCancel,
+  bankDetails,
+  setBankDetails,
+}: any) => {
   const { userDetails, refetch1 } = useUser();
   const [viewBalance, setViewBalance] = useState<boolean>(false);
-  const [openNotice, setOpenNotice] = useState<boolean>(false);
-  const [openDeposit, setOpenDeposit] = useState<boolean>(false);
-  const [openPS, setOpenPS] = useState<boolean>(false);
-  const [openPSuccess, setOpenPSuccess] = useState<boolean>(false);
-  const [openPCancel, setOpenPCancel] = useState<boolean>(false);
-  const [amount, setAmount] = useState<string>("");
-  const [bankDetails, setBankDetails] = useState<any>({});
 
   const fiatBalance = userDetails?.data?.profile?.fiat_balance;
   const handleRefetch = () => {
@@ -30,7 +40,7 @@ const Wallet = ({ setOpenWallet, setBuyCoinModal }: any) => {
   };
 
   return (
-    <div className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12 lgss:pb-4  backdrop-blur-sm">
+    <div className="fixed inset-0 z-50  flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12 lgss:pb-4  backdrop-blur-sm">
       <div
         className={` w-[96%] mds:w-9/12 md:6/12 lgss:w-1/2 xxl:w-[35%] xxxl:w-[25%] border  dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-4 mds:p-6  dark:bg-[#1F1F1F] mt-6 lgss:mt-12   `}
       >

@@ -6,3 +6,22 @@
 .spin-button-none::-webkit-inner-spin-button {
   appearance: none;
 }
+
+.custom-shape-divider-top-1730723744 {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1730723744 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1px);
+  height: 50px;
+}
+
+.custom-shape-divider-top-1730723744 .shape-fill {
+  fill: #ffffff;
+}
