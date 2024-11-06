@@ -8,7 +8,7 @@ const TransactionCard = ({ payouts, onClick1, onClick2, kind = true }: any) => {
   const { formattedTime } = formatDateAndTime(payouts?.transaction_date);
 
   return (
-    <div className="w-full flex-col gap-4 flex">
+    <div className="w-full flex-col  flex">
       <div
         onClick={onClick1}
         className="font-sora cursor-pointer w-full border-b border-gray-200 dark:border-gray-800 py-4 flex justify-between items-center"
