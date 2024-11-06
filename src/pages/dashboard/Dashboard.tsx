@@ -183,7 +183,7 @@ const Dashboard = () => {
   };
 
   const groupedPayouts = groupTransactionsByDate(
-    sortedPayouts.slice(0, 5) || []
+    sortedPayouts?.slice(0, 5) || []
   );
 
   const location = useLocation();
