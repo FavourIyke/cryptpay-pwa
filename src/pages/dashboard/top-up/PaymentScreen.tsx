@@ -110,7 +110,7 @@ const PaymentScreen = ({
   }, [accountExpiryDate, comfirmDetails, amount]);
   const FirstLoading = () => {
     return (
-      <div className="mt-4 w-full flex flex-col justify-center items-center">
+      <div className="mt-4 w-full flex flex-col  justify-center items-center">
         <div className="w-[50px] h-[50px]">
           <img src={pause} className="w-full h-full bg-cover" alt="" />
         </div>
@@ -267,7 +267,7 @@ const PaymentScreen = ({
     );
   };
   return (
-    <div className="fixed inset-0 top-20 flex font-sora justify-start items-start pt-12 bg-white dark:bg-primary_dark   backdrop-blur-sm">
+    <div className="fixed inset-0 top-20 flex font-sora justify-start items-start pt-12 overflow-auto pb-12 bg-white dark:bg-primary_dark   backdrop-blur-sm">
       <div
         className={` w-11/12 mds:w-8/12 md:7/12 border dark:border-[#303030] border-[#E6E6E6]  rounded-xl mx-auto p-6 dark:bg-[#1F1F1F]   lgss:w-2/5 xxl:w-1/3 `}
       >

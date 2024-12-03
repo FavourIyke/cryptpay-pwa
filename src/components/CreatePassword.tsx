@@ -103,6 +103,7 @@ const CreatePassword = () => {
             >
               <input
                 type={showPassword ? "text" : "password"}
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter Password"
                 className="   outline-none focus:border-text_blue dark:focus:border-text_blue active:bg-transparent w-10/12 bg-transparent "
