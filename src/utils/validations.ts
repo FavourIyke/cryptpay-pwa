@@ -44,7 +44,8 @@ import { toast } from "react-hot-toast";
 
       return false;
     }
-    const passwordRegex =/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/
+    const passwordRegex =/^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/
+
     if (!passwordRegex.test(password)) {
      
       toast.error("Password must contain atleast 8 characters, 1 uppercase, 1 lowercase and 1 special character");
