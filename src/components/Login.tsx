@@ -72,7 +72,7 @@ const Login = () => {
 
   return (
     <div
-      className={` w-full font-sora h-screen pb-16 lgss:pb-0 bg-white dark:bg-primary_dark `}
+      className={` w-full font-sora h-screen pb-16 lgss:pb-0 bg-white dark:bg-primary_dark overflow-auto `}
     >
       <AuthNav />
       <div

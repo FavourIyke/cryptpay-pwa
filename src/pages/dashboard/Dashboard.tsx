@@ -568,7 +568,7 @@ const Dashboard = () => {
           network={network}
           setNetwork={setNetwork}
           networks={networks}
-          sellRate={sellRate}
+          sellRate={sellRateFlow}
           setBuyCoinModal={setBuyCoinModal}
         />
       )}
