@@ -60,7 +60,7 @@ const Dashboard = () => {
   const [showdDepositDetails, setShowdDepositDetails] =
     useState<boolean>(false);
   const [clickedPayout, setClickedPayout] = useState<any[]>([]);
-
+  const [coinDeets, setCoinDeets] = useState<any[]>([]);
   const [showBalance, setShowBalance] = useState<boolean>(false);
   const [sellRateFlow, setSellRateFlow] = useState<boolean>(false);
   const [sellRate, setSellRate] = useState<boolean>(false);
@@ -185,7 +185,6 @@ const Dashboard = () => {
   const groupedPayouts = groupTransactionsByDate(
     sortedPayouts?.slice(0, 5) || []
   );
-
   const location = useLocation();
   const showPay = location.state?.showPay;
   useEffect(() => {
@@ -478,6 +477,7 @@ const Dashboard = () => {
             sellRateFlow={sellRateFlow}
             setSellRate={setSellRate}
             setCoin={setCoin}
+            setCoinDeets={setCoinDeets}
             networks={networks}
             setNetworks={setNetworks}
             setNetwork={setNetwork}
@@ -554,6 +554,7 @@ const Dashboard = () => {
             sellRateFlow={sellRateFlow}
             setSellRateFlow={setSellRateFlow}
             openMore={openMore}
+            setCoinDeets={setCoinDeets}
             setBuyCoinModal={setBuyCoinModal}
           />
         )}
@@ -575,7 +576,7 @@ const Dashboard = () => {
         <SelectBank
           setSelectBankModal={setSelectBankModal}
           setSelectNetworkModal={setSelectNetworkModal}
-          setGenerateAddyModal={setGenerateAddyModal}
+          setSellAssetModal={setSellAssetModal}
           setAddBankModal={setAddBankModal}
           networks={networks}
           setSelectCoinModal={setSelectCoinModal}
@@ -583,7 +584,7 @@ const Dashboard = () => {
           selectedBankDetails={selectedBankDetails}
         />
       )}
-      {generateAddyModal && (
+      {/* {generateAddyModal && (
         <GenerateWallet
           setGenerateAddyModal={setGenerateAddyModal}
           setSellAssetModal={setSellAssetModal}
@@ -595,17 +596,21 @@ const Dashboard = () => {
           setWalletAddy={setWalletAddy}
           selectedBankDetails={selectedBankDetails}
         />
-      )}
+      )} */}
       {sellAssetModal && (
         <SellAsset
           setSellAssetModal={setSellAssetModal}
-          setGenerateAddyModal={setGenerateAddyModal}
+          setSelectBankModal={setSelectBankModal}
           setFinalModal={setFinalModal}
           coin={coin}
+          setNetworks={setNetworks}
           network={network}
+          setCoinDeets={setCoinDeets}
           setNetwork={setNetwork}
+          networks={networks}
           walletAddy={walletAddy}
           setWalletAddy={setWalletAddy}
+          coinDeets={coinDeets}
           selectedBankDetails={selectedBankDetails}
         />
       )}

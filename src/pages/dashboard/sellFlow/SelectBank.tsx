@@ -11,7 +11,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 const SelectBank = ({
   setSelectBankModal,
   setSelectNetworkModal,
-  setGenerateAddyModal,
+  setSellAssetModal,
   setAddBankModal,
   setSelectedBankDetails,
   setSelectCoinModal,
@@ -216,7 +216,7 @@ const SelectBank = ({
             disabled={userBanks?.length < 1 || !hasDefaultBank}
             onClick={() => {
               setSelectBankModal(false);
-              setGenerateAddyModal(true);
+              setSellAssetModal(true);
             }}
             className={
               userBanks?.length < 1 || !hasDefaultBank

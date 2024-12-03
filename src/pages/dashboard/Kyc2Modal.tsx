@@ -34,7 +34,9 @@ const Kyc2Modal = ({ setKyc2Modal }: any) => {
           </p>
           <button
             onClick={() => {
-              navigate("/settings", { state: { showKyc2: true } });
+              navigate("/settings", {
+                state: { sureScreen: 2 },
+              });
             }}
             className={`w-10/12 h-[52px] rounded-[18px] bg-text_blue mt-4 text-white flex justify-center items-center  font-semibold`}
           >

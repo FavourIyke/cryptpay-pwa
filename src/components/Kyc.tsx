@@ -24,11 +24,8 @@ const Kyc = () => {
   const [isImageCaptured, setIsImageCaptured] = useState<boolean>(false);
   const [submit, setSubmit] = useState(0);
   const axiosInstance = useAuthAxios();
-  const handlePostKyc = async ({ id_number, liveliness_image }: any) => {
-    const response = await axiosInstance.post(API.verifyKyc, {
-      id_number,
-      liveliness_image,
-    });
+  const handlePostKyc = async (data: any) => {
+    const response = await axiosInstance.post(API.verifyKyc, data);
     return response.data;
   };
   const completeKyc = useMutation({
@@ -80,10 +77,12 @@ const Kyc = () => {
             </div>
             <button
               onClick={() => {
-                completeKyc.mutate({
+                const data = {
                   id_number: bvn,
                   liveliness_image: images,
-                });
+                };
+                // console.log(data);
+                completeKyc.mutate(data);
               }}
               disabled={!bvn}
               className={`w-full h-[52px] rounded-[18px] mt-12 ${

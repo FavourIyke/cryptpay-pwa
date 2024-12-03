@@ -15,7 +15,7 @@ const WalletTransactins = () => {
     return response.data.data;
   };
   const { data: payouts, error: error3 } = useQuery({
-    queryKey: ["get-payouts"],
+    queryKey: ["get-wallet-txns"],
     queryFn: getPayouts,
     retry: 1,
   });
@@ -55,7 +55,8 @@ const WalletTransactins = () => {
     return groupedTransactions;
   };
 
-  const groupedPayouts = groupTransactionsByDate(sortedPayouts.slice() || []);
+  // console.log(payouts);
+  const groupedPayouts = groupTransactionsByDate(sortedPayouts?.slice() || []);
 
   return (
     <div className="h-[400px]  overflow-auto mt-4 flex-col flex gap-6 py-4">

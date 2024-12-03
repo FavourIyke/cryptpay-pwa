@@ -101,6 +101,9 @@ const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
       queryClient.invalidateQueries({
         queryKey: ["get-notifications"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["get-unreadNotifications"],
+      });
     },
     onError: (error: any) => {
       setLoadingIndex(null);
@@ -125,6 +128,9 @@ const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
       }, 1000);
       queryClient.invalidateQueries({
         queryKey: ["get-notifications"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["get-unreadNotifications"],
       });
     },
     onError: (error: any) => {

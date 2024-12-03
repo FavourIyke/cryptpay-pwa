@@ -17,6 +17,7 @@ const SelectCoin = ({
   sellRateFlow,
   setSellRateFlow,
   setBuyCoinModal,
+  setCoinDeets,
 }: any) => {
   const axiosInstance = useAuthAxios();
 
@@ -97,6 +98,7 @@ const SelectCoin = ({
                 onClick={() => {
                   setCoin(coin.symbol);
                   setNetworks(coin.networks);
+                  setCoinDeets(coin);
                   setSelectCoinModal(false); // Close the coin selection modal by default
 
                   if (sellRateFlow) {

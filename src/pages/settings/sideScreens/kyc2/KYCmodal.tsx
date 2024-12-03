@@ -15,11 +15,6 @@ import useAuthAxios from "../../../../utils/baseAxios";
 import { errorMessage } from "../../../../utils/errorMessage";
 
 const KYCmodal = ({ setOpenKyc2, tier }: any) => {
-  const [openGovId, setOpenGovId] = useState<boolean>(false);
-  const [openPOAId, setOpenPOAId] = useState<boolean>(false);
-  const [openSuccess, setOpenSuccess] = useState<boolean>(false);
-  const [idNumber, setIdNumber] = useState<string>("");
-  const [base64Image, setBase64Image] = useState<string | null>(null);
   const axiosInstance = useAuthAxios();
 
   const getKycStatus = async () => {
@@ -110,16 +105,7 @@ const KYCmodal = ({ setOpenKyc2, tier }: any) => {
           </div>
           <FaCircleCheck className="text-[#5E91FF] text-[24px]" />
         </button>
-        <button
-          onClick={() => {
-            if (level === "201") {
-              setOpenPOAId(true);
-            } else if (level === "100") {
-              setOpenGovId(true);
-            }
-          }}
-          className="w-full flex bg-[#ececec] dark:bg-[#262626] mt-6 justify-between gap-4 items-center  p-4 rounded-lg  bg-transparent"
-        >
+        <button className="w-full flex bg-[#ececec] dark:bg-[#262626] mt-6 justify-between gap-4 items-center  p-4 rounded-lg  bg-transparent">
           <div className="flex items-center gap-4">
             <div>
               <FaRegImages className="text-[24px] text-white dark:text-[#636363]" />
@@ -138,34 +124,6 @@ const KYCmodal = ({ setOpenKyc2, tier }: any) => {
           <SlArrowRight className="text-black dark:text-white text-[20px]" />
         </button>
       </div>
-      {openGovId && (
-        <GovernmentID
-          setOpenGovId={setOpenGovId}
-          setOpenSuccess={setOpenSuccess}
-          idNumber={idNumber}
-          setIdNumber={setIdNumber}
-          base64Image={base64Image}
-          setBase64Image={setBase64Image}
-          setOpenPOAId={setOpenPOAId}
-          tier={tier}
-        />
-      )}
-      {openPOAId && (
-        <HouseAddy
-          idNumber={idNumber}
-          base64Image={base64Image}
-          setOpenPOAId={setOpenPOAId}
-          setOpenSuccess={setOpenSuccess}
-          setOpenGovId={setOpenGovId}
-          level={level}
-        />
-      )}
-      {openSuccess && (
-        <Kyc2success
-          setOpenSuccess={setOpenSuccess}
-          setOpenKyc2={setOpenKyc2}
-        />
-      )}
     </div>
   );
 };
