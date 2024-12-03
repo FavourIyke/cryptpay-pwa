@@ -31,7 +31,6 @@ const SellAsset = ({
 }: any) => {
   const statusBarHeight = useStatusBarHeight();
   const axiosInstance = useAuthAxios();
-  const [showProceedButton, setShowProceedButton] = useState<boolean>(false);
   const [showGenerateButton, setShowGenerateButton] = useState<boolean>(false);
   const [showDD, setShowDD] = useState<boolean>(false);
   const queryClient = useQueryClient();
@@ -45,6 +44,7 @@ const SellAsset = ({
     data,
     error: error1,
     isSuccess: success1,
+    refetch,
   } = useQuery({
     queryKey: ["get-wallet-address", coinDeets?.symbol, network], // Include coin and network in the queryKey
     queryFn: getWalletAddy,
@@ -55,7 +55,6 @@ const SellAsset = ({
   useEffect(() => {
     if (error1) {
       setShowGenerateButton(true);
-      setShowProceedButton(false);
       const newError = error1 as any;
       toast(errorMessage(newError?.message || newError?.data?.message), {
         duration: 3000,
@@ -77,12 +76,10 @@ const SellAsset = ({
     if (success1) {
       if (data.data.address) {
         setWalletAddy(data.data.address);
-        setShowProceedButton(true);
         setShowGenerateButton(false);
       } else {
         setWalletAddy("");
         setShowGenerateButton(true);
-        setShowProceedButton(false);
       }
     }
   }, [data, success1]);
@@ -98,6 +95,7 @@ const SellAsset = ({
     mutationFn: generateWalletAddy,
     onSuccess: (r) => {
       toast.success(r.message);
+      refetch();
       setTimeout(() => {
         queryClient.invalidateQueries({
           queryKey: ["get-wallet-address"],
@@ -121,7 +119,7 @@ const SellAsset = ({
   return (
     <div
       style={{ paddingTop: `${statusBarHeight + 80}px ` }}
-      className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start  bg-white dark:bg-primary_dark overflow-auto pb-12 lgss:pb-4  backdrop-blur-sm"
+      className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start  bg-white dark:bg-primary_dark overflow-auto pb-12  backdrop-blur-sm"
     >
       <div
         className={` w-[96%] mds:w-9/12 md:6/12 lgss:w-1/2 xxl:w-[35%] xxxl:w-[25%] border  dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-4 mds:p-6  dark:bg-[#1F1F1F]   `}
@@ -266,7 +264,7 @@ const SellAsset = ({
               </h4>
             </div>
           </div>
-          {showGenerateButton && (
+          {showGenerateButton ? (
             <button
               disabled={!network || completeGetAddy.isPending}
               onClick={handleGenerateClick}
@@ -282,8 +280,7 @@ const SellAsset = ({
                 "Generate Wallet"
               )}
             </button>
-          )}
-          {showProceedButton && (
+          ) : (
             <div className="w-full mt-12 flex gap-4 justify-center items-center">
               <button className="w-1/2 flex justify-center gap-2 h-[58px] text-[14px] font-semibold rounded-xl border items-center border-gray-700 text-gray-800 dark:text-gray-50">
                 <IoMdShare className="text-[20px]" /> Share

@@ -66,7 +66,7 @@ const BuyReceipt = ({
   });
 
   return (
-    <div className="fixed inset-0  flex font-sora justify-start items-start pt-12 bg-white dark:bg-primary_dark   backdrop-blur-sm">
+    <div className="fixed inset-0  flex font-sora justify-start items-start pt-12 overflow-auto pb-16 bg-white dark:bg-primary_dark   backdrop-blur-sm">
       <div
         className={` w-11/12 mds:w-8/12 md:7/12 border dark:border-[#303030] border-[#E6E6E6]  rounded-xl mx-auto p-6 dark:bg-[#1F1F1F]   lgss:w-2/5 xxl:w-1/3 `}
       >
