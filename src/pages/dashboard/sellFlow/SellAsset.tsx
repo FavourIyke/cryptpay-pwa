@@ -1,64 +1,122 @@
 import React, { useEffect, useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { FiClipboard, FiCopy } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
-import { CiExport } from "react-icons/ci";
-import { kudaLogo } from "../../../assets/images";
+
 import { SlArrowLeft } from "react-icons/sl";
-import { truncateWord } from "../../../utils/wordFunctions";
+
 import QRCode from "react-qr-code";
-import { useUser } from "../../../context/user-context";
-import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { API } from "../../../constants/api";
-import { errorMessage } from "../../../utils/errorMessage";
-import useAuthAxios from "../../../utils/baseAxios";
+
 import { useStatusBarHeight } from "../../../components/utils/StatusBarH";
+import { IoIosArrowDown, IoMdShare } from "react-icons/io";
+import { FiCopy } from "react-icons/fi";
+import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
+import { API } from "../../../constants/api";
+import useAuthAxios from "../../../utils/baseAxios";
+import { errorMessage } from "../../../utils/errorMessage";
+import ClipLoader from "react-spinners/ClipLoader";
+import ChangeCoin from "./ChangeCoin";
 
 const SellAsset = ({
   setSellAssetModal,
-  setGenerateAddyModal,
-  setFinalModal,
+  setSelectBankModal,
+  setNetwork,
   network,
+  networks,
+  coinDeets,
   setWalletAddy,
   walletAddy,
-  coin,
-  selectedBankDetails,
+  setCoinDeets,
+  setNetworks,
 }: any) => {
-  const [onCopy, setOnCopy] = useState<boolean>(false);
-  const { theme } = useUser();
-  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
-  const axiosInstance = useAuthAxios();
-  const getThemeBasedImage = () => {
-    if (theme === "dark") {
-      return "dark";
-    } else if (theme === "light") {
-      return "light";
-    } else if (theme === "system") {
-      return darkQuery.matches ? "dark" : "light";
-    }
-    return "dark"; // fallback in case of an unexpected value
-  };
-
   const statusBarHeight = useStatusBarHeight();
-
-  const userTheme = getThemeBasedImage();
-  const getAllBanks = async () => {
-    const response = await axiosInstance.get(API.getAllBanks);
+  const axiosInstance = useAuthAxios();
+  const [showProceedButton, setShowProceedButton] = useState<boolean>(false);
+  const [showGenerateButton, setShowGenerateButton] = useState<boolean>(false);
+  const [showDD, setShowDD] = useState<boolean>(false);
+  const queryClient = useQueryClient();
+  const getWalletAddy = async () => {
+    const response = await axiosInstance.get(
+      API.getWalletAddress(coinDeets?.symbol.toLowerCase(), network)
+    );
     return response.data;
   };
-
-  const { data: allBanks, error: error2 } = useQuery({
-    queryKey: ["all-banks"],
-    queryFn: getAllBanks,
+  const {
+    data,
+    error: error1,
+    isSuccess: success1,
+  } = useQuery({
+    queryKey: ["get-wallet-address", coinDeets?.symbol, network], // Include coin and network in the queryKey
+    queryFn: getWalletAddy,
+    enabled: !!coinDeets?.symbol && !!network,
     retry: 1,
   });
+
   useEffect(() => {
-    if (error2) {
-      const newError = error2 as any;
-      toast.error(errorMessage(newError?.message || newError?.data?.message));
+    if (error1) {
+      setShowGenerateButton(true);
+      setShowProceedButton(false);
+      const newError = error1 as any;
+      toast(errorMessage(newError?.message || newError?.data?.message), {
+        duration: 3000,
+        icon: "🚫",
+        iconTheme: {
+          primary: "#ffffff",
+          secondary: "#DD900D",
+        },
+        style: {
+          color: "#ffffff",
+          backgroundColor: "#DD900D",
+          fontSize: "14px",
+          fontWeight: "600",
+        },
+      });
     }
-  }, [error2]);
+  }, [error1]);
+  useEffect(() => {
+    if (success1) {
+      if (data.data.address) {
+        setWalletAddy(data.data.address);
+        setShowProceedButton(true);
+        setShowGenerateButton(false);
+      } else {
+        setWalletAddy("");
+        setShowGenerateButton(true);
+        setShowProceedButton(false);
+      }
+    }
+  }, [data, success1]);
+
+  const generateWalletAddy = async ({ crypto_type, network }: any) => {
+    const response = await axiosInstance.post(API.generateWalletAddresses, {
+      crypto_type,
+      network,
+    });
+    return response.data;
+  };
+  const completeGetAddy = useMutation({
+    mutationFn: generateWalletAddy,
+    onSuccess: (r) => {
+      toast.success(r.message);
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["get-wallet-address"],
+        });
+      }, 2000);
+    },
+    onError: (e) => {
+      // console.log(e);
+      const err = e as any;
+      toast.error(errorMessage(err?.message || err?.data?.message));
+    },
+  });
+
+  const handleGenerateClick = () => {
+    completeGetAddy.mutate({
+      crypto_type: coinDeets?.symbol.toLowerCase(),
+      network: network,
+    });
+  };
 
   return (
     <div
@@ -72,7 +130,7 @@ const SellAsset = ({
           <button
             onClick={() => {
               setSellAssetModal(false);
-              setGenerateAddyModal(true);
+              setSelectBankModal(true);
             }}
             className="flex items-center gap-2 "
           >
@@ -81,7 +139,9 @@ const SellAsset = ({
               Back
             </h4>
           </button>
-
+          <h4 className="text-gray-800 dark:text-gray-100  font-semibold text-[20px]">
+            Sell
+          </h4>
           <button
             onClick={() => {
               setSellAssetModal(false);
@@ -92,121 +152,157 @@ const SellAsset = ({
             <IoClose className="text-black dark:text-white text-[14px]" />
           </button>
         </div>
-        <h4 className="text-gray-800 dark:text-gray-100 mt-4 font-semibold text-[20px]">
-          Sell {coin}
-        </h4>
-        <div className="w-full py-8 bg-[#F1F1F1] dark:bg-transparent mt-4 rounded-xl flex justify-center items-center">
-          <QRCode
-            size={170}
-            bgColor={
-              userTheme === "light"
-                ? "#F1F1F1"
-                : userTheme === "dark"
-                ? "#1F1F1F"
-                : ""
-            }
-            fgColor={
-              userTheme === "light"
-                ? "#1D2739"
-                : userTheme === "dark"
-                ? "#E4E7EC"
-                : ""
-            }
-            value={walletAddy}
-          />
-        </div>{" "}
-        <div className="w-full mt-6">
-          <h4 className="dark:text-gray-400 text-gray-800 mt-2 font-medium text-[12px]">
-            Wallet Address
-          </h4>
-          <div className="flex w-full justify-between gap-4 mt-4 items-center">
-            {walletAddy && (
-              <div className="w-9/12 h-[40px] flex justify-start px-4 items-center rounded-xl border border-gray-300 bg-[#F1F1F1] dark:bg-transparent dark:border-gray-700 ">
-                <h4 className="dark:text-white text-gray-800  font-medium text-[12px]">
-                  {walletAddy ? truncateWord(walletAddy) : "Fetching..."}
-                </h4>
+        <div className="w-full mt-10">
+          <div className="w-full relative   items-center">
+            <div
+              onClick={() => {
+                setShowDD((prev) => !prev);
+              }}
+              className="justify-center cursor-pointer flex w-full gap-2 items-center"
+            >
+              <div className="[32px] h-[32px] rounded-full">
+                <img
+                  src={coinDeets?.logo}
+                  className="w-full h-full  rounded-full"
+                  alt=""
+                />
+              </div>
+              <h4 className="text-[#141414] dark:text-white  font-semibold text-[16px]">
+                {coinDeets?.symbol}
+              </h4>
+              <IoIosArrowDown className="text-[#141414] dark:text-white text-[20px]" />
+            </div>
+            {showDD && (
+              <div className="w-full absolute mx-auto">
+                <ChangeCoin
+                  setCoinDeets={setCoinDeets}
+                  setNetworks={setNetworks}
+                  setShowDD={setShowDD}
+                  setWalletAddy={setWalletAddy}
+                  setNetwork={setNetwork}
+                />
               </div>
             )}
-            <div className="flex gap-4 items-center">
+          </div>
+
+          <div className="w-full p-4 mt-6 dark:bg-[#DD900D1A] bg-[#DD900D] bg-opacity-10 text-[#664101] rounded-xl dark:text-[#F7D394] text-[12px]">
+            Please ensure to send only{" "}
+            <strong className="text-[#DD900D] font-semibold">
+              {coinDeets?.symbol.toUpperCase()} ({network.toUpperCase()})
+            </strong>{" "}
+            to this address or you may lose your funds.
+          </div>
+          <div className="mt-6 w-full py-6 px-16 rounded-xl bg-[#F0F0F0] dark:bg-[#2b2a2a]">
+            <div className="flex justify-center items-center gap-2 mt-3">
+              {networks?.map((networki: any, index: number) => {
+                const networkNameMap: { [key: string]: string } = {
+                  "Tron Network": "TRX",
+                  "Binance Smart Chain": "BSC",
+                  "Ethereum Network": "ETH",
+                  "Ethereum Mainnet": "ETH",
+                  Bitcoin: "BTC",
+                  Solana: "SOL",
+                };
+
+                const networkCodeMap: { [key: string]: string } = {
+                  bep20: "BEP-20",
+                  trc20: "TRC-20",
+                  erc20: "ERC-20",
+                  btc: "BTC",
+                };
+
+                const transformedName =
+                  networkNameMap[networki?.name] || networki?.name;
+                const transformedCode =
+                  networkCodeMap[networki?.code] || networki?.code;
+
+                return (
+                  <div
+                    key={index}
+                    onClick={() => setNetwork(networki?.code)}
+                    className="w-full flex justify-center items-center"
+                  >
+                    <div className="w-full cursor-pointer flex flex-col justify-center items-center">
+                      <h4
+                        className={
+                          network === networki?.code
+                            ? "text-[#5995FF] text-[12px] font-semibold "
+                            : "text-gray-800 text-[12px] font-semibold dark:text-gray-50"
+                        }
+                      >
+                        {transformedName}
+                      </h4>
+                      <h4
+                        className={
+                          network === networki?.code
+                            ? "text-[#5995FF] text-[12px] "
+                            : "text-gray-400 text-[12px] dark:text-gray-50"
+                        }
+                      >
+                        {transformedCode}
+                      </h4>
+                    </div>
+                    {/* Add a divider if it's not the last item */}
+                    {index < networks.length - 1 && (
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="w-[1px] h-[21px] bg-[#888888] "
+                      ></div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="w-full bg-white flex mt-4 flex-col justify-center items-center rounded-xl p-4">
+              <div>
+                <QRCode size={240} value={walletAddy ?? ""} />
+              </div>
+              <h4
+                style={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+                className="mt-4 text-[#141414] font-bold break-words text-[14px]"
+              >
+                {walletAddy ?? ""}
+              </h4>
+            </div>
+          </div>
+          {showGenerateButton && (
+            <button
+              disabled={!network || completeGetAddy.isPending}
+              onClick={handleGenerateClick}
+              className={`w-full h-[52px] rounded-[18px] mt-4 ${
+                !network
+                  ? "text-gray-400 bg-gray-600"
+                  : "bg-text_blue text-white"
+              }  flex justify-center items-center  font-semibold`}
+            >
+              {completeGetAddy.isPending ? (
+                <ClipLoader color="#FFFFFF" size={30} />
+              ) : (
+                "Generate Wallet"
+              )}
+            </button>
+          )}
+          {showProceedButton && (
+            <div className="w-full mt-12 flex gap-4 justify-center items-center">
+              <button className="w-1/2 flex justify-center gap-2 h-[58px] text-[14px] font-semibold rounded-xl border items-center border-gray-700 text-gray-800 dark:text-gray-50">
+                <IoMdShare className="text-[20px]" /> Share
+              </button>
               <CopyToClipboard
-                text={walletAddy}
+                text={walletAddy ?? ""}
                 onCopy={() => {
-                  setOnCopy(true);
-                  setTimeout(() => {
-                    setOnCopy(false);
-                  }, 2500);
+                  toast.success(`${coinDeets?.symbol} wallet address copied`);
                 }}
               >
-                {onCopy ? (
-                  <div className="w-[40px] h-[40px] flex justify-center items-center rounded-full border border-gray-300 bg-[#F1F1F1] dark:bg-transparent dark:border-gray-700">
-                    <FiClipboard className="text-[16px] dark:text-white text-gray-800" />
-                  </div>
-                ) : (
-                  <div className="w-[40px] h-[40px] flex justify-center items-center rounded-full border border-gray-300 bg-[#F1F1F1] dark:bg-transparent dark:border-gray-700">
-                    <FiCopy className="text-[16px] dark:text-white text-gray-800" />
-                  </div>
-                )}
+                <button className="w-1/2 flex justify-center gap-2 h-[58px] text-[14px] font-semibold rounded-xl text-white bg-text_blue items-center ">
+                  <FiCopy className="text-[20px]" /> Copy Address
+                </button>
               </CopyToClipboard>
-              <div className="w-[40px] h-[40px] flex justify-center items-center rounded-full border border-gray-300 bg-[#F1F1F1] dark:bg-transparent dark:border-gray-700">
-                <CiExport className="text-[18px] dark:text-white text-gray-800" />
-              </div>
             </div>
-          </div>
+          )}
         </div>
-        <div className="w-full mt-6">
-          <h4 className="dark:text-gray-400 text-gray-800 mt-2 font-medium text-[12px]">
-            Credited Account
-          </h4>
-          <div className="mt-4 w-full border border-gray-300 dark:bg-transparent dark:border-gray-700 rounded-xl p-4">
-            <div className="w-full  flex justify-between items-start">
-              <div className="flex gap-2 items-center">
-                <div
-                  className={`w-[20px] h-[20px] p-1 flex justify-center items-center rounded-full  ${
-                    selectedBankDetails.is_default
-                      ? "border-[#5E91FF]  "
-                      : "bg-transparent border-[#505050]"
-                  } border `}
-                >
-                  <div
-                    className={`w-full h-full rounded-full  ${
-                      selectedBankDetails.is_default
-                        ? " bg-[#5E91FF] "
-                        : "bg-transparent "
-                    } `}
-                  />
-                </div>
-                {allBanks?.data
-                  .filter(
-                    (banki: any) => banki.code === selectedBankDetails.bank_code
-                  )
-                  .map((bankk: any, index: any) => (
-                    <h4
-                      key={index}
-                      className="dark:text-gray-50 text-gray-800  font-medium text-[12px]"
-                    >
-                      {bankk.name}
-                    </h4>
-                  ))}
-              </div>
-              <div className="">
-                <h4 className="dark:text-gray-400 text-gray-800 uppercase text-right font-medium text-[12px]">
-                  {selectedBankDetails.account_name}
-                </h4>
-                <h4 className="dark:text-gray-400 text-gray-800 mt-2 text-right  font-medium text-[12px]">
-                  {selectedBankDetails.account_number}
-                </h4>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="px-6 py-4 bg-[#DD900D] rounded-xl mt-6">
-          <h4 className="text-white text-[14px]">Note</h4>
-          <p className="text-gray-50 text-[12px] mt-2">
-            Please ensure to send only Bitcoin ({coin}) to this address or you
-            may lose your funds.
-          </p>
-        </div>
-        <button
+
+        {/* <button
           disabled={!network}
           onClick={() => {
             setSellAssetModal(false);
@@ -217,7 +313,7 @@ const SellAsset = ({
           }  flex justify-center items-center  font-semibold`}
         >
           Proceed
-        </button>
+        </button> */}
       </div>
     </div>
   );

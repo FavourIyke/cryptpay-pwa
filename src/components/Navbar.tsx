@@ -20,7 +20,7 @@ const Navbar = () => {
   };
 
   const { data: notificationsData } = useQuery({
-    queryKey: ["unreadNotifications", token],
+    queryKey: ["get-unreadNotifications", token],
     queryFn: fetchUnreadNotifications,
     enabled: !!token,
   });

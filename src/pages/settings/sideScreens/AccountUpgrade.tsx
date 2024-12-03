@@ -11,6 +11,9 @@ import { API } from "../../../constants/api";
 import { errorMessage } from "../../../utils/errorMessage";
 import useAuthAxios from "../../../utils/baseAxios";
 import KYCmodal from "./kyc2/KYCmodal";
+import GovernmentID from "./kyc2/GovernmentID";
+import HouseAddy from "./kyc2/HouseAddy";
+import Kyc2success from "./kyc2/Kyc2success";
 
 const AccountUpgrade = ({
   setSidePage,
@@ -23,6 +26,12 @@ const AccountUpgrade = ({
   const axiosInstance = useAuthAxios();
   const [levels, setLevels] = useState<number>(1);
   const [tier, setTier] = useState<number>(0);
+  const [openGovId, setOpenGovId] = useState<boolean>(false);
+  const [openPOAId, setOpenPOAId] = useState<boolean>(false);
+  const [openSuccess, setOpenSuccess] = useState<boolean>(false);
+  const [idNumber, setIdNumber] = useState<string>("");
+  const [base64Image, setBase64Image] = useState<string | null>(null);
+  const [idType, setIdType] = useState<number>();
 
   const getKycStatus = async () => {
     const response = await axiosInstance.get(API.checkKycStatus);
@@ -208,7 +217,7 @@ const AccountUpgrade = ({
               <div
                 onClick={() => {
                   if (level === "100") {
-                    setTier(2);
+                    setTier(1);
                   }
                 }}
                 className="w-full    relative  "
@@ -416,8 +425,9 @@ const AccountUpgrade = ({
                 onClick={() => {
                   if (level === "201") {
                     setTier(2);
-                    setOpenKyc2(true);
-                  } else if (level === "202") {
+                    setOpenPOAId(true);
+                  } else if (level === "100") {
+                    setOpenGovId(true);
                   }
                 }}
                 className={
@@ -439,6 +449,37 @@ const AccountUpgrade = ({
         </div>
       </div>
       {openKyc2 && <KYCmodal setOpenKyc2={setOpenKyc2} tier={tier} />}
+      {openGovId && (
+        <GovernmentID
+          setOpenGovId={setOpenGovId}
+          setOpenSuccess={setOpenSuccess}
+          idNumber={idNumber}
+          setIdNumber={setIdNumber}
+          base64Image={base64Image}
+          setBase64Image={setBase64Image}
+          setOpenPOAId={setOpenPOAId}
+          tier={tier}
+          idType={idType}
+          setIdType={setIdType}
+        />
+      )}
+      {openPOAId && (
+        <HouseAddy
+          idNumber={idNumber}
+          base64Image={base64Image}
+          setOpenPOAId={setOpenPOAId}
+          setOpenSuccess={setOpenSuccess}
+          setOpenGovId={setOpenGovId}
+          level={level}
+          idType={idType}
+        />
+      )}
+      {openSuccess && (
+        <Kyc2success
+          setOpenSuccess={setOpenSuccess}
+          setOpenKyc2={setOpenKyc2}
+        />
+      )}
     </div>
   );
 };

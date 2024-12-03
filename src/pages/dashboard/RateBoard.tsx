@@ -15,6 +15,7 @@ const RateBoard = ({
   setNetwork,
   setSelectBankModal,
   setBuyCoinModal,
+  setCoinDeets,
 }: any) => {
   const axiosInstance = useAuthAxios();
   const getCoins = async () => {
@@ -57,6 +58,7 @@ const RateBoard = ({
             onClick={() => {
               setCoin(coin.symbol);
               setNetworks(coin.networks);
+              setCoinDeets(coin);
 
               if (sellRateFlow) {
                 if (coin.networks.length === 1) {

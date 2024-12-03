@@ -15,7 +15,7 @@ const SettingsPage = () => {
   const [openKyc2, setOpenKyc2] = useState<boolean>(false);
 
   const setScreenn = location.state?.setScreen;
-  const showKyc2 = location.state?.showKyc2;
+  const setSureScreenn = location.state?.sureScreen;
 
   useEffect(() => {
     if (setScreenn) {
@@ -24,13 +24,12 @@ const SettingsPage = () => {
     }
   }, [setScreenn]);
   useEffect(() => {
-    if (showKyc2) {
-      setOpenKyc2(true);
-
+    if (setSureScreenn) {
+      setScreen(setSureScreenn);
       // Clear location.state to prevent re-triggering on refresh
       navigate("/settings", { replace: true, state: {} });
     }
-  }, [showKyc2, navigate]);
+  }, [navigate, setSureScreenn]);
   return (
     <div
       className={` w-full font-sora h-screen overflow-auto pb-16  bg-white dark:bg-primary_dark `}

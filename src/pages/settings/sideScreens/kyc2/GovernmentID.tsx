@@ -1,5 +1,5 @@
-import { useMutation } from "@tanstack/react-query";
-import React, { useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { GoTrash } from "react-icons/go";
 import { IoClose } from "react-icons/io5";
@@ -7,7 +7,6 @@ import { SlArrowLeft } from "react-icons/sl";
 import { API } from "../../../../constants/api";
 import { errorMessage } from "../../../../utils/errorMessage";
 import useAuthAxios from "../../../../utils/baseAxios";
-import { useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const GovernmentID = ({
@@ -19,6 +18,8 @@ const GovernmentID = ({
   setBase64Image,
   tier,
   setOpenPOAId,
+  setIdType,
+  idType,
 }: any) => {
   const [image, setImage] = useState<File | null>(null);
   const [openImage, setOpenImage] = useState<boolean>(false);
@@ -37,6 +38,23 @@ const GovernmentID = ({
       reader.readAsDataURL(selectedFile); // Convert image to Base64
     }
   };
+
+  const getIdTypes = async () => {
+    const response = await axiosInstance.get(API.getIdTypes);
+    return response.data;
+  };
+
+  const { data: allTypes, error: error1 } = useQuery({
+    queryKey: ["get-all-types"],
+    queryFn: getIdTypes,
+    retry: 1,
+  });
+  useEffect(() => {
+    if (error1) {
+      const newError = error1 as any;
+      toast.error(errorMessage(newError?.message || newError?.data?.message));
+    }
+  }, [error1]);
 
   const handlePostKyc2 = async (data: any) => {
     const response = await axiosInstance.post(API.verifyKyc2, data);
@@ -58,9 +76,14 @@ const GovernmentID = ({
       );
     },
   });
+  useEffect(() => {
+    if (allTypes?.data?.length > 0 && !idType) {
+      setIdType(allTypes.data[0].id);
+    }
+  }, [allTypes]);
 
   return (
-    <div className="fixed inset-0  flex font-sora justify-start items-start pt-12 bg-white dark:bg-primary_dark   backdrop-blur-sm">
+    <div className="fixed inset-0  flex font-sora justify-start items-start pt-12 overflow-auto pb-16 bg-white dark:bg-primary_dark   backdrop-blur-sm">
       <div
         className={` w-11/12 mds:w-8/12 md:7/12 border dark:border-[#303030] border-[#E6E6E6]  rounded-xl mx-auto p-6 dark:bg-[#1F1F1F]   lgss:w-2/5 xxl:w-1/3 `}
       >
@@ -72,7 +95,7 @@ const GovernmentID = ({
         >
           <SlArrowLeft className="dark:text-[#D8D8D8] text-gray-800 text-[12px]" />
           <h4 className="dark:text-[#D8D8D8] text-gray-800 text-[14px]">
-            Back
+            Back {idType}
           </h4>
         </button>
         <div className="w-full mt-8">
@@ -95,6 +118,25 @@ const GovernmentID = ({
               placeholder="Enter ID Number"
               className="w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
             />
+          </div>
+          <div className="w-full mt-6">
+            <label className="text-gray-800 text-[14px]  dark:text-white">
+              ID Type
+            </label>
+            <select
+              value={idType}
+              onChange={(e) => setIdType(e.target.value)}
+              className="w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+            >
+              <option value="" disabled>
+                Select ID type
+              </option>
+              {allTypes?.data?.map((type: any, index: number) => (
+                <option key={index} value={type?.id}>
+                  {type?.name}
+                </option>
+              ))}
+            </select>
           </div>
           <h4 className="text-gray-800 text-[14px]  dark:text-white mt-6">
             Upload Document
@@ -174,6 +216,7 @@ const GovernmentID = ({
             const data = {
               government_id: base64Image,
               id_number: idNumber,
+              id_type: idType,
             };
             if (tier === 1) {
               completeKyc.mutate(data);
