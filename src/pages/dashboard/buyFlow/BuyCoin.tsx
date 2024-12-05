@@ -24,7 +24,17 @@ const BuyCoin = ({
   setNairaAmount,
 }: any) => {
   const [isNairaToCoin, setIsNairaToCoin] = useState(true);
-  const { userDetails } = useUser();
+  const { userDetails, displayColor } = useUser();
+  //  const { displayColor } = useUser();
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
   const rate = GetRates("USDT", "buy");
   const axiosInstance = useAuthAxios();
 
@@ -230,10 +240,13 @@ const BuyCoin = ({
         <button
           disabled={!coinAmount}
           onClick={handleProceed}
+          style={{
+            backgroundColor: !coinAmount ? "" : bgColor,
+          }}
           className={`w-full h-[52px] rounded-[18px] mt-8 ${
             !coinAmount
               ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
-              : "bg-text_blue text-white"
+              : `${bgColor ? `bg-[${bgColor}]` : "bg-text_blue"} text-white`
           }  flex justify-center items-center  font-semibold`}
         >
           Next

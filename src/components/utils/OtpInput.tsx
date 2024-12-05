@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../../context/user-context";
 import OtpInput from "react18-input-otp";
 
@@ -17,7 +17,7 @@ const OtpInputField: React.FC<OtpInputFieldProps> = ({
   input = 6, // default to 6 if input is not provided
   shouldAutoFocus = true,
 }) => {
-  const { theme } = useUser();
+  const { theme, displayColor } = useUser();
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
   const getThemeBasedImage = () => {
     if (theme === "dark") {
@@ -43,6 +43,15 @@ const OtpInputField: React.FC<OtpInputFieldProps> = ({
       console.error("Failed to read clipboard contents: ", err);
     }
   };
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
 
   const darkThemeStyles = {
     inputStyle: {
@@ -63,7 +72,7 @@ const OtpInputField: React.FC<OtpInputFieldProps> = ({
       type: "password", // Added to mask input characters
     },
     focusStyle: {
-      borderColor: "#3A66FF",
+      borderColor: bgColor ? bgColor : "#3A66FF",
     },
   };
 
@@ -86,7 +95,7 @@ const OtpInputField: React.FC<OtpInputFieldProps> = ({
       type: "password", // Added to mask input characters
     },
     focusStyle: {
-      borderColor: "#3A66FF",
+      borderColor: bgColor ? bgColor : "#3A66FF",
     },
   };
 

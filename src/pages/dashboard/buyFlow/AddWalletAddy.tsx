@@ -27,9 +27,18 @@ const AddWalletAddy = ({
   setBuyCoinPin,
 }: any) => {
   const [walletAddyC, setWalletAddyC] = useState<string>("");
-  const { userPreferences } = useUser();
+  const { userPreferences, displayColor } = useUser();
   const [scan, setScan] = useState(false);
   const [scanC, setScanC] = useState(false);
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
 
   const handleScan = (data: any) => {
     if (data) {
@@ -266,11 +275,17 @@ const AddWalletAddy = ({
         </div>
         <button
           disabled={!walletAddy || !walletAddyC || walletAddy !== walletAddyC}
+          style={{
+            backgroundColor:
+              !walletAddy || !walletAddyC || walletAddy !== walletAddyC
+                ? ""
+                : bgColor,
+          }}
           onClick={handleNext}
           className={`w-full h-[52px] rounded-[18px] mt-8 ${
             !walletAddy || !walletAddyC || walletAddy !== walletAddyC
               ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
-              : "bg-text_blue text-white"
+              : `${bgColor ? `bg-[${bgColor}]` : "bg-text_blue"} text-white`
           }  flex justify-center items-center  font-semibold`}
         >
           {completeBuy?.isPending ? (

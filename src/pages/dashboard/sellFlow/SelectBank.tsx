@@ -7,6 +7,7 @@ import { API } from "../../../constants/api";
 import useAuthAxios from "../../../utils/baseAxios";
 import { errorMessage } from "../../../utils/errorMessage";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useUser } from "../../../context/user-context";
 
 const SelectBank = ({
   setSelectBankModal,
@@ -22,6 +23,16 @@ const SelectBank = ({
   const [loadingIndex, setLoadingIndex] = useState<number | null>(null);
 
   const [bankId, setBankId] = useState<number>();
+  const { displayColor } = useUser();
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
   const getUserBanks = async () => {
     const response = await axiosInstance.get(API.userBanks);
     return response.data.data;
@@ -88,6 +99,23 @@ const SelectBank = ({
       setSelectedBankDetails(filteredBanks[0]);
     }
   }, [userBanks]);
+
+  const getKycStatus = async () => {
+    const response = await axiosInstance.get(API.checkKycStatus);
+    return response.data;
+  };
+  const { data: kycStatus, error: error3 } = useQuery({
+    queryKey: ["kyc-status"],
+    queryFn: getKycStatus,
+    retry: 1,
+  });
+
+  useEffect(() => {
+    if (error3) {
+      const newError = error3 as any;
+      toast.error(errorMessage(newError?.message || newError?.data?.message));
+    }
+  }, [error3]);
 
   return (
     <div className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12     backdrop-blur-sm">
@@ -164,15 +192,29 @@ const SelectBank = ({
                     <ClipLoader color="#5E91FF" size={20} />
                   ) : (
                     <div
+                      style={{
+                        border: bank.is_default
+                          ? `1px solid ${bgColor}`
+                          : "1px solid #505050",
+                      }}
                       className={`w-[20px] h-[20px] p-1 flex justify-center items-center rounded-full  ${
                         bank.is_default
-                          ? "border-[#5E91FF]  "
+                          ? `${
+                              bgColor
+                                ? `border-[${bgColor}]`
+                                : "border-[#5E91FF] "
+                            }  `
                           : "bg-transparent border-[#505050]"
                       } border `}
                     >
                       <div
+                        style={{
+                          backgroundColor: bank.is_default ? bgColor : "",
+                        }}
                         className={`w-full h-full rounded-full  ${
-                          bank.is_default ? " bg-[#5E91FF] " : "bg-transparent "
+                          bank.is_default
+                            ? `${bgColor ? `bg-[${bgColor}]` : "bg-text_blue"}`
+                            : "bg-transparent "
                         } `}
                       />
                     </div>
@@ -202,26 +244,44 @@ const SelectBank = ({
         </div>
 
         <div className="w-full flex justify-between items-center gap-3 mt-12">
-          <button
-            onClick={() => {
-              setSelectBankModal(false);
-              setAddBankModal(true);
-            }}
-            className="w-1/2 mx-auto flex gap-3 items-center justify-center h-[48px] text-[14px] xs:text-[14px] font-medium rounded-xl text-[#3A66FF] border-text_blue border "
-          >
-            <IoAddOutline className="text-[24px] " />
-            <h4>Add Bank</h4>
-          </button>
+          {userBanks?.length >= 1 &&
+          (kycStatus?.data.kyc_level === "201" ||
+            kycStatus?.data.kyc_level === "202") ? (
+            <button
+              onClick={() => {
+                setSelectBankModal(false);
+                setAddBankModal(true);
+              }}
+              style={{
+                border: `1px solid ${bgColor}`,
+                color: `${bgColor}`,
+              }}
+              className={`w-full mx-auto flex gap-3 items-center justify-center h-[48px] text-[14px] xs:text-[14px] font-medium rounded-xl  ${
+                bgColor
+                  ? `border-[${bgColor}] text-[${bgColor}] `
+                  : "text-[#3A66FF] border-text_blue"
+              } border `}
+            >
+              <IoAddOutline className="text-[24px] " />
+              <h4>Add Bank</h4>
+            </button>
+          ) : null}
           <button
             disabled={userBanks?.length < 1 || !hasDefaultBank}
             onClick={() => {
               setSelectBankModal(false);
               setSellAssetModal(true);
             }}
+            style={{
+              backgroundColor:
+                userBanks?.length < 1 || !hasDefaultBank ? "" : bgColor,
+            }}
             className={
               userBanks?.length < 1 || !hasDefaultBank
-                ? "w-1/2 mx-auto flex  items-center justify-center h-[48px] text-[14px] font-medium rounded-xl bg-gray-400 text-gray-100 "
-                : "w-1/2 mx-auto flex  items-center justify-center h-[48px] text-[14px] font-medium rounded-xl bg-[#3A66FF] text-gray-100 "
+                ? "w-full mx-auto flex  items-center justify-center h-[48px] text-[14px] font-medium rounded-xl bg-gray-400 text-gray-100 "
+                : `w-full mx-auto flex  items-center justify-center h-[48px] text-[14px] font-medium rounded-xl ${
+                    bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+                  } text-gray-100 `
             }
           >
             <h4>Proceed</h4>

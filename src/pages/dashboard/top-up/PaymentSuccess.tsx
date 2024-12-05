@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { topupSuccess } from "../../../assets/images";
 import CopyToClipboard from "react-copy-to-clipboard";
@@ -15,7 +15,16 @@ const PaymentSuccess = ({
   setOpenWallet,
   setSelectCoinModal,
 }: any) => {
-  const { refetch1 } = useUser();
+  const { refetch1, displayColor } = useUser();
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
   const handleRefetch = () => {
     // Trigger the refetch function for user details
     refetch1();
@@ -109,11 +118,16 @@ const PaymentSuccess = ({
               Go to wallet
             </button>
             <button
+              style={{
+                backgroundColor: bgColor,
+              }}
               onClick={() => {
                 setOpenPSuccess(false);
                 setSelectCoinModal(true);
               }}
-              className={`w-1/2 h-[52px] rounded-[18px] bg-text_blue  text-white flex justify-center items-center  font-semibold`}
+              className={`w-1/2 h-[52px] rounded-[18px] ${
+                bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+              }  text-white flex justify-center items-center  font-semibold`}
             >
               Buy Crypto
             </button>

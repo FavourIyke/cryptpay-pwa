@@ -87,24 +87,15 @@ import { toast } from "react-hot-toast";
 
     return true;
   };
-  export  const validateSaveDetails = (username:string, fullname: string, ) => {
-    // check if password is empty
-     if (!username) {
-      toast.error("Kindly tell us your username");
-      return false;
-    }
-     if (!fullname) {
-      toast.error("Kindly tell us your full name");
-      return false;
-    }
-
-    return true;
-  };
 
 
   export const validateBvn = (bvnno: string,) => {
     if (!bvnno) {
       toast.error("Enter your BVN");
+      return false;
+    }
+    if (bvnno.length !== 11) {
+      toast.error("Invalid BVN");
       return false;
     }
    

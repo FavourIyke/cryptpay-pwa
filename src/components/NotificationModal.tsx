@@ -24,7 +24,7 @@ const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [loadingIndex, setLoadingIndex] = useState<number | null>(null);
-
+  const [notifications, setNotifications] = useState<any[]>([]);
   const handleButtonClick = () => {
     // Navigate to the settings route and set state to true
     if (pathname === "/dashboard") {
@@ -60,6 +60,7 @@ const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
     data,
     error: error1,
     isLoading,
+    refetch,
   } = useQuery({
     queryKey: ["get-notifications", page], // Unique key for this query
     queryFn: handleFetchN,
@@ -71,9 +72,8 @@ const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
       toast.error(errorMessage(newError?.message || newError?.data?.message));
     }
   }, [error1]);
-  const notifications = data?.data?.notifications || [];
+
   const totalPages = data?.data.last_page || 0;
-  // console.log(notifications);
 
   useEffect(() => {
     if (inView) {
@@ -82,6 +82,19 @@ const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
       }
     }
   }, [inView, totalPages]);
+
+  useEffect(() => {
+    if (data?.data?.notifications) {
+      const newNotifications = [...notifications, ...data.data.notifications];
+
+      // Remove duplicates by notification ID
+      const uniqueNotifications = Array.from(
+        new Map(newNotifications.map((notif) => [notif.id, notif])).values()
+      );
+
+      setNotifications(uniqueNotifications);
+    }
+  }, [data]);
 
   //Mark one as read
   const handleMarkRead = async () => {
@@ -97,7 +110,7 @@ const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
     onSuccess: (r: any) => {
       toast.success(r.message);
       setLoadingIndex(null);
-
+      refetch();
       queryClient.invalidateQueries({
         queryKey: ["get-notifications"],
       });
@@ -123,6 +136,7 @@ const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
     mutationFn: handleMarkAllRead,
     onSuccess: (r: any) => {
       toast.success(r.message);
+      refetch();
       setTimeout(() => {
         setIsNotified(false);
       }, 1000);
@@ -269,7 +283,7 @@ const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
   return (
     <div
       onClick={() => setIsNotified(false)}
-      className="fixed w-full inset-0 flex font-sora justify-end px-6 xs:px-10 items-start pt-[75px] bg-[#000000] dark:bg-opacity-60 bg-opacity-10 "
+      className="fixed w-full inset-0 flex font-sora z-50 justify-end px-6 xs:px-10 items-start pt-[75px] bg-[#000000] dark:bg-opacity-60 bg-opacity-10 "
     >
       <div
         onClick={(e) => {

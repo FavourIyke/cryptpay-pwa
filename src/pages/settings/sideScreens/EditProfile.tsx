@@ -1,22 +1,26 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Webcam from "react-webcam";
 import { SlArrowLeft } from "react-icons/sl";
 import { avatar } from "../../../assets/images";
-import { FaCamera } from "react-icons/fa6";
-import { validateSaveDetails } from "../../../utils/validations";
 import { useUser } from "../../../context/user-context";
 import { convertDateFormat } from "../../../utils/formatDate";
+import useAuthAxios from "../../../utils/baseAxios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { API } from "../../../constants/api";
+import { errorMessage } from "../../../utils/errorMessage";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const EditProfile = ({ setSidePage, setScreen }: any) => {
-  const { userDetails } = useUser();
+  const { userDetails, refetch1, displayColor } = useUser();
+  const axiosInstance = useAuthAxios();
 
-  const [fullName, setFullName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [showWebcam, setShowWebcam] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const webcamRef = useRef<Webcam>(null);
-
+  const queryClient = useQueryClient();
   const handleImageChoice = () => {
     const userChoice = window.confirm("Would you like to take a selfie?");
     if (userChoice) {
@@ -25,7 +29,16 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
       document.getElementById("fileInput")?.click();
     }
   };
-  console.log(userDetails);
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
+
   const handleCapture = () => {
     const image = webcamRef.current?.getScreenshot();
     if (image) {
@@ -44,11 +57,95 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
       fileReader.readAsDataURL(event.target.files[0]);
     }
   };
+  const handleUUsername = async (data: any) => {
+    const response = await axiosInstance.post(API.updateUsername, data);
+    return response.data;
+  };
+  const completeUUsername = useMutation({
+    mutationFn: handleUUsername,
+    onSuccess: (r) => {
+      toast.success(r.message);
+      queryClient.invalidateQueries({
+        queryKey: ["userDetails"],
+      });
+      refetch1();
+      setTimeout(() => {
+        setUsername("");
+      }, 2000);
+    },
+    onError: (error: any) => {
+      toast.error(
+        errorMessage((error?.data as any)?.message || String(error?.data))
+      );
+    },
+  });
+  const handleUPhone = async (data: any) => {
+    const response = await axiosInstance.put(API.updatePhoneNumber, data);
+    return response.data;
+  };
+  const completeUPhone = useMutation({
+    mutationFn: handleUPhone,
+    onSuccess: (r) => {
+      toast.success(r.message);
+      queryClient.invalidateQueries({
+        queryKey: ["userDetails"],
+      });
+      refetch1();
+      setTimeout(() => {
+        setPhone("");
+      }, 2000);
+    },
+    onError: (error: any) => {
+      toast.error(
+        errorMessage((error?.data as any)?.message || String(error?.data))
+      );
+    },
+  });
   const handleSave = () => {
-    if (!validateSaveDetails(username, fullName)) {
+    const updatedFields: { username?: string; phone?: string } = {};
+
+    // Check if the username has been changed and validate its length
+    if (username && username !== userDetails?.data?.profile?.username) {
+      if (username.length < 3) {
+        toast.error("Username must be at least 3 characters long.");
+        return;
+      }
+      updatedFields.username = username;
+    }
+
+    // Check if the phone number has been changed and validate its length
+    if (phone && phone !== userDetails?.data?.profile?.phone_number) {
+      if (phone.length < 11) {
+        toast.error("Phone number must be at least 11 digits.");
+        return;
+      }
+      updatedFields.phone = phone.slice(-10);
+    }
+
+    // If no fields are updated, return early
+    if (Object.keys(updatedFields).length === 0) {
+      toast.error("No changes detected.");
       return;
     }
+
+    // Make API calls based on updated fields
+    if (updatedFields.username) {
+      const data = {
+        username: updatedFields.username,
+      };
+      console.log(data);
+      completeUUsername.mutate(data);
+    }
+
+    if (updatedFields.phone) {
+      const data = {
+        phone_number: updatedFields.phone,
+      };
+      // console.log(data);
+      completeUPhone.mutate(data);
+    }
   };
+
   return (
     <div className="w-full font-sora">
       <button
@@ -127,8 +224,8 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
             Full Name
           </label>
           <div className="w-full  mt-2  h-[52px] flex justify-start items-center dark:text-gray-500 text-gray-600 outline-none text-[14px] bg-[#D2D2D2] dark:bg-[#2B2B2B] bg-transparent px-4  rounded-xl ">
-            {userDetails?.data?.profile.first_name}{" "}
-            {userDetails?.data?.profile.last_name}
+            {userDetails?.data?.profile.first_name ?? "---"}{" "}
+            {userDetails?.data?.profile.last_name ?? "---"}
           </div>
         </div>
         <div className="w-full mt-6 ">
@@ -164,20 +261,38 @@ const EditProfile = ({ setSidePage, setScreen }: any) => {
             Date of Birth
           </label>
           <div className="w-full  mt-2  h-[52px] flex justify-start items-center dark:text-gray-500 text-gray-600 outline-none text-[14px] bg-[#D2D2D2] dark:bg-[#2B2B2B] bg-transparent px-4  rounded-xl ">
-            {convertDateFormat(userDetails?.data?.profile.birthday)}
+            {userDetails?.data?.profile.birthday
+              ? convertDateFormat(userDetails?.data?.profile.birthday)
+              : "---"}
           </div>
         </div>
 
         <button
           onClick={handleSave}
-          disabled={!fullName || !username}
+          style={{
+            backgroundColor:
+              (!username ||
+                username === userDetails?.data?.profile?.username) &&
+              (!phone || phone === userDetails?.data?.profile?.phone_number)
+                ? ""
+                : bgColor,
+          }}
+          disabled={
+            (!username || username === userDetails?.data?.profile?.username) &&
+            (!phone || phone === userDetails?.data?.profile?.phone_number)
+          }
           className={`w-full h-[52px] rounded-[18px] mt-20 lgss:mt-10 ${
-            !fullName || !username
+            (!username || username === userDetails?.data?.profile?.username) &&
+            (!phone || phone === userDetails?.data?.profile?.phone_number)
               ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
-              : "bg-text_blue text-white"
+              : `${bgColor ? `bg-[${bgColor}]` : "bg-text_blue"} text-white`
           }  flex justify-center items-center  font-semibold`}
         >
-          Save
+          {completeUPhone.isPending || completeUUsername?.isPending ? (
+            <ClipLoader color="#FFFFFF" size={30} />
+          ) : (
+            "Save"
+          )}
         </button>
       </div>
     </div>

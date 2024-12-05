@@ -11,6 +11,7 @@ import { useUser } from "../../../context/user-context";
 import { formatAmount } from "../../../utils/formatDate";
 import PaymentCancelled from "./PaymentCancelled";
 import WalletTransactins from "./WalletTransactins";
+import WalletDetails from "./WalletDetails";
 
 const Wallet = ({
   setOpenWallet,
@@ -32,6 +33,8 @@ const Wallet = ({
 }: any) => {
   const { userDetails, refetch1 } = useUser();
   const [viewBalance, setViewBalance] = useState<boolean>(false);
+  const [viewDetails, setViewDetails] = useState<boolean>(false);
+  const [clickedPayout, setClickedPayout] = useState<any[]>([]);
 
   const fiatBalance = userDetails?.data?.profile?.fiat_balance;
   const handleRefetch = () => {
@@ -47,7 +50,11 @@ const Wallet = ({
         <div className="w-full flex justify-start items-center">
           <button
             onClick={() => {
-              setOpenWallet(false);
+              if (viewDetails) {
+                setViewDetails(false);
+              } else {
+                setOpenWallet(false);
+              }
             }}
             className="flex items-center gap-2 "
           >
@@ -57,67 +64,78 @@ const Wallet = ({
             </h4>
           </button>
         </div>
-        <div className="w-full mt-6 bg-[#F4F4F4] dark:bg-[#1C1C1C] rounded-xl p-4 flex justify-between items-center">
-          <div className="">
-            <div className="justify-start items-center flex gap-2">
-              <h4 className="text-[10px] uppercase text-gray-900 dark:text-gray-50 tracking-wider">
-                Available balance
-              </h4>
-              {!viewBalance ? (
-                <AiOutlineEyeInvisible
-                  onClick={() => setViewBalance((prev) => !prev)}
-                  className="text-[15px]  text-gray-900 dark:text-gray-50"
-                />
-              ) : (
-                <AiOutlineEye
-                  onClick={() => setViewBalance((prev) => !prev)}
-                  className="text-[15px]  text-gray-900 dark:text-gray-50"
-                />
-              )}
-            </div>
-            <div className="flex justify-start mt-2 gap-2 items-center">
-              <h4 className="font-semibold text-[20px] text-gray-900 dark:text-gray-100">
-                {formatAmount(fiatBalance)}
-              </h4>
-              <h4 className=" text-[10px] text-gray-900 dark:text-gray-100">
-                NGN
-              </h4>
-            </div>
-          </div>
+        {viewDetails ? (
+          <WalletDetails clickedPayout={clickedPayout} />
+        ) : (
+          <>
+            <div className="w-full mt-6 bg-[#F4F4F4] dark:bg-[#1C1C1C] rounded-xl p-4 flex justify-between items-center">
+              <div className="">
+                <div className="justify-start items-center flex gap-2">
+                  <h4 className="text-[10px] uppercase text-gray-900 dark:text-gray-50 tracking-wider">
+                    Available balance
+                  </h4>
+                  {!viewBalance ? (
+                    <AiOutlineEyeInvisible
+                      onClick={() => setViewBalance((prev) => !prev)}
+                      className="text-[15px]  text-gray-900 dark:text-gray-50"
+                    />
+                  ) : (
+                    <AiOutlineEye
+                      onClick={() => setViewBalance((prev) => !prev)}
+                      className="text-[15px]  text-gray-900 dark:text-gray-50"
+                    />
+                  )}
+                </div>
+                <div className="flex justify-start mt-2 gap-2 items-center">
+                  <h4 className="font-semibold text-[20px] text-gray-900 dark:text-gray-100">
+                    {formatAmount(fiatBalance)}
+                  </h4>
+                  <h4 className=" text-[10px] text-gray-900 dark:text-gray-100">
+                    NGN
+                  </h4>
+                </div>
+              </div>
 
-          <div
-            onClick={handleRefetch}
-            className="flex justify-center items-center cursor-pointer rounded-full h-[32px] w-[32px] bg-[#83BF4F] font-bold text-white text-[16px]"
-          >
-            ₦
-          </div>
-        </div>
-        <div className="w-full mt-6  gap-4 flex justify-center items-center">
-          <div className="w-1/2 flex p-4 border border-gray-200 dark:border-[#2F2F2F] rounded-xl flex-col items-center justify-center gap-2">
-            <button
-              onClick={() => {
-                setOpenWallet(false);
-                setBuyCoinModal(true);
-              }}
-              className="w-[45px] h-[45px] rounded-full bg-[#2F2F2F] flex justify-center items-center"
-            >
-              <MdAdd className="text-[24px] text-white" />
-            </button>
-            <h4 className="text-white mt-1 text-[14px] text-center">
-              Buy Crypto
-            </h4>
-          </div>
-          <div className="w-1/2 flex p-4 border border-gray-200 dark:border-[#2F2F2F] rounded-xl flex-col justify-center gap-2 items-center">
-            <button
-              onClick={() => setOpenNotice(true)}
-              className="w-[45px] h-[45px] rounded-full bg-[#2F2F2F] flex justify-center items-center"
-            >
-              <BsArrowDown className="text-[24px] text-white" />
-            </button>
-            <h4 className="text-white mt-1 text-[14px] text-center">Deposit</h4>
-          </div>
-        </div>
-        <WalletTransactins />
+              <div
+                onClick={handleRefetch}
+                className="flex justify-center items-center cursor-pointer rounded-full h-[32px] w-[32px] bg-[#83BF4F] font-bold text-white text-[16px]"
+              >
+                ₦
+              </div>
+            </div>
+            <div className="w-full mt-6  gap-4 flex justify-center items-center">
+              <div className="w-1/2 flex p-4 border border-gray-200 dark:border-[#2F2F2F] rounded-xl flex-col items-center justify-center gap-2">
+                <button
+                  onClick={() => {
+                    setOpenWallet(false);
+                    setBuyCoinModal(true);
+                  }}
+                  className="w-[45px] h-[45px] rounded-full bg-[#2F2F2F] flex justify-center items-center"
+                >
+                  <MdAdd className="text-[24px] text-white" />
+                </button>
+                <h4 className="text-white mt-1 text-[14px] text-center">
+                  Buy Crypto
+                </h4>
+              </div>
+              <div className="w-1/2 flex p-4 border border-gray-200 dark:border-[#2F2F2F] rounded-xl flex-col justify-center gap-2 items-center">
+                <button
+                  onClick={() => setOpenNotice(true)}
+                  className="w-[45px] h-[45px] rounded-full bg-[#2F2F2F] flex justify-center items-center"
+                >
+                  <BsArrowDown className="text-[24px] text-white" />
+                </button>
+                <h4 className="text-white mt-1 text-[14px] text-center">
+                  Deposit
+                </h4>
+              </div>
+            </div>
+            <WalletTransactins
+              setViewDetails={setViewDetails}
+              setClickedPayout={setClickedPayout}
+            />
+          </>
+        )}
       </div>
       {openNotice && (
         <NoticeModal

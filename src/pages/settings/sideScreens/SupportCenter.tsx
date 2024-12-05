@@ -41,7 +41,7 @@ const SupportCenter = ({ setSidePage, setScreen, setSupportMode }: any) => {
           </div>
           <SlArrowRight className="text-gray-400 dark:text-gray-200 text-[15px]" />
         </button>
-        <button
+        {/* <button
           onClick={() => {
             setSupportMode(3);
           }}
@@ -61,7 +61,7 @@ const SupportCenter = ({ setSidePage, setScreen, setSupportMode }: any) => {
             </div>
           </div>
           <SlArrowRight className="text-gray-400 dark:text-gray-200 text-[15px]" />
-        </button>
+        </button> */}
         <button
           onClick={() => {
             setSupportMode(4);

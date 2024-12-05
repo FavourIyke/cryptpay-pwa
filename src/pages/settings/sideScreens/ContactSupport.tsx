@@ -39,7 +39,7 @@ const ContactSupport = ({ setSupportMode }: any) => {
                   Phone Number
                 </h4>
                 <h4 className="text-gray-800  dark:text-gray-50 text-left text-[14px]">
-                  +2348016880235
+                  +2349160805210
                 </h4>
               </div>
             </div>
@@ -59,13 +59,13 @@ const ContactSupport = ({ setSupportMode }: any) => {
                   rel="noreferrer"
                   className="text-gray-800  underline dark:text-gray-50 text-left text-[14px]"
                 >
-                  help.cryptpay.com
+                  support@cryptpay.co
                 </a>
               </div>
             </div>
           </button>
         </div>
-        <h4 className="text-gray-800 dark:text-gray-100 mt-4 lgss:mt-8 font-semibold text-[17px]">
+        {/* <h4 className="text-gray-800 dark:text-gray-100 mt-4 lgss:mt-8 font-semibold text-[17px]">
           Quick Contact
         </h4>
         <div className="w-full mt-6">
@@ -113,7 +113,7 @@ const ContactSupport = ({ setSupportMode }: any) => {
         </div>
         <button className="w-full bg-text_blue mt-10 h-[44px] rounded-xl text-[14px] font-semibold text-white">
           Send message
-        </button>
+        </button> */}
       </div>
     </div>
   );

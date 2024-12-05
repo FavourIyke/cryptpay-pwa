@@ -1,4 +1,5 @@
 export const BASE_URL = process.env.REACT_APP_API_URL;
+ export const APP_URL = BASE_URL?.includes("staging") ? "https://staging.app.cryptpay.co" : "https://app.cryptpay.co";
 
 export const API = {
   // auth
@@ -25,6 +26,7 @@ export const API = {
   verifyKyc2: `${BASE_URL}/api/kyc/level-2/submit`,
   getIdTypes: `${BASE_URL}/api/kyc/level-2/supported-id-types`,
   getTransactions: `${BASE_URL}/api/transactions?filter=deposit,payout`,
+  getAllTransactions: `${BASE_URL}/api/transactions`,
   getWalletTransactions: `${BASE_URL}/api/transactions?filter=buy,topup`,
   getSingleTransaction: (id:string) =>  `${BASE_URL}/api/transactions/${id}`,
   getSummary: `${BASE_URL}/api/total-payouts`,
@@ -39,5 +41,11 @@ export const API = {
   markOneAsRead: (id:string) => `${BASE_URL}/api/notifications/${id}/read`,
   getWalletAddress: (coin:string, network:string) => `${BASE_URL}/api/wallet-address?crypto_type=${coin}&network=${network}`,
   setDefaultBank: (bankId:any, ) => `${BASE_URL}/api/banks/${bankId}/set-default`,
-  deleteBank: (bankId:any, ) => `${BASE_URL}/api/bank/delete/${bankId}`
+  deleteBank: (bankId:any, ) => `${BASE_URL}/api/bank/delete/${bankId}`,
+  updatePhoneNumber: `${BASE_URL}/api/user/phone-number`,
+  updateUsername: `${BASE_URL}/api/user/update-username`,
+  getReferrals: `${BASE_URL}/api/user/referrals`,
+  getLeaderboard: `${BASE_URL}/api/leaderboard`,
+
+
 };

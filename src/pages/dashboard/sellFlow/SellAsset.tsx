@@ -16,6 +16,7 @@ import useAuthAxios from "../../../utils/baseAxios";
 import { errorMessage } from "../../../utils/errorMessage";
 import ClipLoader from "react-spinners/ClipLoader";
 import ChangeCoin from "./ChangeCoin";
+import { useUser } from "../../../context/user-context";
 
 const SellAsset = ({
   setSellAssetModal,
@@ -34,6 +35,16 @@ const SellAsset = ({
   const [showGenerateButton, setShowGenerateButton] = useState<boolean>(false);
   const [showDD, setShowDD] = useState<boolean>(false);
   const queryClient = useQueryClient();
+  const { displayColor } = useUser();
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
   const getWalletAddy = async () => {
     const response = await axiosInstance.get(
       API.getWalletAddress(coinDeets?.symbol.toLowerCase(), network)
@@ -222,18 +233,28 @@ const SellAsset = ({
                   >
                     <div className="w-full cursor-pointer flex flex-col justify-center items-center">
                       <h4
+                        style={{
+                          color: network !== networki?.code ? "" : bgColor,
+                        }}
                         className={
                           network === networki?.code
-                            ? "text-[#5995FF] text-[12px] font-semibold "
+                            ? `${
+                                bgColor ? `text-[${bgColor}]` : "bg-text_blue"
+                              } text-[12px] font-semibold `
                             : "text-gray-800 text-[12px] font-semibold dark:text-gray-50"
                         }
                       >
                         {transformedName}
                       </h4>
                       <h4
+                        style={{
+                          color: network !== networki?.code ? "" : bgColor,
+                        }}
                         className={
                           network === networki?.code
-                            ? "text-[#5995FF] text-[12px] "
+                            ? `${
+                                bgColor ? `text-[${bgColor}]` : "bg-text_blue"
+                              } text-[12px] `
                             : "text-gray-400 text-[12px] dark:text-gray-50"
                         }
                       >
@@ -266,12 +287,16 @@ const SellAsset = ({
           </div>
           {showGenerateButton ? (
             <button
+              style={{
+                backgroundColor:
+                  !network || completeGetAddy.isPending ? "" : bgColor,
+              }}
               disabled={!network || completeGetAddy.isPending}
               onClick={handleGenerateClick}
               className={`w-full h-[52px] rounded-[18px] mt-4 ${
                 !network
                   ? "text-gray-400 bg-gray-600"
-                  : "bg-text_blue text-white"
+                  : `${bgColor ? `bg-[${bgColor}]` : "bg-text_blue"} text-white`
               }  flex justify-center items-center  font-semibold`}
             >
               {completeGetAddy.isPending ? (
@@ -291,7 +316,14 @@ const SellAsset = ({
                   toast.success(`${coinDeets?.symbol} wallet address copied`);
                 }}
               >
-                <button className="w-1/2 flex justify-center gap-2 h-[58px] text-[14px] font-semibold rounded-xl text-white bg-text_blue items-center ">
+                <button
+                  style={{
+                    backgroundColor: bgColor,
+                  }}
+                  className={`w-1/2 flex justify-center gap-2 h-[58px] text-[14px] font-semibold rounded-xl text-white ${
+                    bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+                  } items-center `}
+                >
                   <FiCopy className="text-[20px]" /> Copy Address
                 </button>
               </CopyToClipboard>

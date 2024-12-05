@@ -8,7 +8,7 @@ import { errorMessage } from "../../../utils/errorMessage";
 import { noWalletTxn } from "../../../assets/images";
 import { format, isToday, isYesterday, parseISO } from "date-fns";
 
-const WalletTransactins = () => {
+const WalletTransactins = ({ setViewDetails, setClickedPayout }: any) => {
   const axiosInstance = useAuthAxios();
   const getPayouts = async () => {
     const response = await axiosInstance.get(API.getWalletTransactions);
@@ -71,9 +71,10 @@ const WalletTransactins = () => {
                 <div className="cursor-pointer w-full">
                   <TransactionCard
                     payouts={payout}
-                    onClick1={() => {}}
-                    onClick2={() => {}}
-                    kind={payout?.transaction_type === "topup" ? false : true}
+                    onClick1={() => {
+                      setViewDetails(true);
+                      setClickedPayout(payout);
+                    }}
                   />
                 </div>
               </div>

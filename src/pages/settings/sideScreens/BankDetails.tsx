@@ -117,6 +117,7 @@ const BankDetails = ({ setSidePage, setScreen, setBankMode }: any) => {
       toast.error(errorMessage(newError?.message || newError?.data?.message));
     }
   }, [error3]);
+
   return (
     <div className="w-full font-sora">
       <button
@@ -252,19 +253,39 @@ const BankDetails = ({ setSidePage, setScreen, setBankMode }: any) => {
             ))}
         </div>
         <div className="w-full ">
-          <button
-            onClick={() => {
-              if (kycStatus?.data.kyc_level === "0") {
-                navigate("/kyc");
-              } else {
-                setBankMode(2);
-              }
-            }}
-            className="w-4/5 xs:w-3/5 mds:w-1/2 mx-auto flex gap-3 items-center justify-center h-[40px] text-[12px] font-medium rounded-xl text-[#3A66FF] border-text_blue border "
-          >
-            <IoAddOutline className="text-[24px] " />
-            <h4>Add Bank Account</h4>
-          </button>
+          {userBanks?.length >= 1 &&
+          (kycStatus?.data.kyc_level === "201" ||
+            kycStatus?.data.kyc_level === "202") ? (
+            <button
+              onClick={() => {
+                if (kycStatus?.data.kyc_level === "000") {
+                  navigate("/kyc");
+                } else {
+                  setBankMode(2);
+                }
+              }}
+              className="w-4/5 xs:w-3/5 mds:w-1/2 mx-auto flex gap-3 items-center justify-center h-[40px] text-[12px] font-medium rounded-xl text-[#3A66FF] border-text_blue border "
+            >
+              <IoAddOutline className="text-[24px] " />
+              <h4>Add Bank Account</h4>
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                if (kycStatus?.data.kyc_level === "000") {
+                  navigate("/kyc");
+                } else if (kycStatus?.data.kyc_level === "100") {
+                  setScreen(2);
+                } else {
+                  setBankMode(2);
+                }
+              }}
+              className="w-4/5 xs:w-3/5 mds:w-1/2 mx-auto flex gap-3 items-center justify-center h-[40px] text-[12px] font-medium rounded-xl text-[#3A66FF] border-text_blue border "
+            >
+              <IoAddOutline className="text-[24px] " />
+              <h4>Add Bank Account</h4>
+            </button>
+          )}
         </div>
       </div>
     </div>

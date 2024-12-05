@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { avatar, logo, notify } from "../assets/images";
 import { paddingX } from "../constants";
 import { NavLink } from "react-router-dom";
@@ -8,9 +8,27 @@ import { useQuery } from "@tanstack/react-query";
 import { API } from "../constants/api";
 import useAuthAxios from "../utils/baseAxios";
 import { useAuth } from "../context/auth-context";
+import { MdColorLens } from "react-icons/md";
+import Colorpalette from "./Colorpalette";
 
 const Navbar = () => {
-  const { userDetails, isNotified, setIsNotified } = useUser();
+  const {
+    userDetails,
+    isNotified,
+    setIsNotified,
+    displayColor,
+    setIsPalette,
+    isPalette,
+  } = useUser();
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
   const { token } = useAuth();
   const axiosinstance = useAuthAxios();
 
@@ -41,6 +59,12 @@ const Navbar = () => {
         <h4 className="mds:flex hidden capitalize text-black dark:text-white text-[14px]">
           Hello, {userDetails?.data?.profile.username}
         </h4>
+        <button className="w-[32px]  h-[32px] bg-[#313131] rounded-full flex justify-center items-center">
+          <MdColorLens
+            onClick={() => setIsPalette((prev: any) => !prev)}
+            className="cursor-pointer text-gray-100 text-[20px]"
+          />
+        </button>
         <button className="w-[32px] relative h-[32px] bg-[#313131] rounded-full flex justify-center items-center">
           <img
             src={notify}
@@ -49,7 +73,16 @@ const Navbar = () => {
             alt=""
           />
           {notificationsData?.data?.total >= 1 && (
-            <div className="bell-light absolute top-0 animate-pulse -right-[1px] w-2 h-2 bg-text_blue rounded-full" />
+            <div
+              style={{
+                backgroundColor: bgColor,
+              }}
+              className={`bell-light absolute top-0 animate-pulse -right-[1px] w-4 h-4 z-10 flex justify-center items-center font-bold text-[9px] text-white ${
+                bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+              } rounded-full`}
+            >
+              {notificationsData?.data?.total}
+            </div>
           )}
         </button>
       </div>
@@ -59,6 +92,7 @@ const Navbar = () => {
           unreadNo={notificationsData?.data?.total}
         />
       )}
+      {isPalette && <Colorpalette setIsPalette={setIsPalette} />}
     </div>
   );
 };
