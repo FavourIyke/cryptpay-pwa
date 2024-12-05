@@ -1,12 +1,42 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import AuthNav from "./AuthNav";
 import { validateSignUp } from "../utils/validations";
+import { Cookies, useCookies } from "react-cookie";
 
 const Signup = () => {
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [referralCode, setReferralCode] = useState<string>("");
+  const [, setCookie] = useCookies(["cryptpay-referral-code"]);
+  const [referrer, setReferrer] = useState("");
+
+  const location = useLocation();
+
+  useEffect(() => {
+    // Fetch referral code from URL query params
+    const params = new URLSearchParams(location.search);
+    const codeFromUrl = params.get("r");
+
+    if (codeFromUrl) {
+      setReferrer(codeFromUrl); // Set the referral code in state
+      setCookie("cryptpay-referral-code", codeFromUrl, { path: "/" }); // Save in cookies
+    }
+
+    // Fetch referral code from cookies if not in URL
+    const cookies = new Cookies();
+    const cookieReferralCode = cookies.get("cryptpay-referral-code");
+    if (cookieReferralCode && !codeFromUrl) {
+      setReferrer(cookieReferralCode);
+    }
+  }, [location.search, setCookie]);
+
+  useEffect(() => {
+    const cookies = new Cookies();
+    const newCookie = cookies.get("cryptpay-referral-code");
+
+    setReferrer(newCookie);
+  }, []);
   const navigate = useNavigate();
 
   const handleSignup = () => {
@@ -17,6 +47,8 @@ const Signup = () => {
       state: {
         email: email,
         username: username,
+        referralCode: referralCode,
+        referrer: referrer,
       },
     });
   };
@@ -72,7 +104,7 @@ const Signup = () => {
               type="text"
               value={referralCode}
               onChange={(e) => setReferralCode(e.target.value)}
-              placeholder="Enter Referral code"
+              placeholder={referrer ? referrer : "Enter Referral code"}
               className={
                 referralCode
                   ? "w-full dark:text-white border-text_blue text-gray-800   bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border  bg-transparent px-4 spin-button-none rounded-xl "

@@ -81,10 +81,10 @@ const Referral = ({ setSidePage, setScreen, setRefMode }: any) => {
         </h4>
         <div className="w-full h-[52px] flex justify-between px-4 mt-2 items-center rounded-xl border border-gray-300 bg-[#F1F1F1] dark:bg-transparent dark:border-gray-500">
           <h4 className="dark:text-white text-gray-800   text-[12px]">
-            {APP_URL}/{referralCode}
+            {APP_URL}/sign-up?r={referralCode}
           </h4>
           <CopyToClipboard
-            text={`${APP_URL}/${referralCode}`}
+            text={`${APP_URL}/sign-up?r=${referralCode}`}
             onCopy={() => {
               toast.success("Referral link copied");
             }}

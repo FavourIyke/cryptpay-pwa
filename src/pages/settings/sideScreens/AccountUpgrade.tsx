@@ -91,9 +91,7 @@ const AccountUpgrade = ({
               You are currently on
             </h4>
             <div
-              className={`px-3 py-1 ${
-                bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
-              } rounded-lg text-white text-[11px]`}
+              className={`px-3 py-1 bg-text_blue rounded-lg text-white text-[11px]`}
             >
               Level{" "}
               {level === "100" ? 1 : level === "201" || level === "202" ? 2 : 0}
@@ -121,22 +119,13 @@ const AccountUpgrade = ({
             <div className="w-full flex justify-between gap-4 items-center mt-4">
               <div className="w-11/12 flex justify-start items-center rounded-full h-[12px] bg-[#B7D7FF] ">
                 {level === "100" && (
-                  <div
-                    className={`w-1/3 bg-text_blue
-                    } rounded-l-full h-full`}
-                  />
+                  <div className={`w-1/3 bg-text_blue rounded-l-full h-full`} />
                 )}
                 {level === "201" && (
-                  <div
-                    className={`w-2/3 bg-text_blue
-                    } rounded-l-full h-full`}
-                  />
+                  <div className={`w-2/3 bg-text_blue rounded-l-full h-full`} />
                 )}
                 {level === "202" && (
-                  <div
-                    className={`w-full bg-text_blue
-                    } rounded-full h-full`}
-                  />
+                  <div className={`w-full bg-text_blue rounded-full h-full`} />
                 )}
               </div>
               <h4 className=" text-black text-[14px]">

@@ -95,7 +95,7 @@ const GovernmentID = ({
         >
           <SlArrowLeft className="dark:text-[#D8D8D8] text-gray-800 text-[12px]" />
           <h4 className="dark:text-[#D8D8D8] text-gray-800 text-[14px]">
-            Back {idType}
+            Back
           </h4>
         </button>
         <div className="w-full mt-8">
@@ -213,12 +213,13 @@ const GovernmentID = ({
         </div>
         <button
           onClick={() => {
-            const data = {
-              government_id: base64Image,
-              id_number: idNumber,
-              id_type: idType,
-            };
             if (tier === 1) {
+              const data = {
+                government_id: base64Image,
+                id_number: idNumber,
+                id_type: Number(idType),
+              };
+              // console.log(data);
               completeKyc.mutate(data);
             } else if (tier === 2) {
               setOpenGovId(false);

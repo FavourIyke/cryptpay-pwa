@@ -14,7 +14,7 @@ import { SlArrowRight, SlOptions } from "react-icons/sl";
 import { IoCheckmark } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
+const NotificationModal = ({ setIsNotified, unreadNo, refetch2 }: any) => {
   const { token } = useAuth();
   const { theme, setTransactionID, setShowDetails } = useUser();
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -111,6 +111,7 @@ const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
       toast.success(r.message);
       setLoadingIndex(null);
       refetch();
+      refetch2();
       queryClient.invalidateQueries({
         queryKey: ["get-notifications"],
       });
@@ -137,6 +138,7 @@ const NotificationModal = ({ setIsNotified, unreadNo }: any) => {
     onSuccess: (r: any) => {
       toast.success(r.message);
       refetch();
+      refetch2();
       setTimeout(() => {
         setIsNotified(false);
       }, 1000);

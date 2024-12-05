@@ -274,7 +274,10 @@ const BankDetails = ({ setSidePage, setScreen, setBankMode }: any) => {
               onClick={() => {
                 if (kycStatus?.data.kyc_level === "000") {
                   navigate("/kyc");
-                } else if (kycStatus?.data.kyc_level === "100") {
+                } else if (
+                  kycStatus?.data.kyc_level === "100" &&
+                  userBanks?.length === 1
+                ) {
                   setScreen(2);
                 } else {
                   setBankMode(2);
