@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { topupCancel } from "../../../assets/images";
 import { IoClose } from "react-icons/io5";
+import { useUser } from "../../../context/user-context";
 
 const PaymentCancelled = ({
   setOpenWallet,
   setOpenDeposit,
   setOpenPCancel,
 }: any) => {
+  const { displayColor } = useUser();
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
   return (
     <div className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12     backdrop-blur-sm">
       <div
@@ -45,11 +56,16 @@ const PaymentCancelled = ({
               Go to wallet
             </button>
             <button
+              style={{
+                backgroundColor: bgColor,
+              }}
               onClick={() => {
                 setOpenPCancel(false);
                 setOpenDeposit(true);
               }}
-              className={`w-1/2 h-[52px] rounded-[18px] bg-text_blue  text-white flex justify-center items-center  font-semibold`}
+              className={`w-1/2 h-[52px] rounded-[18px] ${
+                bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+              }  text-white flex justify-center items-center  font-semibold`}
             >
               Retry
             </button>

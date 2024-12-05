@@ -79,6 +79,7 @@ const Kyc = () => {
               onClick={() => {
                 const data = {
                   id_number: bvn,
+                  last_name: "Ajayi",
                   liveliness_image: images,
                 };
                 // console.log(data);

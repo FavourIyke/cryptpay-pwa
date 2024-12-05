@@ -21,7 +21,16 @@ const AccountUpgrade = ({
   openKyc2,
   setOpenKyc2,
 }: any) => {
-  const { userDetails } = useUser();
+  const { userDetails, displayColor } = useUser();
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
   const navigate = useNavigate();
   const axiosInstance = useAuthAxios();
   const [levels, setLevels] = useState<number>(1);
@@ -81,7 +90,11 @@ const AccountUpgrade = ({
             <h4 className="text-gray-900 dark:text-white">
               You are currently on
             </h4>
-            <div className="px-3 py-1 bg-text_blue rounded-lg text-white text-[11px]">
+            <div
+              className={`px-3 py-1 ${
+                bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+              } rounded-lg text-white text-[11px]`}
+            >
               Level{" "}
               {level === "100" ? 1 : level === "201" || level === "202" ? 2 : 0}
             </div>
@@ -108,13 +121,22 @@ const AccountUpgrade = ({
             <div className="w-full flex justify-between gap-4 items-center mt-4">
               <div className="w-11/12 flex justify-start items-center rounded-full h-[12px] bg-[#B7D7FF] ">
                 {level === "100" && (
-                  <div className="w-1/3 bg-text_blue rounded-l-full h-full" />
+                  <div
+                    className={`w-1/3 bg-text_blue
+                    } rounded-l-full h-full`}
+                  />
                 )}
                 {level === "201" && (
-                  <div className="w-2/3 bg-text_blue rounded-l-full h-full" />
+                  <div
+                    className={`w-2/3 bg-text_blue
+                    } rounded-l-full h-full`}
+                  />
                 )}
                 {level === "202" && (
-                  <div className="w-full bg-text_blue rounded-full h-full" />
+                  <div
+                    className={`w-full bg-text_blue
+                    } rounded-full h-full`}
+                  />
                 )}
               </div>
               <h4 className=" text-black text-[14px]">
@@ -202,9 +224,7 @@ const AccountUpgrade = ({
                       navigate("/kyc");
                     }
                   }}
-                  className={
-                    "w-full bg-text_blue mt-6 h-[44px] rounded-xl text-[14px] font-semibold text-white"
-                  }
+                  className={`w-full bg-text_blue mt-6 h-[44px] rounded-xl text-[14px] font-semibold text-white`}
                 >
                   {level === "100"
                     ? "Upgrade to level 2"
@@ -433,7 +453,7 @@ const AccountUpgrade = ({
                 className={
                   tier === 0
                     ? "w-full bg-gray-500 mt-6 h-[48px] rounded-xl text-[14px] font-semibold text-gray-200"
-                    : "w-full bg-text_blue mt-6 h-[48px] rounded-xl text-[14px] font-semibold text-white"
+                    : `w-full bg-text_blue mt-6 h-[48px] rounded-xl text-[14px] font-semibold text-white`
                 }
               >
                 {level === "202"

@@ -25,3 +25,57 @@
 .custom-shape-divider-top-1730723744 .shape-fill {
   fill: #ffffff;
 }
+
+.sidebar {
+  -webkit-animation: slide-down 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; /* Default slide down */
+  animation: slide-down 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@-webkit-keyframes slide-down {
+  0% {
+    -webkit-transform: translateY(-100%); /* Start above */
+    transform: translateY(-100%);
+  }
+  100% {
+    -webkit-transform: translateY(0); /* End at default position */
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  0% {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+.sidebar-hidden {
+  -webkit-animation: slide-up 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; /* Slide up animation */
+  animation: slide-up 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@-webkit-keyframes slide-up {
+  0% {
+    -webkit-transform: translateY(0); /* Start at default position */
+    transform: translateY(0);
+  }
+  100% {
+    -webkit-transform: translateY(-100%); /* End above */
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  100% {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+  }
+}

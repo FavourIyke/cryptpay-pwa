@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdStopwatch } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import { SlArrowLeft } from "react-icons/sl";
+import { useUser } from "../../../context/user-context";
 
 const SelectNetwork = ({
   setSelectNetworkModal,
@@ -13,7 +14,17 @@ const SelectNetwork = ({
   sellRate,
   networks,
 }: any) => {
+  const { displayColor } = useUser();
   const [networkSelect, setNetworkSelect] = useState<number>(100);
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
   return (
     <div className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12   backdrop-blur-sm">
       <div
@@ -62,16 +73,27 @@ const SelectNetwork = ({
                       setNetwork(networkk.code);
                     }
                   }}
+                  style={{
+                    border:
+                      networkSelect === index
+                        ? `1px solid ${bgColor}`
+                        : "1px solid #505050",
+                  }}
                   className={`w-[20px] h-[20px] p-1 flex justify-center items-center rounded-full  ${
                     networkSelect === index
-                      ? "border-[#5E91FF]  "
+                      ? `${
+                          bgColor ? `border-[${bgColor}]` : "border-[#5E91FF] "
+                        }  `
                       : "bg-transparent border-[#505050]"
                   } border `}
                 >
                   <div
+                    style={{
+                      backgroundColor: networkSelect === index ? bgColor : "",
+                    }}
                     className={`w-full h-full rounded-full  ${
                       networkSelect === index
-                        ? " bg-[#5E91FF] "
+                        ? `${bgColor ? `bg-[${bgColor}]` : "bg-text_blue"}`
                         : "bg-transparent "
                     } `}
                   />
@@ -100,10 +122,11 @@ const SelectNetwork = ({
               setBuyCoinModal(true);
             }
           }}
+          style={{ backgroundColor: networkSelect !== 100 ? bgColor : "" }}
           className={`w-full h-[52px] rounded-[18px] mt-16 ${
             networkSelect === 100
               ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
-              : "bg-text_blue text-white"
+              : `${bgColor ? `bg-[${bgColor}]` : "bg-text_blue"}  text-white`
           }  flex justify-center items-center  font-semibold`}
         >
           Proceed

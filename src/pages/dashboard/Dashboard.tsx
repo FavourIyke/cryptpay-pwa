@@ -18,9 +18,8 @@ import BuyReceipt from "./buyFlow/BuyReceipt";
 import AddBankModal from "./addBank/AddBankModal";
 import BankAddedModal from "./addBank/BankAddedModal";
 import { useUser } from "../../context/user-context";
-import { SlArrowRight } from "react-icons/sl";
+import { SlArrowDown, SlArrowRight } from "react-icons/sl";
 import { TiWarning } from "react-icons/ti";
-import GenerateWallet from "./sellFlow/GenerateWallet";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { API } from "../../constants/api";
@@ -32,7 +31,6 @@ import { formatAmount } from "../../utils/formatDate";
 import DetailsModal from "./transactionList/DetailsModal";
 import MoreModal from "./MoreModal";
 import { MdAdd, MdPending } from "react-icons/md";
-import DepositDetails from "./transactionList/DepositDetails";
 import AddWalletAddy from "./buyFlow/AddWalletAddy";
 import Wallet from "./top-up/Wallet";
 import Kyc2Modal from "./Kyc2Modal";
@@ -44,7 +42,7 @@ import PaymentScreen from "./top-up/PaymentScreen";
 import PaymentSuccess from "./top-up/PaymentSuccess";
 
 const Dashboard = () => {
-  const { theme, setShowDetails, showDetails } = useUser();
+  const { theme, setShowDetails, showDetails, displayColor } = useUser();
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
   const getThemeBasedImage = () => {
@@ -57,8 +55,7 @@ const Dashboard = () => {
     }
     return darkCrypt; // fallback in case of an unexpected value
   };
-  const [showdDepositDetails, setShowdDepositDetails] =
-    useState<boolean>(false);
+
   const [clickedPayout, setClickedPayout] = useState<any[]>([]);
   const [coinDeets, setCoinDeets] = useState<any[]>([]);
   const [showBalance, setShowBalance] = useState<boolean>(false);
@@ -78,7 +75,6 @@ const Dashboard = () => {
   const [coinAmount, setCoinAmount] = useState("");
   const [addBankModal, setAddBankModal] = useState<boolean>(false);
   const [bankAddedModal, setBankAddedModal] = useState<boolean>(false);
-  const [generateAddyModal, setGenerateAddyModal] = useState<boolean>(false);
   const [walletAddy, setWalletAddy] = useState<string>("");
   const { userDetails } = useUser();
   const axiosInstance = useAuthAxios();
@@ -103,8 +99,18 @@ const Dashboard = () => {
   const [openPSuccess, setOpenPSuccess] = useState<boolean>(false);
 
   const [openPCancel, setOpenPCancel] = useState<boolean>(false);
+  const [openDisplay, setOpenDisplay] = useState<boolean>(false);
 
   const [bankDetails, setBankDetails] = useState<any>({});
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
 
   const navigate = useNavigate();
   const getPayoutsSummary = async () => {
@@ -117,11 +123,11 @@ const Dashboard = () => {
     retry: 1,
   });
   const getPayouts = async () => {
-    const response = await axiosInstance.get(API.getTransactions);
+    const response = await axiosInstance.get(API.getAllTransactions);
     return response.data.data;
   };
   const { data: payouts, error: error3 } = useQuery({
-    queryKey: ["get-payouts"],
+    queryKey: ["get-all-payouts"],
     queryFn: getPayouts,
     retry: 1,
   });
@@ -183,7 +189,7 @@ const Dashboard = () => {
   };
 
   const groupedPayouts = groupTransactionsByDate(
-    sortedPayouts?.slice(0, 5) || []
+    sortedPayouts?.slice(0, 8) || []
   );
   const location = useLocation();
   const showPay = location.state?.showPay;
@@ -206,19 +212,85 @@ const Dashboard = () => {
       <Navbar />
       <div className={`${paddingX}  w-full mt-12 lgss:flex lgss:gap-12 `}>
         <div className="w-full  lgss:w-3/5">
-          <div className="w-full h-[401px] mb-24 flex justify-center flex-col items-center relative">
+          <div
+            className={
+              openDisplay
+                ? "w-full h-[401px] mb-24 flex justify-center flex-col items-center relative"
+                : "w-full h-[401px] flex justify-center flex-col items-center relative"
+            }
+          >
             {/* Blue background behind the image */}
-            <div className="py-3 bg-text_blue w-full -bottom-[76px] pt-12 rounded-b-[40px] absolute flex flex-col justify-center items-start px-10">
-              <div className="w-full flex justify-between items-center">
-                <div>
-                  <h4 className="uppercase text-start  text-white tracking-wider text-[12px]  ">
-                    Wallet Balance
-                  </h4>
-                  <h4 className="uppercase text-start mt-1  text-white tracking-wider text-[15px] font-semibold ">
-                    NGN {formatAmount(fiatBalance)}
-                  </h4>
-                </div>
-                <div
+            {openDisplay && (
+              <div
+                style={{ backgroundColor: bgColor }}
+                className={`py-3 ${
+                  bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+                } w-full -bottom-[130px] pt-20 rounded-b-[40px] absolute ${
+                  openDisplay ? "" : "sidebar-hidden"
+                }   pl-4 xxs:pl-10 lgss:px-16 xxxl:px-20 sidebar`}
+              >
+                <div className="w-full mx-auto grid grid-cols-2 gap-3 md:gap-4 justify-start items-center">
+                  <div>
+                    <h4
+                      style={{
+                        wordBreak: "break-word",
+                        overflowWrap: "break-word",
+                      }}
+                      className="uppercase text-start break-words text-white tracking-wide text-[10px]  "
+                    >
+                      🤑 FIAT BAL
+                    </h4>
+                    <h4 className="uppercase text-start mt-1  text-white tracking-wider text-[14px] font-bold ">
+                      NGN {formatAmount(fiatBalance)}
+                    </h4>
+                  </div>
+                  <div>
+                    <h4 className="uppercase text-start  text-white tracking-wider text-[10px]  ">
+                      ♦️ CRYPTO BAL
+                    </h4>
+                    <h4
+                      style={{
+                        wordBreak: "break-word",
+                        overflowWrap: "break-word",
+                      }}
+                      className="uppercase text-start mt-1 break-words  text-white tracking-wider text-[15px] font-semibold "
+                    >
+                      $0.00
+                    </h4>
+                  </div>
+                  <div>
+                    <h4 className="uppercase text-start  text-white tracking-wider text-[10px]  ">
+                      💸 TOTAL PAYOUT
+                    </h4>
+                    <h4
+                      style={{
+                        wordBreak: "break-word",
+                        overflowWrap: "break-word",
+                      }}
+                      className="uppercase text-start mt-1 break-words  text-white tracking-wider text-[15px] font-semibold "
+                    >
+                      $
+                      {payoutSummary?.total_asset_in_usd
+                        ? formatAmount(payoutSummary?.total_asset_in_usd)
+                        : "0.00"}
+                    </h4>
+                  </div>
+                  <div>
+                    <h4 className="uppercase text-start  text-white tracking-wider text-[10px]  ">
+                      ✅ TOTAL PURCHASE
+                    </h4>
+                    <h4
+                      style={{
+                        wordBreak: "break-word",
+                        overflowWrap: "break-word",
+                      }}
+                      className="uppercase text-start mt-1 break-words  text-white tracking-wider text-[15px] font-semibold "
+                    >
+                      $0.00
+                    </h4>
+                  </div>
+
+                  {/* <div
                   onClick={() => {
                     if (
                       kycStatus?.data.kyc_level === "000" ||
@@ -242,9 +314,10 @@ const Dashboard = () => {
                   <div className="w-full h-full flex justify-center p-1 bg-blue-500 rounded-full  items-center">
                     <SlArrowRight className="text-white text-[14px]" />
                   </div>
+                </div> */}
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Main content container with rounded corners */}
             <div className="w-full bg-dashboardBg bg-cover bg-center py-6 rounded-[40px] h-full flex flex-col gap-[70px] mds:gap-24 justify-end items-center relative ">
@@ -252,9 +325,19 @@ const Dashboard = () => {
                 Hello, {userDetails?.data?.profile.username}
               </h4>
               <div>
-                <h4 className="uppercase text-center text-white tracking-wider text-[10px] font-semibold ">
-                  total payout
-                </h4>
+                <div
+                  onClick={() => setOpenDisplay((prev) => !prev)}
+                  className="flex cursor-pointer justify-center items-center gap-1"
+                >
+                  <h4 className="uppercase text-center text-white tracking-wider text-[11px] font-semibold ">
+                    total payout
+                  </h4>
+                  {openDisplay ? (
+                    <SlArrowDown className="text-[10px] text-white" />
+                  ) : (
+                    <SlArrowRight className="text-[10px] text-white" />
+                  )}
+                </div>
                 <div className="flex  justify-center mt-3 items-center gap-4">
                   <h4 className="text-[40px] text-white">
                     {showBalance
@@ -370,7 +453,10 @@ const Dashboard = () => {
                         setSelectCoinModal(true);
                       }
                     }}
-                    className="w-[45px] h-[45px] rounded-full bg-text_blue flex justify-center items-center"
+                    style={{ backgroundColor: bgColor }}
+                    className={`w-[45px] h-[45px] rounded-full ${
+                      bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+                    } flex justify-center items-center`}
                   >
                     <BsArrowDown className="text-[24px] text-white" />
                   </button>
@@ -395,7 +481,11 @@ const Dashboard = () => {
             </div>
           </div>
           {kycStatus?.data.kyc_status === "pending" ? (
-            <div className="w-full  flex justify-between items-start gap-4 py-3 mt-6 bg-[#E9F4FF] rounded-2xl text-gray-900 ">
+            <div
+              className={`w-full  flex justify-between items-start gap-4 py-3 ${
+                openDisplay ? "mt-[160px]" : "mt-4"
+              } bg-[#E9F4FF] rounded-2xl text-gray-900 `}
+            >
               <div className="flex  w-full items-start gap-6 px-4">
                 <div>
                   <MdPending className="text-[38px]" />
@@ -406,7 +496,7 @@ const Dashboard = () => {
                     Verification is in Progress
                   </h4>
                   <h4 className="  text-[14px] mt-1 text-left pr-6 mds:pr-12 md:pr-16 xl:pr-20 xxxl:pr-32">
-                    Your KYC {kycStatus?.data.kyc_level === "100" && "Level 2"}
+                    Your KYC {kycStatus?.data.kyc_level === "100" && "Level 1"}
                     {kycStatus?.data.kyc_level === "201" &&
                       "Level 2 Tier-2"}{" "}
                     verification is currently being processed. Please allow some
@@ -426,7 +516,9 @@ const Dashboard = () => {
             kycStatus?.data.kyc_status === null ? (
             <Link
               to="/kyc"
-              className="w-full flex justify-between items-center gap-4 px-4 py-3 mt-6 bg-[#664101] rounded-2xl text-[#F5B546] "
+              className={`w-full flex justify-between items-center gap-4 px-4 py-3 ${
+                openDisplay ? "mt-[160px]" : "mt-4"
+              } bg-[#664101] rounded-2xl text-[#F5B546] `}
             >
               <div className="flex  w-9/12 items-start gap-3">
                 <div>
@@ -434,9 +526,7 @@ const Dashboard = () => {
                 </div>
 
                 <div>
-                  <h4 className=" font-bold text-[16px]">
-                    {kycStatus?.message ? kycStatus?.message : "KYC Incomplete"}
-                  </h4>
+                  <h4 className=" font-bold text-[16px]">KYC Incomplete</h4>
                   <h4 className="  text-[11px] mt-1 text-left">
                     It appears that you have not yet completed your Know Your
                     Customer (KYC) verification process.
@@ -447,7 +537,18 @@ const Dashboard = () => {
             </Link>
           ) : null}
 
-          <div className="flex w-full  mx-auto lgss:mx-0 mt-8 px-2  h-[56px] rounded-2xl items-center">
+          <div
+            className={
+              kycStatus?.data.kyc_status === "pending"
+                ? "flex w-full  mx-auto lgss:mx-0 mt-8 px-2  h-[56px] rounded-2xl items-center"
+                : kycStatus?.data.kyc_level === "000" ||
+                  kycStatus?.data.kyc_status === null
+                ? "flex w-full  mx-auto lgss:mx-0 mt-10 px-2  h-[56px] rounded-2xl items-center"
+                : openDisplay
+                ? "flex w-full  mx-auto lgss:mx-0 mt-[160px] px-2  h-[56px] rounded-2xl items-center"
+                : "flex w-full  mx-auto lgss:mx-0 mt-8 px-2  h-[56px] rounded-2xl items-center"
+            }
+          >
             <button
               onClick={() => setSellRateFlow(false)}
               className={
@@ -490,7 +591,13 @@ const Dashboard = () => {
             <h4 className="text-black dark:text-white  text-[15px] ">
               Recent Transactions
             </h4>
-            <Link to="/transactions" className="text-[15px] text-text_blue">
+            <Link
+              to="/transactions"
+              style={{ color: bgColor }}
+              className={`text-[15px] ${
+                bgColor ? `text-[${bgColor}]` : "text-text_blue"
+              } `}
+            >
               View all
             </Link>
           </div>
@@ -511,15 +618,6 @@ const Dashboard = () => {
                               setClickedPayout(payout);
                               setShowDetails(true);
                             }}
-                            onClick2={() => {
-                              setClickedPayout(payout);
-                              setShowdDepositDetails(true);
-                            }}
-                            kind={
-                              payout?.transaction_type === "topup"
-                                ? false
-                                : true
-                            }
                           />
                         </div>
                       </div>
@@ -540,6 +638,7 @@ const Dashboard = () => {
         {openMore && (
           <MoreModal
             setOpenMore={setOpenMore}
+            setOpenWallet={setOpenWallet}
             setSelectCoinModal={setSelectCoinModal}
           />
         )}
@@ -690,12 +789,7 @@ const Dashboard = () => {
           setClickedPayout={setClickedPayout}
         />
       )}
-      {showdDepositDetails && (
-        <DepositDetails
-          setShowdDepositDetails={setShowdDepositDetails}
-          clickedPayout={clickedPayout}
-        />
-      )}
+
       {openWallet && (
         <Wallet
           setOpenWallet={setOpenWallet}

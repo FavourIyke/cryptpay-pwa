@@ -17,9 +17,10 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
   const { token, logout } = useAuth();
   const [userCurrency, setUserCurrency] = useState<string>("NGN");
   const [isNotified, setIsNotified] = useState<boolean>(false);
+  const [isPalette, setIsPalette] = useState<boolean>(false);
   const [transactionID, setTransactionID] = useState<string>("");
   const [showDetails, setShowDetails] = useState<boolean>(false);
-
+  const [displayColor, setDisplayColor] = useState<string>("");
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
   const element = document.documentElement;
   const axiosInstance = useAuthAxios();
@@ -147,6 +148,10 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
         showDetails,
         userLoading,
         refetch1,
+        displayColor,
+        setDisplayColor,
+        setIsPalette,
+        isPalette,
       }}
     >
       {children}

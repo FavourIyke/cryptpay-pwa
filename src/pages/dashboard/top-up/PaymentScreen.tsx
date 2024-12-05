@@ -23,7 +23,16 @@ const PaymentScreen = ({
   setOpenPSuccess,
   setOpenPCancel,
 }: any) => {
-  const { theme } = useUser();
+  const { theme, displayColor } = useUser();
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
   const axiosInstance = useAuthAxios();
   const [timeLeft, setTimeLeft] = useState<string>("");
@@ -125,7 +134,14 @@ const PaymentScreen = ({
         <h4 className="text-gray-500 mt-6 text-[12px]  text-center">
           Fund wallet with
         </h4>
-        <h4 className="text-text_blue mt-1 text-[22px] font-semibold text-center">
+        <h4
+          style={{
+            color: bgColor,
+          }}
+          className={`${
+            bgColor ? `text-[${bgColor}]` : "text-text_blue"
+          }  mt-1 text-[22px] font-semibold text-center`}
+        >
           {formatAmount(amount)} NGN
         </h4>
         <div className="p-4 rounded-xl mt-4 flex justify-start gap-2 items-start bg-[#F4F4F4] dark:bg-[#222222] w-full">
@@ -139,6 +155,9 @@ const PaymentScreen = ({
           </h4>
         </div>
         <button
+          style={{
+            backgroundColor: bgColor,
+          }}
           onClick={() => {
             const data = {
               amount: amount,
@@ -146,7 +165,9 @@ const PaymentScreen = ({
             comfirmDetails.mutate(data);
             setScreen(false);
           }}
-          className={`w-full h-[52px] rounded-[18px] bg-text_blue mt-8 text-white flex justify-center items-center  font-semibold`}
+          className={`w-full h-[52px] rounded-[18px] ${
+            bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+          }  mt-8 text-white flex justify-center items-center  font-semibold`}
         >
           Proceed
         </button>
@@ -173,16 +194,16 @@ const PaymentScreen = ({
         <div className="">
           <img src={getThemeBasedImage()} alt="" />
         </div>
-        <h4 className="text-text_blue mt-3 text-[22px] font-medium text-center">
+        <h4
+          className={`text-text_blue  mt-1 text-[22px] font-semibold text-center`}
+        >
           {formatAmount(amount)} NGN
         </h4>
         <h4 className="text-gray-500 mt-2 text-[12px]  text-center">
           Fund wallet with
         </h4>
         <h4 className="dark:text-white text-gray-900 mt-5 text-[14px] text-center">
-          Transfer the amount to the
-          <br />
-          Account to the Bank Details below
+          Transfer the amount to the bank Details below
         </h4>
         <div className="rounded-xl w-full  py-5 px-2 xs:px-4 mt-8 bg-[#F1F1F1] dark:bg-[#2a2929]">
           <div className="w-full  flex justify-between gap-4 items-center">
@@ -224,9 +245,16 @@ const PaymentScreen = ({
             </div>
           </div>
           <h4 className="dark:text-gray-400 text-gray-500 mt-8 text-[13px] text-center">
-            This account is for only one time use only and expires in
+            This account is one time use only and expires in
           </h4>
-          <h4 className="text-text_blue mt-3 text-[14px] font-medium text-center">
+          <h4
+            style={{
+              color: bgColor,
+            }}
+            className={`${
+              bgColor ? `text-[${bgColor}]` : "text-text_blue"
+            }  mt-3 text-[14px] font-medium text-center`}
+          >
             {timeLeft}
           </h4>
         </div>
@@ -237,7 +265,12 @@ const PaymentScreen = ({
             };
             comfirmStatus.mutate(data);
           }}
-          className={`w-full h-[52px] rounded-[18px] bg-text_blue mt-8 text-white flex justify-center items-center  font-semibold`}
+          style={{
+            backgroundColor: bgColor,
+          }}
+          className={`w-full h-[52px] rounded-[18px] ${
+            bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+          }  mt-8 text-white flex justify-center items-center  font-semibold`}
         >
           {comfirmStatus?.isPending ? (
             <ClipLoader color="#FFFFFF" size={30} />

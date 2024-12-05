@@ -1,5 +1,5 @@
 import React from "react";
-import { IoClose, IoMoonSharp } from "react-icons/io5";
+import { IoClose, IoMoonSharp, IoWalletOutline } from "react-icons/io5";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import { AiOutlineThunderbolt } from "react-icons/ai";
 import { FaUsers } from "react-icons/fa";
@@ -8,7 +8,7 @@ import { useUser } from "../../context/user-context";
 import { RiSunFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 
-const MoreModal = ({ setOpenMore, setSelectCoinModal }: any) => {
+const MoreModal = ({ setOpenMore, setSelectCoinModal, setOpenWallet }: any) => {
   const { theme, setTheme } = useUser();
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -121,6 +121,28 @@ const MoreModal = ({ setOpenMore, setSelectCoinModal }: any) => {
                 </h4>
                 <h4 className="text-gray-500 mt-1 dark:text-gray-400 text-[11px]">
                   View your payout bank accounts
+                </h4>
+              </div>
+            </div>
+            <SlArrowRight className="text-gray-400 dark:text-gray-200 text-[15px]" />
+          </button>
+          <button
+            onClick={() => {
+              setOpenMore(false);
+              setOpenWallet(true);
+            }}
+            className="w-full flex  justify-between items-center  py-6  bg-transparent"
+          >
+            <div className="flex items-center gap-4">
+              <div className="flex justify-center items-center w-[40px] h-[40px] rounded-full dark:bg-gray-200 dark:text-gray-800 bg-text_blue text-white">
+                <IoWalletOutline className="text-[24px] text-white dark:text-gray-800" />
+              </div>
+              <div>
+                <h4 className="text-gray-800 text-left dark:text-gray-50 text-[14px]">
+                  Wallet
+                </h4>
+                <h4 className="text-gray-500 mt-1 dark:text-gray-400 text-[11px]">
+                  Click to have access to your wallet
                 </h4>
               </div>
             </div>

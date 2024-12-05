@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { FiClipboard, FiCopy } from "react-icons/fi";
-import { Link } from "react-router-dom";
-import { formatAmount, formatDateAndTime } from "../../utils/formatDate";
-import { truncateWord } from "../../utils/wordFunctions";
 import { FaCheck } from "react-icons/fa";
+import { formatAmount, formatDateAndTime } from "../../../utils/formatDate";
+import { truncateWord } from "../../../utils/wordFunctions";
 
-const TransactionDetails = ({ clickedPayout }: any) => {
+const WalletDetails = ({ clickedPayout }: any) => {
   const [open, setOpen] = useState<boolean>(false);
   const [onCopyTxnId, setOnCopyTxnId] = useState<boolean>(false);
   const [onCopyMerchantname, setOnCopyMerchantname] = useState<boolean>(false);
@@ -504,4 +503,4 @@ const TransactionDetails = ({ clickedPayout }: any) => {
   );
 };
 
-export default TransactionDetails;
+export default WalletDetails;

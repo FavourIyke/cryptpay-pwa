@@ -3,20 +3,14 @@ import { btc, eth, naijaLogo, solana, trx, usdt } from "../../../assets/images";
 import { useUser } from "../../../context/user-context";
 import { formatAmount, formatDateAndTime } from "../../../utils/formatDate";
 
-const TransactionCard = ({ payouts, onClick1, onClick2, kind = true }: any) => {
+const TransactionCard = ({ payouts, onClick1 }: any) => {
   const { theme } = useUser();
   const { formattedTime } = formatDateAndTime(payouts?.transaction_date);
 
   return (
     <div className="w-full flex-col  flex">
       <div
-        onClick={
-          payouts?.transaction_type === "payout"
-            ? onClick1
-            : payouts?.transaction_type === "deposit"
-            ? onClick2
-            : () => {}
-        }
+        onClick={onClick1}
         className="font-sora cursor-pointer w-full border-b border-gray-200 dark:border-gray-800 py-4 flex justify-between items-center"
       >
         <div className="flex items-center gap-2">

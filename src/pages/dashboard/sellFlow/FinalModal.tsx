@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { progress } from "../../../assets/images";
+import { useUser } from "../../../context/user-context";
 
 const FinalModal = ({
   setFinalModal,
@@ -9,6 +10,17 @@ const FinalModal = ({
   setBuyReceiptModal,
   setWalletAddy,
 }: any) => {
+  const { displayColor } = useUser();
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
+
   return (
     <div className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12   backdrop-blur-sm">
       <div
@@ -41,11 +53,16 @@ const FinalModal = ({
             usually within 45 seconds
           </p>
           <button
+            style={{
+              backgroundColor: bgColor,
+            }}
             onClick={() => {
               setFinalModal(false);
               setWalletAddy("");
             }}
-            className={`w-10/12 h-[52px] rounded-[18px] bg-text_blue mt-4 text-white flex justify-center items-center  font-semibold`}
+            className={`w-10/12 h-[52px] rounded-[18px] ${
+              bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+            } mt-4 text-white flex justify-center items-center  font-semibold`}
           >
             Back to home
           </button>

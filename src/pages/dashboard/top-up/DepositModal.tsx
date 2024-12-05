@@ -12,8 +12,17 @@ const DepositModal = ({
   amount,
   setAmount,
 }: any) => {
-  const { userDetails } = useUser();
+  const { userDetails, displayColor } = useUser();
   const [displayAmount, setDisplayAmount] = useState<string>("");
+  const [bgColor, setBgColor] = useState<string>("");
+
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
   const isNumber = (str: string) => /^\d*\.?\d*$/.test(str); // Allows numbers and decimals
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,7 +119,12 @@ const DepositModal = ({
               setOpenDeposit(false);
               setOpenPS(true);
             }}
-            className={`w-full h-[52px] rounded-[18px] bg-text_blue mt-12 text-white flex justify-center items-center  font-semibold`}
+            style={{
+              backgroundColor: bgColor,
+            }}
+            className={`w-full h-[52px] rounded-[18px] ${
+              bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+            } mt-12 text-white flex justify-center items-center  font-semibold`}
           >
             Deposit
           </button>

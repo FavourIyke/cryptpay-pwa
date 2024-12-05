@@ -31,11 +31,11 @@ const Transactions = () => {
     return darkCrypt; // fallback in case of an unexpected value
   };
   const getPayouts = async () => {
-    const response = await axiosInstance.get(API.getTransactions);
+    const response = await axiosInstance.get(API.getAllTransactions);
     return response.data.data;
   };
   const { data: payouts, error: error3 } = useQuery({
-    queryKey: ["get-payouts"],
+    queryKey: ["get-all-payouts"],
     queryFn: getPayouts,
     retry: 1,
   });
@@ -75,10 +75,10 @@ const Transactions = () => {
     return groupedTransactions;
   };
 
-  const groupedPayouts = groupTransactionsByDate(sortedPayouts.slice() || []);
+  const groupedPayouts = groupTransactionsByDate(sortedPayouts || []);
   return (
     <div
-      className={` w-full font-sora overflow-auto h-screen pb-16 lgss:pb-0 bg-white dark:bg-primary_dark `}
+      className={` w-full font-sora overflow-auto h-screen pb-16  bg-white dark:bg-primary_dark `}
     >
       <Navbar />
       <div
@@ -131,15 +131,6 @@ const Transactions = () => {
                               setClickedPayout(payout);
                               setShowHistory(2);
                             }}
-                            onClick2={() => {
-                              setClickedPayout(payout);
-                              setShowHistory(3);
-                            }}
-                            kind={
-                              payout?.transaction_type === "topup"
-                                ? false
-                                : true
-                            }
                           />
                         </div>
                       </div>

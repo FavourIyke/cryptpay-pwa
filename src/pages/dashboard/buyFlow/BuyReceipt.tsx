@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { FiClipboard, FiCopy } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { SlArrowLeft } from "react-icons/sl";
 import { truncateWord } from "../../../utils/wordFunctions";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { API } from "../../../constants/api";
 import { errorMessage } from "../../../utils/errorMessage";
@@ -27,7 +27,16 @@ const BuyReceipt = ({
   buySummary,
 }: any) => {
   const [copyBankName, setCopyBankName] = useState<boolean>(false);
-  const { refetch2 } = useUser();
+  const { refetch2, displayColor } = useUser();
+  const [bgColor, setBgColor] = useState<string>("");
+  const queryClient = useQueryClient();
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
 
   const [addPin, setAddPin] = useState<boolean>(false);
   const [pin, setPin] = useState<string>("");
@@ -45,9 +54,13 @@ const BuyReceipt = ({
     onSuccess: (r) => {
       // console.log(r);
       toast.success(r.message);
+
+      refetch2();
+      queryClient.invalidateQueries({
+        queryKey: ["userDetails"],
+      });
       setTimeout(() => {
         setBuyReceiptModal(false);
-        refetch2();
         setFinalModal(true);
         setWalletAddy("");
         setNairaAmount("");
@@ -118,10 +131,15 @@ const BuyReceipt = ({
                   comfirmBuy.mutate(data);
                 }}
                 disabled={pin.length !== 4 || comfirmBuy.isPending}
+                style={{
+                  backgroundColor: pin.length !== 4 ? "" : bgColor,
+                }}
                 className={`w-full h-[52px] rounded-[18px] mt-[200px] ${
                   pin.length !== 4
                     ? "dark:text-white dark:bg-gray-600 bg-gray-400 text-gray-100"
-                    : "bg-text_blue text-white"
+                    : `${
+                        bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+                      } text-white`
                 }  flex justify-center items-center  font-semibold`}
               >
                 {comfirmBuy?.isPending ? (
@@ -213,8 +231,16 @@ const BuyReceipt = ({
 
             <div className="flex items-center gap-4 mt-8 w-full">
               <button
+                style={{
+                  border: `1px solid ${bgColor}`,
+                  color: `${bgColor}`,
+                }}
                 onClick={() => setBuyReceiptModal(false)}
-                className="w-1/2  text-[14px] rounded-2xl h-[52px] border border-text_blue text-text_blue flex justify-center items-center"
+                className={`w-1/2  text-[14px] rounded-2xl h-[52px] border ${
+                  bgColor
+                    ? `border-[${bgColor}] text-[${bgColor}] `
+                    : "text-[#3A66FF] border-text_blue"
+                } flex justify-center items-center`}
               >
                 Cancel trade
               </button>
@@ -222,7 +248,12 @@ const BuyReceipt = ({
                 onClick={() => {
                   setAddPin(true);
                 }}
-                className="w-1/2 text-white text-[14px] rounded-2xl h-[52px] bg-text_blue flex justify-center items-center"
+                style={{
+                  backgroundColor: bgColor,
+                }}
+                className={`w-1/2 text-white text-[14px] rounded-2xl h-[52px] ${
+                  bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+                } flex justify-center items-center`}
               >
                 Confirm
               </button>
