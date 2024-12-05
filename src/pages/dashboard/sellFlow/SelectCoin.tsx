@@ -88,7 +88,8 @@ const SelectCoin = ({
           </button>
         </div>
         <h4 className="text-black dark:text-gray-300 mt-2  text-[14px]">
-          These are the rates you will be selling a specific asset.
+          These are the rates you will be {sellRateFlow ? "selling" : "buying"}{" "}
+          a specific asset.
         </h4>
         <div className="w-full font-sora mt-6 flex-col flex gap-4">
           {coins?.cryptocurrencies.length >= 1 ? (

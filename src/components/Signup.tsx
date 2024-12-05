@@ -7,7 +7,7 @@ import { Cookies, useCookies } from "react-cookie";
 const Signup = () => {
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
-  const [referralCode, setReferralCode] = useState<string>("");
+  const [referralCode, setReferralCode] = useState<string | null>(null);
   const [, setCookie] = useCookies(["cryptpay-referral-code"]);
   const [referrer, setReferrer] = useState("");
 
@@ -102,7 +102,7 @@ const Signup = () => {
             </label>
             <input
               type="text"
-              value={referralCode}
+              value={referralCode || ""}
               onChange={(e) => setReferralCode(e.target.value)}
               placeholder={referrer ? referrer : "Enter Referral code"}
               className={

@@ -10,7 +10,6 @@ import { formatAmount } from "../../../utils/formatDate";
 
 const Referral = ({ setSidePage, setScreen, setRefMode }: any) => {
   const { userDetails } = useUser();
-
   const referralCode = userDetails?.data?.profile?.username;
   const referralEarnings = userDetails?.data?.profile?.referral_earnings;
   const referralPoints = userDetails?.data?.profile?.referral_points;
