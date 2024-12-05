@@ -265,6 +265,25 @@ const SelectBank = ({
               <IoAddOutline className="text-[24px] " />
               <h4>Add Bank</h4>
             </button>
+          ) : userBanks?.length === 0 && kycStatus?.data.kyc_level === "100" ? (
+            <button
+              onClick={() => {
+                setSelectBankModal(false);
+                setAddBankModal(true);
+              }}
+              style={{
+                border: `1px solid ${bgColor}`,
+                color: `${bgColor}`,
+              }}
+              className={`w-full mx-auto flex gap-3 items-center justify-center h-[48px] text-[14px] xs:text-[14px] font-medium rounded-xl  ${
+                bgColor
+                  ? `border-[${bgColor}] text-[${bgColor}] `
+                  : "text-[#3A66FF] border-text_blue"
+              } border `}
+            >
+              <IoAddOutline className="text-[24px] " />
+              <h4>Add Bank</h4>
+            </button>
           ) : null}
           <button
             disabled={userBanks?.length < 1 || !hasDefaultBank}

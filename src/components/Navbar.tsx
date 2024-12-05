@@ -37,7 +37,7 @@ const Navbar = () => {
     return response.data;
   };
 
-  const { data: notificationsData } = useQuery({
+  const { data: notificationsData, refetch: refetch2 } = useQuery({
     queryKey: ["get-unreadNotifications", token],
     queryFn: fetchUnreadNotifications,
     enabled: !!token,
@@ -77,7 +77,7 @@ const Navbar = () => {
               style={{
                 backgroundColor: bgColor,
               }}
-              className={`bell-light absolute top-0 animate-pulse -right-[1px] w-4 h-4 z-10 flex justify-center items-center font-bold text-[9px] text-white ${
+              className={`bell-light absolute top-0 animate-pulse -right-[1px] w-4 h-4  flex justify-center items-center font-bold text-[9px] text-white ${
                 bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
               } rounded-full`}
             >
@@ -89,6 +89,7 @@ const Navbar = () => {
       {isNotified && (
         <NotificationModal
           setIsNotified={setIsNotified}
+          refetch2={refetch2}
           unreadNo={notificationsData?.data?.total}
         />
       )}

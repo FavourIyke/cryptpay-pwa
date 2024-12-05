@@ -496,7 +496,7 @@ const Dashboard = () => {
                     Verification is in Progress
                   </h4>
                   <h4 className="  text-[14px] mt-1 text-left pr-6 mds:pr-12 md:pr-16 xl:pr-20 xxxl:pr-32">
-                    Your KYC {kycStatus?.data.kyc_level === "100" && "Level 1"}
+                    Your KYC {kycStatus?.data.kyc_level === "100" && "Level 2"}
                     {kycStatus?.data.kyc_level === "201" &&
                       "Level 2 Tier-2"}{" "}
                     verification is currently being processed. Please allow some

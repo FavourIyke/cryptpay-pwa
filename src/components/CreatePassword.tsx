@@ -60,12 +60,17 @@ const CreatePassword = () => {
     if (!validateCreatePassword(password, passwordC)) {
       return;
     }
-    const data = {
+    const data: { [key: string]: any } = {
       username: info.username,
       email: info.email,
-      referral_code: null,
       password: password,
     };
+    if (info.referralCode !== "") {
+      data.referral_code = info.referralCode.trim();
+    } else if (info.referralCode === "" && info.referrer) {
+      data.referral_code = info.referrer;
+    }
+    // console.log(data);
     completeSignIn.mutate(data);
   };
   const upperCaseRegex = /[A-Z]/;
