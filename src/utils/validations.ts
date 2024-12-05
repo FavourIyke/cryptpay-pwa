@@ -44,7 +44,7 @@ import { toast } from "react-hot-toast";
 
       return false;
     }
-    const passwordRegex =/[!@#_$%^&*(),.?":{}|<>]/
+    const passwordRegex =/^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/
 
     if (!passwordRegex.test(password)) {
      
