@@ -60,16 +60,25 @@ const CreatePassword = () => {
     if (!validateCreatePassword(password, passwordC)) {
       return;
     }
+
     const data: { [key: string]: any } = {
       username: info.username,
       email: info.email,
       password: password,
     };
-    if (info.referralCode !== "") {
+
+    // Handle referral code logic
+    if (info.referralCode?.trim()) {
+      // If `referralCode` is not empty after trimming
       data.referral_code = info.referralCode.trim();
-    } else if (info.referralCode === "" && info.referrer) {
-      data.referral_code = info.referrer;
+    } else if (info.referrer?.trim()) {
+      // If `referralCode` is empty but `referrer` exists
+      data.referral_code = info.referrer.trim();
+    } else {
+      // Explicitly set to null if neither exists
+      data.referral_code = null;
     }
+
     // console.log(data);
     completeSignIn.mutate(data);
   };

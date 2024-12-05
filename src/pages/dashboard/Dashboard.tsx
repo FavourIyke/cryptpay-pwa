@@ -571,7 +571,8 @@ const Dashboard = () => {
             </button>
           </div>
           <h4 className="dark:text-gray-300 mt-10 text-black text-[16px] font-medium">
-            These are the rates you will be buying a specific asset at{" "}
+            These are the rates you will be{" "}
+            {sellRateFlow ? "selling" : "buying"} a specific asset at{" "}
           </h4>
           <RateBoard
             setSelectNetworkModal={setSelectNetworkModal}
