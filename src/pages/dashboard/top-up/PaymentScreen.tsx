@@ -47,7 +47,7 @@ const PaymentScreen = ({
   const comfirmDetails = useMutation({
     mutationFn: getBankDetails,
     onSuccess: (r) => {
-      //   console.log(r);
+      console.log(r);
       setTime(r?.data?.account_expiry_date);
       setBankDetails(r?.data?.account);
       //   toast.success(r.message);
@@ -205,7 +205,7 @@ const PaymentScreen = ({
         <h4 className="dark:text-white text-gray-900 mt-5 text-[14px] text-center">
           Transfer the amount to the bank Details below
         </h4>
-        <div className="rounded-xl w-full  py-5 px-2 xs:px-4 mt-8 bg-[#F1F1F1] dark:bg-[#2a2929]">
+        <div className="rounded-xl w-full  py-5 px-4 mt-8 bg-[#F1F1F1] dark:bg-[#2a2929]">
           <div className="w-full  flex justify-between gap-4 items-center">
             <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
               Account Number
@@ -284,14 +284,14 @@ const PaymentScreen = ({
               setOpenPS(false);
               setOpenPCancel(true);
             }}
-            className="w-1/2 h-[42px] mt-4 border rounded-lg border-[#3E3838] text-[#DD524D] text-[12px] flex gap-2 items-center justify-center"
+            className="w-full xs:w-1/2 h-[42px] mt-4 px-2 border rounded-lg border-[#3E3838] text-[#DD524D] text-[12px] flex gap-2 items-center justify-center"
           >
             <FaTimes />
             Cancel Transaction
           </button>
         </div>
         <div className="w-full flex justify-center items-center">
-          <button className="w-1/2 h-[38px] rounded-lg mt-2 bg-[#E9E9E9] dark:bg-[#626262] text-gray-900dark: text-white text-[12px] flex gap-2 items-center justify-center">
+          <button className="w-full xs:w-1/2 h-[38px] px-2 rounded-lg mt-2 bg-[#E9E9E9] dark:bg-[#626262] text-gray-900 dark:text-white text-[12px] flex gap-2 items-center justify-center">
             <FaLock />
             Secured by Tampay
           </button>
@@ -300,7 +300,7 @@ const PaymentScreen = ({
     );
   };
   return (
-    <div className="fixed inset-0 top-20 flex font-sora justify-start items-start pt-12 overflow-auto pb-12 bg-white dark:bg-primary_dark   backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex font-sora justify-start items-start pt-12 overflow-auto pb-12 bg-white dark:bg-primary_dark   backdrop-blur-sm">
       <div
         className={` w-11/12 mds:w-8/12 md:7/12 border dark:border-[#303030] border-[#E6E6E6]  rounded-xl mx-auto p-6 dark:bg-[#1F1F1F]   lgss:w-2/5 xxl:w-1/3 `}
       >

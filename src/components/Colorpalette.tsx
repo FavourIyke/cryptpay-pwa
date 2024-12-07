@@ -73,7 +73,12 @@ const Colorpalette = ({ setIsPalette }: any) => {
           ))}
         </div>
         <button
-          className="w-full mt-6 bg-text_blue rounded-xl font-medium text-[15px] text-white h-[52px]"
+          style={{
+            backgroundColor: bgColor,
+          }}
+          className={`w-full mt-6 ${
+            bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+          } rounded-xl font-medium text-[15px] text-white h-[52px]`}
           onClick={() => handleColorClick(bgColor)}
         >
           Change Color

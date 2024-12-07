@@ -3,6 +3,7 @@ import { IoMdStopwatch } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import { SlArrowLeft } from "react-icons/sl";
 import { useUser } from "../../../context/user-context";
+import { bnb, btc, eth, solana, trx } from "../../../assets/images";
 
 const SelectNetwork = ({
   setSelectNetworkModal,
@@ -25,6 +26,15 @@ const SelectNetwork = ({
       setBgColor(savedColor);
     }
   }, [displayColor]);
+
+  const networkImages: { [key: string]: string } = {
+    Bitcoin: btc,
+    "Ethereum Mainnet": eth,
+    "Ethereum Network": eth,
+    "Binance Smart Chain": bnb,
+    "Tron Network": trx,
+    Solana: solana,
+  };
   return (
     <div className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12   backdrop-blur-sm">
       <div
@@ -60,42 +70,33 @@ const SelectNetwork = ({
           {networks.map((networkk: any, index: any) => (
             <div
               key={index}
-              className="w-full flex mt-8 justify-between items-center"
+              onClick={() => {
+                if (networkSelect === index) {
+                  setNetworkSelect(100);
+                  setNetwork("");
+                } else {
+                  setNetworkSelect(index);
+                  setNetwork(networkk.code);
+                }
+              }}
+              style={{
+                border:
+                  networkSelect === index
+                    ? `1px solid ${bgColor}`
+                    : "1px solid transparent",
+              }}
+              className={`w-full flex p-4 rounded-xl mb-4 dark:bg-[#303030] bg-[#F1F1F1] ${
+                networkSelect === index
+                  ? `${bgColor ? `border-[${bgColor}] border` : " "}  `
+                  : ""
+              }  justify-between items-center`}
             >
               <div className="flex items-center gap-3">
-                <div
-                  onClick={() => {
-                    if (networkSelect === index) {
-                      setNetworkSelect(100);
-                      setNetwork("");
-                    } else {
-                      setNetworkSelect(index);
-                      setNetwork(networkk.code);
-                    }
-                  }}
-                  style={{
-                    border:
-                      networkSelect === index
-                        ? `1px solid ${bgColor}`
-                        : "1px solid #505050",
-                  }}
-                  className={`w-[20px] h-[20px] p-1 flex justify-center items-center rounded-full  ${
-                    networkSelect === index
-                      ? `${
-                          bgColor ? `border-[${bgColor}]` : "border-[#5E91FF] "
-                        }  `
-                      : "bg-transparent border-[#505050]"
-                  } border `}
-                >
-                  <div
-                    style={{
-                      backgroundColor: networkSelect === index ? bgColor : "",
-                    }}
-                    className={`w-full h-full rounded-full  ${
-                      networkSelect === index
-                        ? `${bgColor ? `bg-[${bgColor}]` : "bg-text_blue"}`
-                        : "bg-transparent "
-                    } `}
+                <div className="w-[32px] h-[32px]  rounded-full ">
+                  <img
+                    src={networkImages[networkk.name] || ""} // Default image fallback
+                    alt={`${networkk.name} logo`}
+                    className="w-full h-full bg-cover rounded-full"
                   />
                 </div>
                 <h4 className="text-[14px] dark:text-gray-300 uppercase text-black tracking-widest">
@@ -103,10 +104,12 @@ const SelectNetwork = ({
                 </h4>
               </div>
 
-              <div className="flex items-center gap-2">
-                <IoMdStopwatch className="text-[16px] dark:text-[#D0D5DD] text-black" />
-                <h4 className="text-[10px] dark:text-[#D0D5DD] text-black tracking-widest">
-                  ~ 15 mins
+              <div className="">
+                <h4 className="text-[12px] dark:text-[#D0D5DD] text-black tracking-widest">
+                  Fee = Free
+                </h4>
+                <h4 className="text-[12px] text-right dark:text-gray-400 mt-1 text-black tracking-widest">
+                  ⚡️ 5mins
                 </h4>
               </div>
             </div>

@@ -20,7 +20,7 @@ import BankAddedModal from "./addBank/BankAddedModal";
 import { useUser } from "../../context/user-context";
 import { SlArrowDown, SlArrowRight } from "react-icons/sl";
 import { TiWarning } from "react-icons/ti";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { API } from "../../constants/api";
 import { errorMessage } from "../../utils/errorMessage";
@@ -99,10 +99,11 @@ const Dashboard = () => {
   const [openPSuccess, setOpenPSuccess] = useState<boolean>(false);
 
   const [openPCancel, setOpenPCancel] = useState<boolean>(false);
-  const [openDisplay, setOpenDisplay] = useState<boolean>(false);
+  const [openDisplay, setOpenDisplay] = useState<boolean>(true);
 
   const [bankDetails, setBankDetails] = useState<any>({});
   const [bgColor, setBgColor] = useState<string>("");
+  const queryClient = useQueryClient();
 
   // Retrieve saved color from localStorage on mount
   useEffect(() => {
@@ -135,7 +136,11 @@ const Dashboard = () => {
     const response = await axiosInstance.get(API.checkKycStatus);
     return response.data;
   };
-  const { data: kycStatus, error: error2 } = useQuery({
+  const {
+    data: kycStatus,
+    error: error2,
+    refetch,
+  } = useQuery({
     queryKey: ["kyc-status"],
     queryFn: getKycStatus,
     retry: 1,
@@ -503,7 +508,12 @@ const Dashboard = () => {
                     time for confirmation
                   </h4>
                   <button
-                    onClick={() => navigate("/dashboard")}
+                    onClick={() => {
+                      queryClient.invalidateQueries({
+                        queryKey: ["kyc-status"],
+                      });
+                      refetch();
+                    }}
                     className="p-2 mt-4  rounded-xl bg-gray-900 text-white font-medium text-[12px]"
                   >
                     Click here to refresh
@@ -551,20 +561,34 @@ const Dashboard = () => {
           >
             <button
               onClick={() => setSellRateFlow(false)}
+              style={{
+                borderBottom: !sellRateFlow
+                  ? `2px solid ${bgColor}`
+                  : "2px solid #645D5D",
+              }}
               className={
                 sellRateFlow
                   ? "py-4 w-[50%]  border-b-2 dark:border-[#645D5D] dark:text-[#645D5D] border-[#B7AFAF]  font-semibold text-[14px] text-[#B7AFAF] flex justify-center items-center"
-                  : "py-4 w-[50%]  text-gray-900 dark:text-white font-semibold text-[14px] border-b-2 border-text_blue  flex justify-center items-center"
+                  : `py-4 w-[50%]  text-gray-900 dark:text-white font-semibold text-[14px] border-b-2 ${
+                      bgColor ? `border-[${bgColor}]` : "border-text_blue"
+                    }  flex justify-center items-center`
               }
             >
               Buy Rate
             </button>
             <button
+              style={{
+                borderBottom: sellRateFlow
+                  ? `2px solid ${bgColor}`
+                  : "2px solid #645D5D",
+              }}
               onClick={() => setSellRateFlow(true)}
               className={
                 !sellRateFlow
                   ? "py-4 w-[50%]  border-b-2 dark:border-[#645D5D] dark:text-[#645D5D] border-[#B7AFAF]  font-semibold text-[14px] text-[#B7AFAF] flex justify-center items-center"
-                  : "py-4 w-[50%]  text-gray-900 dark:text-white font-semibold text-[14px] border-b-2 border-text_blue  flex justify-center items-center"
+                  : `py-4 w-[50%]  text-gray-900 dark:text-white font-semibold text-[14px] border-b-2 ${
+                      bgColor ? `border-[${bgColor}]` : "border-text_blue"
+                    } flex justify-center items-center`
               }
             >
               Sell Rate

@@ -19,6 +19,7 @@ import darkCrypt from "./darkCrypt.svg"
 import naijaLogo from "./naijaLogo.svg"
 import feedback from "./feedB.svg"
 import trx from "./trx.png"
+import bnb from "./bnb.svg"
 import verifyBadge from "./verifyBadge.svg"
 import pause from "./pause.svg"
 import paylogoLight from "./payLogoLight.svg"
@@ -28,6 +29,7 @@ import topupCancel from "./topup-cancel.svg"
 import verified from "./verified.svg"
 import noWalletTxn from "./noWalletTXN.svg"
 export  {
+    bnb,
     noWalletTxn,
     verified,
     paylogoDark,

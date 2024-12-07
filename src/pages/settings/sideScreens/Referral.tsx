@@ -12,7 +12,9 @@ const Referral = ({ setSidePage, setScreen, setRefMode }: any) => {
   const { userDetails } = useUser();
   const referralCode = userDetails?.data?.profile?.username;
   const referralEarnings = userDetails?.data?.profile?.referral_earnings;
-  const referralPoints = userDetails?.data?.profile?.referral_points;
+  const referralPoints = userDetails?.data?.profile?.total_referrals;
+
+  // console.log(userDetails);
   return (
     <div className="w-full font-sora">
       <button
@@ -45,7 +47,7 @@ const Referral = ({ setSidePage, setScreen, setRefMode }: any) => {
       <div className="mt-4 flex justify-center gap-4">
         <div className="bg-text_blue w-1/2 rounded-xl p-3 pb-8">
           <h4 className="text-white   font-medium text-[12px]">Earnings</h4>
-          <h4 className="text-white mt-2  font-semibold text-[24px]">
+          <h4 className="text-white mt-2  font-semibold text-[19px]">
             ₦{referralEarnings ? formatAmount(referralEarnings) : "0"}
           </h4>
         </div>
@@ -53,8 +55,8 @@ const Referral = ({ setSidePage, setScreen, setRefMode }: any) => {
           <h4 className="text-gray-800 dark:text-gray-400    font-medium text-[12px]">
             Number of Invites
           </h4>
-          <h4 className="dark:text-white text-gray-800  mt-2  font-semibold text-[24px]">
-            {referralPoints ? formatAmount(referralPoints) : "0"}
+          <h4 className="dark:text-white text-gray-800  mt-2  font-semibold text-[20px]">
+            {referralPoints ? referralPoints.toLocaleString("en-US") : "0"}
           </h4>
         </div>
       </div>

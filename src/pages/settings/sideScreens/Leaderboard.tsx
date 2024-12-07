@@ -14,7 +14,9 @@ const Leaderboard = ({ setRefMode }: any) => {
   const axiosInstance = useAuthAxios();
 
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const referralCode = userDetails?.data?.profile?.username;
 
+  const referralPoints = userDetails?.data?.profile?.total_points;
   const getThemeBasedImage = () => {
     if (theme === "dark") {
       return cryptpay;
@@ -44,6 +46,7 @@ const Leaderboard = ({ setRefMode }: any) => {
       toast.error(errorMessage(newError?.message || newError?.data?.message));
     }
   }, [error2]);
+  console.log(leaderboard);
   return (
     <div className="w-full font-sora">
       <button
@@ -61,10 +64,12 @@ const Leaderboard = ({ setRefMode }: any) => {
             <img src={avatar} className="w-full h-full bg-cover" alt="" />
           </div>
           <div>
-            <h4 className="text-black dark:text-white  text-[12px]">Daniel</h4>
+            <h4 className="text-black dark:text-white  text-[12px]">
+              {referralCode ?? ""}
+            </h4>
 
-            <h4 className="text-gray-400 dark:text-gray-500  text-[10px]">
-              @daniel001
+            <h4 className="text-gray-400  text-[10px]">
+              {referralPoints ? referralPoints : 0}
             </h4>
           </div>
         </div>
@@ -101,7 +106,7 @@ const Leaderboard = ({ setRefMode }: any) => {
                       {board?.username}
                     </h4>
 
-                    <h4 className="text-gray-400 dark:text-gray-500  text-[10px]">
+                    <h4 className="text-gray-400   text-[10px]">
                       {formatAmount(board.points)} points
                     </h4>
                   </div>
@@ -121,7 +126,7 @@ const Leaderboard = ({ setRefMode }: any) => {
         ) : (
           <div className="w-full flex flex-col h-full    justify-start overflow-auto items-center">
             <img src={getThemeBasedImage()} alt="" />
-            <h4 className="text-[14px] mt-5 text-center text-gray-800 dark:text-gray-500">
+            <h4 className="text-[14px] mt-5 text-center text-gray-800 dark:text-gray-400">
               There are no Leaderboards available yet
             </h4>
           </div>

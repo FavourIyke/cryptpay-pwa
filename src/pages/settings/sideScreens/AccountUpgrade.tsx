@@ -166,7 +166,7 @@ const AccountUpgrade = ({
                     </h4>
                   </div>
 
-                  <h4 className=" text-[14px] mt-2 text-gray-600 dark:text-gray-100">
+                  <h4 className=" text-[14px] mt-4 text-gray-600 dark:text-gray-100">
                     One Bank Account
                   </h4>
                 </div>
@@ -293,7 +293,7 @@ const AccountUpgrade = ({
                       </h4>
                     </div>
                     <div className="w-full mt-2 flex justify-start gap-2 items-center">
-                      {level === "201" || level === "202" ? (
+                      {level === "100" || level === "201" || level === "202" ? (
                         <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
@@ -430,7 +430,11 @@ const AccountUpgrade = ({
                 </div>
               </div>
               <button
-                disabled={level === "202" || (level === "201" && tier === 0)}
+                disabled={
+                  level === "202" ||
+                  (level === "201" && tier === 0) ||
+                  (level === "100" && tier === 0)
+                }
                 onClick={() => {
                   if (level === "201") {
                     setTier(2);
