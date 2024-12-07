@@ -172,7 +172,7 @@ const SellAsset = ({
               <div className="[32px] h-[32px] rounded-full">
                 <img
                   src={coinDeets?.logo}
-                  className="w-full h-full  rounded-full"
+                  className="[32px] h-[32px]  rounded-full"
                   alt=""
                 />
               </div>
@@ -201,7 +201,7 @@ const SellAsset = ({
             </strong>{" "}
             to this address or you may lose your funds.
           </div>
-          <div className="mt-6 w-full py-6 px-16 rounded-xl bg-[#F0F0F0] dark:bg-[#2b2a2a]">
+          <div className="mt-6 w-full py-6  rounded-xl bg-[#F0F0F0] dark:bg-[#2b2a2a]">
             <div className="flex justify-center items-center gap-2 mt-3">
               {networks?.map((networki: any, index: number) => {
                 const networkNameMap: { [key: string]: string } = {
@@ -239,7 +239,7 @@ const SellAsset = ({
                         className={
                           network === networki?.code
                             ? `${
-                                bgColor ? `text-[${bgColor}]` : "bg-text_blue"
+                                bgColor ? `text-[${bgColor}]` : "text-text_blue"
                               } text-[12px] font-semibold `
                             : "text-gray-800 text-[12px] font-semibold dark:text-gray-50"
                         }
@@ -253,7 +253,7 @@ const SellAsset = ({
                         className={
                           network === networki?.code
                             ? `${
-                                bgColor ? `text-[${bgColor}]` : "bg-text_blue"
+                                bgColor ? `text-[${bgColor}]` : "text-text_blue"
                               } text-[12px] `
                             : "text-gray-400 text-[12px] dark:text-gray-50"
                         }
@@ -273,9 +273,12 @@ const SellAsset = ({
               })}
             </div>
 
-            <div className="w-full bg-white flex mt-4 flex-col justify-center items-center rounded-xl p-4">
-              <div>
-                <QRCode size={240} value={walletAddy ?? ""} />
+            <div className="w-10/12  xs:w-7/12 md:w-3/5  mb-6 mx-auto bg-white flex mt-4 flex-col justify-center items-center rounded-xl px-4 py-6">
+              <div className=" hidden xs:flex">
+                {walletAddy && <QRCode size={220} value={walletAddy ?? ""} />}
+              </div>
+              <div className="xs:hidden">
+                {walletAddy && <QRCode size={180} value={walletAddy ?? ""} />}
               </div>
               <h4
                 style={{ wordBreak: "break-word", overflowWrap: "break-word" }}

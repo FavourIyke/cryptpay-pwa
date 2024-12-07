@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import { toast } from "react-hot-toast";
 import { API } from "../../../constants/api";
 import useAuthAxios from "../../../utils/baseAxios";
 import { errorMessage } from "../../../utils/errorMessage";
+import { useUser } from "../../../context/user-context";
 
 const SelectCoin = ({
   setSelectCoinModal,
@@ -20,7 +21,16 @@ const SelectCoin = ({
   setCoinDeets,
 }: any) => {
   const axiosInstance = useAuthAxios();
+  const { displayColor } = useUser();
+  const [bgColor, setBgColor] = useState<string>("");
 
+  // Retrieve saved color from localStorage on mount
+  useEffect(() => {
+    const savedColor = localStorage.getItem("dashboardColor");
+    if (savedColor) {
+      setBgColor(savedColor);
+    }
+  }, [displayColor]);
   const getCoins = async () => {
     const response = await axiosInstance.get(API.getCoins);
     return response.data.data;
@@ -68,20 +78,34 @@ const SelectCoin = ({
         <div className="flex w-full  mt-4 mb-6   rounded-2xl items-center">
           <button
             onClick={() => setSellRateFlow(false)}
+            style={{
+              borderBottom: !sellRateFlow
+                ? `2px solid ${bgColor}`
+                : "2px solid #645D5D",
+            }}
             className={
               sellRateFlow
                 ? "py-4 w-[50%]  border-b-2 dark:border-[#645D5D] dark:text-[#645D5D] border-[#B7AFAF]  font-semibold text-[14px] text-[#B7AFAF] flex justify-center items-center"
-                : "py-4 w-[50%]  text-gray-900 dark:text-white font-semibold text-[14px] border-b-2 border-text_blue  flex justify-center items-center"
+                : `py-4 w-[50%]  text-gray-900 dark:text-white font-semibold text-[14px] border-b-2 ${
+                    bgColor ? `border-[${bgColor}]` : "border-text_blue"
+                  }  flex justify-center items-center`
             }
           >
             Buy Rate
           </button>
           <button
+            style={{
+              borderBottom: sellRateFlow
+                ? `2px solid ${bgColor}`
+                : "2px solid #645D5D",
+            }}
             onClick={() => setSellRateFlow(true)}
             className={
               !sellRateFlow
                 ? "py-4 w-[50%]  border-b-2 dark:border-[#645D5D] dark:text-[#645D5D] border-[#B7AFAF]  font-semibold text-[14px] text-[#B7AFAF] flex justify-center items-center"
-                : "py-4 w-[50%]  text-gray-900 dark:text-white font-semibold text-[14px] border-b-2 border-text_blue  flex justify-center items-center"
+                : `py-4 w-[50%]  text-gray-900 dark:text-white font-semibold text-[14px] border-b-2 ${
+                    bgColor ? `border-[${bgColor}]` : "border-text_blue"
+                  } flex justify-center items-center`
             }
           >
             Sell Rate

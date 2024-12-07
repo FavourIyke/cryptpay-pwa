@@ -63,7 +63,7 @@ const GovernmentID = ({
   const completeKyc = useMutation({
     mutationFn: handlePostKyc2,
     onSuccess: (r) => {
-      console.log(r);
+      // console.log(r);
       toast.success(r.message);
       setTimeout(() => {
         setOpenGovId(false);
@@ -107,19 +107,7 @@ const GovernmentID = ({
           </h4>
         </div>
         <div className="w-full mt-10">
-          <div className="w-full">
-            <label className="text-gray-800 text-[14px]  dark:text-white">
-              ID Number
-            </label>
-            <input
-              type="text"
-              value={idNumber}
-              onChange={(e) => setIdNumber(e.target.value)}
-              placeholder="Enter ID Number"
-              className="w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
-            />
-          </div>
-          <div className="w-full mt-6">
+          <div className="w-full ">
             <label className="text-gray-800 text-[14px]  dark:text-white">
               ID Type
             </label>
@@ -138,6 +126,19 @@ const GovernmentID = ({
               ))}
             </select>
           </div>
+          <div className="w-full mt-6">
+            <label className="text-gray-800 text-[14px]  dark:text-white">
+              ID Number
+            </label>
+            <input
+              type="text"
+              value={idNumber}
+              onChange={(e) => setIdNumber(e.target.value)}
+              placeholder="Enter ID Number"
+              className="w-full dark:text-white focus:border-text_blue dark:focus:border-text_blue text-gray-800  dark:border-gray-400 bg-[#FAFAFA] dark:bg-transparent h-[52px] mt-2   outline-none text-[14px] border border-gray-300 bg-transparent px-4 spin-button-none rounded-xl "
+            />
+          </div>
+
           <h4 className="text-gray-800 text-[14px]  dark:text-white mt-6">
             Upload Document
           </h4>

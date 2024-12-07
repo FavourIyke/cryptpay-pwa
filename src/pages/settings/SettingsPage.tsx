@@ -25,6 +25,7 @@ const SettingsPage = () => {
   }, [setScreenn]);
   useEffect(() => {
     if (setSureScreenn) {
+      setSidePage(true);
       setScreen(setSureScreenn);
       // Clear location.state to prevent re-triggering on refresh
       navigate("/settings", { replace: true, state: {} });
