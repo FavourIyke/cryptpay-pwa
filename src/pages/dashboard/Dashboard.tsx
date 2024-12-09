@@ -207,7 +207,6 @@ const Dashboard = () => {
     }
   }, [showPay, navigate]);
   // console.log(sortedPayouts);
-
   const fiatBalance = userDetails?.data?.profile?.fiat_balance;
 
   return (
@@ -291,7 +290,10 @@ const Dashboard = () => {
                       }}
                       className="uppercase text-start mt-1 break-words  text-white tracking-wider text-[15px] font-semibold "
                     >
-                      $0.00
+                      ${" "}
+                      {payoutSummary?.total_bought_in_usd
+                        ? formatAmount(payoutSummary?.total_bought_in_usd)
+                        : "0.00"}
                     </h4>
                   </div>
 
