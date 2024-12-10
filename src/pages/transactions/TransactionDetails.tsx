@@ -15,6 +15,8 @@ const TransactionDetails = ({ clickedPayout }: any) => {
   const { monthAndYear, formattedTime } = formatDateAndTime(
     clickedPayout.transaction_date
   );
+  console.log(clickedPayout);
+
   return (
     <div className="w-full font-sora mt-8">
       <div className="w-full flex flex-col justify-center items-center">
@@ -31,15 +33,9 @@ const TransactionDetails = ({ clickedPayout }: any) => {
         </h4>
         <h4
           className={` ${
-            clickedPayout?.transaction_type === "payout"
-              ? `text-[#0EB622] dark:text-[#0F973D]`
-              : clickedPayout?.transaction_type === "topup"
-              ? `text-[#0EB622] dark:text-[#0F973D]`
-              : clickedPayout?.transaction_type === "buy"
+            clickedPayout?.status === "pending"
               ? `dark:text-pending text-[#F3A218]`
-              : clickedPayout?.transaction_type === "deposit"
-              ? `dark:text-pending text-[#F3A218]`
-              : ""
+              : `text-[#0EB622] dark:text-[#0F973D]`
           }  text-[18px] mt-1 `}
         >
           {" "}
