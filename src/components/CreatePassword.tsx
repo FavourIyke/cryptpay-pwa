@@ -44,7 +44,7 @@ const CreatePassword = () => {
       setTimeout(() => {
         navigate("/verify-mail", {
           state: {
-            email: info.email,
+            email: info?.email,
           },
         });
       }, 1000);
@@ -63,7 +63,7 @@ const CreatePassword = () => {
 
     const data: { [key: string]: any } = {
       username: info?.username,
-      email: info.email,
+      email: info?.email,
       password: password,
     };
 

@@ -489,38 +489,37 @@ const Dashboard = () => {
           </div>
           {kycStatus?.data.kyc_status === "pending" ? (
             <div
-              className={`w-full  flex justify-between items-start gap-4 py-3 ${
+              className={`w-full  flex justify-between items-start md:gap-8 p-4 gap-2 xs:gap-4  ${
                 openDisplay ? "mt-[160px]" : "mt-4"
               } bg-[#E9F4FF] rounded-2xl text-gray-900 `}
             >
               <div className="flex  w-full items-start gap-6 px-4">
                 <div>
-                  <MdPending className="text-[38px]" />
-                </div>
-
-                <div>
-                  <h4 className=" font-bold text-[18px]">
-                    Verification is in Progress
-                  </h4>
-                  <h4 className="  text-[14px] mt-1 text-left pr-6 mds:pr-12 md:pr-16 xl:pr-20 xxxl:pr-32">
+                  <div className="flex justify-start gap-2">
+                    <MdPending className="text-[28px]" />
+                    <h4 className=" font-bold text-[18px]">
+                      Verification is in Progress
+                    </h4>
+                  </div>
+                  <h4 className="  text-[14px] mt-1 text-left ">
                     Your KYC {kycStatus?.data.kyc_level === "100" && "Level 2"}
                     {kycStatus?.data.kyc_level === "201" &&
                       "Level 2 Tier-2"}{" "}
                     verification is currently being processed. Please allow some
                     time for confirmation
                   </h4>
-                  <button
-                    onClick={() => {
-                      queryClient.invalidateQueries({
-                        queryKey: ["kyc-status"],
-                      });
-                      refetch();
-                    }}
-                    className="p-2 mt-4  rounded-xl bg-gray-900 text-white font-medium text-[12px]"
-                  >
-                    Click here to refresh
-                  </button>
                 </div>
+                <button
+                  onClick={() => {
+                    queryClient.invalidateQueries({
+                      queryKey: ["kyc-status"],
+                    });
+                    refetch();
+                  }}
+                  className="p-4 mt-4  rounded-lg bg-text_blue text-white font-medium text-[14px]"
+                >
+                  Refresh
+                </button>
               </div>
               {/* <SlArrowRight className="text-white text-[16px]" /> */}
             </div>
@@ -548,7 +547,6 @@ const Dashboard = () => {
               <SlArrowRight className="text-white text-[16px]" />
             </Link>
           ) : null}
-
           <div
             className={
               kycStatus?.data.kyc_status === "pending"
@@ -760,6 +758,7 @@ const Dashboard = () => {
           setCoinAmount={setCoinAmount}
           nairaAmount={nairaAmount}
           setNairaAmount={setNairaAmount}
+          setOpenDeposit={setOpenDeposit}
         />
       )}
       {buyCoinAddy && (

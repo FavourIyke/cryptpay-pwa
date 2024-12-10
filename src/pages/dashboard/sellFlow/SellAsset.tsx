@@ -17,6 +17,7 @@ import { errorMessage } from "../../../utils/errorMessage";
 import ClipLoader from "react-spinners/ClipLoader";
 import ChangeCoin from "./ChangeCoin";
 import { useUser } from "../../../context/user-context";
+import { pendingAddy } from "../../../assets/images";
 
 const SellAsset = ({
   setSellAssetModal,
@@ -275,16 +276,32 @@ const SellAsset = ({
 
             <div className="w-10/12  xs:w-7/12 md:w-3/5  mb-6 mx-auto bg-white flex mt-4 flex-col justify-center items-center rounded-xl px-4 py-6">
               <div className=" hidden xs:flex">
-                {walletAddy && <QRCode size={220} value={walletAddy ?? ""} />}
+                {walletAddy ? (
+                  <QRCode size={220} value={walletAddy ?? ""} />
+                ) : (
+                  <img
+                    src={pendingAddy}
+                    className="mb-4 w-[60px] h-[60px] rounded-full mt-6"
+                    alt=""
+                  />
+                )}
               </div>
               <div className="xs:hidden">
-                {walletAddy && <QRCode size={180} value={walletAddy ?? ""} />}
+                {walletAddy ? (
+                  <QRCode size={180} value={walletAddy ?? ""} />
+                ) : (
+                  <img
+                    src={pendingAddy}
+                    className="mb-4 w-[60px] h-[60px] rounded-full mt-6"
+                    alt=""
+                  />
+                )}
               </div>
               <h4
                 style={{ wordBreak: "break-word", overflowWrap: "break-word" }}
-                className="mt-4 text-[#141414] font-bold break-words text-[14px]"
+                className="mt-4 text-[#141414] text-left font-bold break-words text-[14px]"
               >
-                {walletAddy ?? ""}
+                {walletAddy ? walletAddy : "No Wallet Address yet"}
               </h4>
             </div>
           </div>

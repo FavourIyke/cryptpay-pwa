@@ -22,6 +22,7 @@ const BuyCoin = ({
   setCoinAmount,
   nairaAmount,
   setNairaAmount,
+  setOpenDeposit,
 }: any) => {
   const [isNairaToCoin, setIsNairaToCoin] = useState(true);
   const { userDetails, displayColor } = useUser();
@@ -67,6 +68,10 @@ const BuyCoin = ({
 
   const handleNairaAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/,/g, "");
+    if (parseFloat(value) < 0) {
+      toast.error("Amount cannot be negative");
+      return;
+    }
     setNairaAmount(value);
     if (value) {
       setCoinAmount((parseFloat(value) / calculatedRate).toFixed(2));
@@ -77,6 +82,10 @@ const BuyCoin = ({
 
   const handleCoinAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/,/g, "");
+    if (parseFloat(value) < 0) {
+      toast.error("Amount cannot be negative");
+      return;
+    }
     setCoinAmount(value);
     if (value) {
       setNairaAmount((parseFloat(value) * calculatedRate).toFixed(2));
@@ -237,20 +246,41 @@ const BuyCoin = ({
           </div>
         </div>
 
-        <button
-          disabled={!coinAmount}
-          onClick={handleProceed}
-          style={{
-            backgroundColor: !coinAmount ? "" : bgColor,
-          }}
-          className={`w-full h-[52px] rounded-[18px] mt-8 ${
-            !coinAmount
-              ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
-              : `${bgColor ? `bg-[${bgColor}]` : "bg-text_blue"} text-white`
-          }  flex justify-center items-center  font-semibold`}
-        >
-          Next
-        </button>
+        <div className="w-full mt-12 gap-2 flex justify-center items-center">
+          {Number(nairaAmount) > Number(fiatBalance) && (
+            <button
+              onClick={() => {
+                setBuyCoinModal(false);
+                setOpenDeposit(true);
+              }}
+              style={{
+                border: `1px solid ${bgColor}`,
+                color: `${bgColor}`,
+              }}
+              className={`w-full mx-auto flex gap-3 items-center justify-center h-[52px] text-[14px] xs:text-[14px] font-medium rounded-xl  ${
+                bgColor
+                  ? `border-[${bgColor}] text-[${bgColor}] `
+                  : "text-[#3A66FF] border-text_blue"
+              } border `}
+            >
+              <h4>Top up</h4>
+            </button>
+          )}
+          <button
+            disabled={!coinAmount}
+            onClick={handleProceed}
+            style={{
+              backgroundColor: !coinAmount ? "" : bgColor,
+            }}
+            className={`w-full h-[52px] rounded-xl  ${
+              !coinAmount
+                ? "dark:text-gray-400 dark:bg-gray-600 bg-gray-400 text-gray-100"
+                : `${bgColor ? `bg-[${bgColor}]` : "bg-text_blue"} text-white`
+            }  flex justify-center items-center  font-semibold`}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );

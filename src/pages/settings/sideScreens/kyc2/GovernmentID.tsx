@@ -8,6 +8,7 @@ import { API } from "../../../../constants/api";
 import { errorMessage } from "../../../../utils/errorMessage";
 import useAuthAxios from "../../../../utils/baseAxios";
 import ClipLoader from "react-spinners/ClipLoader";
+import imageCompression from "browser-image-compression";
 
 const GovernmentID = ({
   setOpenGovId,
@@ -25,17 +26,44 @@ const GovernmentID = ({
   const [openImage, setOpenImage] = useState<boolean>(false);
   const axiosInstance = useAuthAxios();
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
-    setImage(selectedFile);
 
     if (selectedFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        setBase64Image(base64String);
-      };
-      reader.readAsDataURL(selectedFile); // Convert image to Base64
+      if (selectedFile.size > 5 * 1024 * 1024) {
+        // If the file is larger than 5 MB, compress it
+        try {
+          const options = {
+            maxSizeMB: 5, // Maximum file size
+            maxWidthOrHeight: 1920, // Optional: Resize the image to reduce size
+            useWebWorker: true,
+          };
+          const compressedFile = await imageCompression(selectedFile, options);
+          setImage(compressedFile);
+
+          // Convert compressed image to Base64
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64String = reader.result as string;
+            setBase64Image(base64String);
+          };
+          reader.readAsDataURL(compressedFile);
+        } catch (error) {
+          console.error("Error during image compression:", error);
+          toast.error("Failed to compress the image. Please try again.");
+        }
+      } else {
+        // If the file is under 5 MB, use it directly
+        setImage(selectedFile);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64String = reader.result as string;
+          setBase64Image(base64String);
+        };
+        reader.readAsDataURL(selectedFile);
+      }
     }
   };
 

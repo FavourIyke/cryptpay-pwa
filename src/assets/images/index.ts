@@ -28,7 +28,9 @@ import topupSuccess from "./topup-success.svg"
 import topupCancel from "./topup-cancel.svg"
 import verified from "./verified.svg"
 import noWalletTxn from "./noWalletTXN.svg"
+import pendingAddy from "./pendingAddy.png"
 export  {
+    pendingAddy,
     bnb,
     noWalletTxn,
     verified,
