@@ -265,7 +265,10 @@ const SelectBank = ({
               <IoAddOutline className="text-[24px] " />
               <h4>Add Bank</h4>
             </button>
-          ) : userBanks?.length === 0 && kycStatus?.data.kyc_level === "100" ? (
+          ) : userBanks?.length === 0 &&
+            (kycStatus?.data.kyc_level === "100" ||
+              kycStatus?.data.kyc_level === "201" ||
+              kycStatus?.data.kyc_level === "202") ? (
             <button
               onClick={() => {
                 setSelectBankModal(false);

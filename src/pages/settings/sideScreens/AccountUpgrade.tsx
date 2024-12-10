@@ -431,6 +431,7 @@ const AccountUpgrade = ({
               </div>
               <button
                 disabled={
+                  kycStatus?.data.kyc_status === "pending" ||
                   level === "202" ||
                   (level === "201" && tier === 0) ||
                   (level === "100" && tier === 0)

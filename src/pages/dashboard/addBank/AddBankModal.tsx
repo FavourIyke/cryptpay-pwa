@@ -218,7 +218,9 @@ const AddBankModal = ({
               <h4 className="text-[13px] font-semibold mt-4 dark:text-white text-gray-800">
                 {userBankName && userBankName}
               </h4>
-              {userBankName && (
+              {completeGetBankName.isPending ? (
+                <ClipLoader color="#F7931A" size={20} />
+              ) : userBankName ? (
                 <div className="mt-4 flex justify-start gap-3 items-center">
                   <input
                     type="checkbox"
@@ -230,7 +232,7 @@ const AddBankModal = ({
                     Make default bank
                   </h4>
                 </div>
-              )}
+              ) : null}
               <button
                 disabled={disabled}
                 onClick={() => {

@@ -195,16 +195,25 @@ const PaymentScreen = ({
           <img src={getThemeBasedImage()} alt="" />
         </div>
         <h4
-          className={`text-text_blue  mt-1 text-[22px] font-semibold text-center`}
+          style={{
+            color: bgColor,
+          }}
+          className={`${
+            bgColor ? `text-[${bgColor}]` : "text-text_blue"
+          }  mt-1 text-[22px] font-semibold text-center`}
         >
           {formatAmount(amount)} NGN
         </h4>
         <h4 className="text-gray-500 mt-2 text-[12px]  text-center">
           Fund wallet with
         </h4>
-        <h4 className="dark:text-white text-gray-900 mt-5 text-[14px] text-center">
-          Transfer the amount to the bank Details below
-        </h4>
+
+        <div className="w-full p-4 mt-6 dark:bg-[#DD900D1A] bg-[#DD900D] bg-opacity-10 text-[#664101] rounded-xl dark:text-[#F7D394] text-[12px]">
+          Please ensure to transfer the{" "}
+          <strong className="text-[#DD900D] font-semibold">Exact Amount</strong>{" "}
+          to the Account below to avoid any delays or complications with
+          processing your transaction or you may lose your funds.
+        </div>
         <div className="rounded-xl w-full  py-5 px-4 mt-8 bg-[#F1F1F1] dark:bg-[#2a2929]">
           <div className="w-full  flex justify-between gap-4 items-center">
             <h4 className="text-gray-800 dark:text-gray-400 text-[12px] ">
