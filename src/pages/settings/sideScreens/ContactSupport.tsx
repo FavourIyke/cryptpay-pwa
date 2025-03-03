@@ -54,12 +54,12 @@ const ContactSupport = ({ setSupportMode }: any) => {
                   Email Address
                 </h4>
                 <a
-                  href="mailto:help.cryptpay.co"
+                  href="mailto:help.celler.co"
                   target="_blank"
                   rel="noreferrer"
                   className="text-gray-800  underline dark:text-gray-50 text-left text-[14px]"
                 >
-                  support@cryptpay.co
+                  support@celler.co
                 </a>
               </div>
             </div>

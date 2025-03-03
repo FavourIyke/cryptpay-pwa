@@ -46,7 +46,7 @@ const UserFeedback = ({ setSupportMode }: any) => {
         User Feedback
       </h4>
       <h4 className="text-gray-500 dark:text-white mt-2  font-medium text-[14px]">
-        Got an idea to elevate CryptPay? Share it with us and help shape the
+        Got an idea to elevate Celler? Share it with us and help shape the
         future!
       </h4>
       <div className="w-full overflow-auto lgss:h-[600px]">
@@ -81,7 +81,7 @@ const UserFeedback = ({ setSupportMode }: any) => {
         </div>
         <h4 className="text-gray-800 dark:text-gray-100 mt-3 font-medium text-[14px]">
           Please share the reason for your rating. Let us know what you love
-          about CryptPay or where we can improve.
+          about Celler or where we can improve.
         </h4>
         <div className="w-full mt-3">
           <textarea
