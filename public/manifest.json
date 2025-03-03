@@ -449,6 +449,12 @@
     {
       "src": "ios/1024.png",
       "sizes": "1024x1024"
+    },
+    {
+      "src": "thumbnail.png",
+      "type": "image/png",
+      "sizes": "1200x630",
+      "purpose": "any"
     }
   ],
   "start_url": "/",

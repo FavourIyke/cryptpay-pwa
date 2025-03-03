@@ -362,7 +362,7 @@ const Dashboard = () => {
                 <div
                   style={{ backgroundColor: bgColor }}
                   className={`py-3 ${
-                    bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+                    bgColor ? `bg-[${bgColor}]` : "bg-[#1C1C1D]"
                   } w-full -bottom-[130px] pt-20 rounded-b-[40px] absolute ${
                     openDisplay ? "" : "sidebar-hidden"
                   }   pl-4 xxs:pl-10 lgss:px-16 xxxl:px-20 sidebar`}

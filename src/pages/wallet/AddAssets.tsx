@@ -299,8 +299,10 @@ const AddAssets = ({ setOpenAddModal }: any) => {
                           }}
                           className={`flex w-[52px] cursor-pointer h-8 rounded-full transition-all items-center duration-500 ${
                             toggleStates[wallet.crypto_symbol]
-                              ? `bg-[${bgColor}]`
-                              : "bg-gray-600"
+                              ? `${
+                                  bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+                                }`
+                              : "bg-gray-800"
                           }`}
                         >
                           <span
