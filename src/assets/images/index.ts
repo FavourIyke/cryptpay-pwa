@@ -1,4 +1,5 @@
-import logo from "./newLogo.svg"
+import logo from "./lightLogo.svg"
+import darkLogo from "./darkLogo.svg"
 import btc from "./btc.png"
 import eth from "./eth.png"
 import solana from "./solana.png"
@@ -14,30 +15,27 @@ import opayLogo from "./opayLogo.png"
 import progress from "./progress.png"
 import nigeriaFlag from "./Country.png"
 import success from "./success.png"
-import cryptpay from "./cryptpayES.svg"
-import darkCrypt from "./darkCrypt.svg"
+import cryptpay from "./newdarkLogomark.svg"
+import darkCrypt from "./newLightLogomARK.svg"
 import naijaLogo from "./naijaLogo.svg"
 import feedback from "./feedB.svg"
 import trx from "./trx.png"
 import bnb from "./bnb.svg"
 import verifyBadge from "./verifyBadge.svg"
 import pause from "./pause.svg"
-import paylogoLight from "./payLogoLight.svg"
-import paylogoDark from "./payLogoDark.svg"
+
 import topupSuccess from "./topup-success.svg"
 import topupCancel from "./topup-cancel.svg"
 import verified from "./verified.svg"
 import noWalletTxn from "./noWalletTXN.svg"
 import pendingAddy from "./pendingAddy.png"
-export  {
+export  {darkLogo,
     pendingAddy,
     bnb,
     noWalletTxn,
     verified,
-    paylogoDark,
     topupCancel,
     topupSuccess,
-    paylogoLight,
     pause,
     verifyBadge,
     trx,

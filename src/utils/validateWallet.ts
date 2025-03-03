@@ -24,7 +24,7 @@ export const validateWalletAddress = (
   network?: string
 ) => {
   try {
-    const coinName = coin.toLowerCase();
+    const coinName = coin?.toLowerCase();
     const normalizedNetwork = network?.toLowerCase() || '';
 
     switch (coinName) {

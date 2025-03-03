@@ -13,7 +13,10 @@ const SelectNetwork = ({
   setNetwork,
   coin,
   sellRate,
+  sellRateFlow,
   networks,
+  buyType,
+  setBuyExModal,
 }: any) => {
   const { displayColor } = useUser();
   const [networkSelect, setNetworkSelect] = useState<number>(100);
@@ -38,7 +41,7 @@ const SelectNetwork = ({
   return (
     <div className="fixed inset-0  flex font-sora justify-start items-center lgss:items-start lgss:pt-10 bg-white dark:bg-primary_dark overflow-auto pb-12   backdrop-blur-sm">
       <div
-        className={` w-[96%] mds:w-9/12 md:6/12 lgss:w-1/2 xxl:w-[35%] xxxl:w-[25%] border  dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-4 mds:p-6  dark:bg-[#1F1F1F] mt-6 lgss:mt-12   `}
+        className={` w-[96%] mds:w-9/12 md:6/12 lgss:w-2/5 xxl:w-[35%] xxxl:w-[25%] border  dark:border-[#303030] border-[#E6E6E6] rounded-xl mx-auto p-4 mds:p-6  dark:bg-[#1F1F1F] mt-6 lgss:mt-12   `}
       >
         <div className="w-full flex justify-between items-center">
           <button
@@ -119,11 +122,15 @@ const SelectNetwork = ({
           disabled={networkSelect === 100}
           onClick={() => {
             setSelectNetworkModal(false);
-            if (sellRate) {
+
+            if (sellRate || sellRateFlow) {
               setSelectBankModal(true);
-            } else {
-              setBuyCoinModal(true);
+              return;
             }
+
+            buyType === "Celler"
+              ? setBuyExModal(true)
+              : buyType === "Ex" && setBuyCoinModal(true);
           }}
           style={{ backgroundColor: networkSelect !== 100 ? bgColor : "" }}
           className={`w-full h-[52px] rounded-[18px] mt-16 ${

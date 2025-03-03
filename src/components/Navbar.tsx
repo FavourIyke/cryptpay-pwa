@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { avatar, logo, notify } from "../assets/images";
+import { avatar, darkLogo, logo, notify } from "../assets/images";
 import { paddingX } from "../constants";
 import { NavLink } from "react-router-dom";
 import { useUser } from "../context/user-context";
@@ -10,6 +10,7 @@ import useAuthAxios from "../utils/baseAxios";
 import { useAuth } from "../context/auth-context";
 import { MdColorLens } from "react-icons/md";
 import Colorpalette from "./Colorpalette";
+import { HiMenuAlt3 } from "react-icons/hi";
 
 const Navbar = () => {
   const {
@@ -19,6 +20,8 @@ const Navbar = () => {
     displayColor,
     setIsPalette,
     isPalette,
+    theme,
+    setShowMenu,
   } = useUser();
   const [bgColor, setBgColor] = useState<string>("");
 
@@ -45,12 +48,22 @@ const Navbar = () => {
   // console.log(notificationsData);
   return (
     <div
-      className={`${paddingX} w-full font-sora py-6  flex justify-between items-center`}
+      className={`${paddingX} w-full font-sora pt-8  flex justify-between items-center`}
     >
       <NavLink to="/dashboard">
-        <img src={logo} alt="" />
+        {theme === "light" ? (
+          <img src={logo} className="lgss:hidden" alt="" />
+        ) : (
+          <img src={darkLogo} className="lgss:hidden" alt="" />
+        )}
       </NavLink>
-      <div className="flex gap-3 items-center">
+      <div className="lgss:hidden">
+        <HiMenuAlt3
+          className="text-black dark:text-white cursor-pointer text-[28px]"
+          onClick={() => setShowMenu((prev: any) => !prev)}
+        />
+      </div>
+      <div className="hidden lgss:flex gap-3 items-center">
         <NavLink to="/settings">
           <div className="w-[36px] h-[36px] rounded-full">
             <img src={avatar} alt="" className="w-full h-full bg-cover" />
@@ -65,13 +78,11 @@ const Navbar = () => {
             className="cursor-pointer text-gray-100 text-[20px]"
           />
         </button>
-        <button className="w-[32px] relative h-[32px] bg-[#313131] rounded-full flex justify-center items-center">
-          <img
-            src={notify}
-            onClick={() => setIsNotified((prev: any) => !prev)}
-            className="cursor-pointer"
-            alt=""
-          />
+        <button
+          onClick={() => setIsNotified((prev: any) => !prev)}
+          className="w-[32px] relative h-[32px] bg-[#313131] rounded-full flex justify-center items-center"
+        >
+          <img src={notify} className="cursor-pointer" alt="" />
           {notificationsData?.data?.total >= 1 && (
             <div
               style={{

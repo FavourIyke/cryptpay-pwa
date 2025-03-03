@@ -35,7 +35,7 @@ const FAQ = ({ setSupportMode }: any) => {
         >
           <div className="flex justify-between items-center">
             <h4 className="text-gray-800 dark:text-gray-100 font-bold text-[14px]">
-              What is Cryptpay?
+              What is Celler ?
             </h4>
             {activeQuestion === 1 ? (
               <SlArrowUp className="text-gray-400 dark:text-gray-50 text-[16px]" />
@@ -45,7 +45,7 @@ const FAQ = ({ setSupportMode }: any) => {
           </div>
           {activeQuestion === 1 && (
             <h4 className="text-left text-gray-600 dark:text-gray-400 mt-4 text-[14px]">
-              Cryptpay is a comprehensive cryptocurrency platform that allows
+              Celler is a comprehensive cryptocurrency platform that allows
               users to buy, sell, swap, and deposit various cryptocurrencies. It
               also provides advanced features for managing and tracking your
               digital assets.
@@ -63,7 +63,7 @@ const FAQ = ({ setSupportMode }: any) => {
         >
           <div className="flex justify-between items-center">
             <h4 className="text-gray-800 dark:text-gray-100 font-bold text-[14px]">
-              How do I create an account on Cryptpay?
+              How do I create an account on Celler ?
             </h4>
             {activeQuestion === 2 ? (
               <SlArrowUp className="text-gray-400 dark:text-gray-50 text-[16px]" />
@@ -90,7 +90,7 @@ const FAQ = ({ setSupportMode }: any) => {
         >
           <div className="flex justify-between items-center">
             <h4 className="text-gray-800 dark:text-gray-100 font-bold text-[14px]">
-              What cryptocurrencies can I trade on Cryptpay?
+              What cryptocurrencies can I trade on Celler ?
             </h4>
             {activeQuestion === 3 ? (
               <SlArrowUp className="text-gray-400 dark:text-gray-50 text-[16px]" />
@@ -100,7 +100,7 @@ const FAQ = ({ setSupportMode }: any) => {
           </div>
           {activeQuestion === 3 && (
             <h4 className="text-left text-gray-600 dark:text-gray-400 mt-4 text-[14px]">
-              On Cryptpay, you can trade a variety of popular cryptocurrencies,
+              On Celler , you can trade a variety of popular cryptocurrencies,
               including Bitcoin (BTC), Ethereum (ETH), Tether (USDT), and Solana
               (SOL), among others. We continuously update our list to include
               new and emerging cryptocurrencies.
@@ -118,7 +118,7 @@ const FAQ = ({ setSupportMode }: any) => {
         >
           <div className="flex justify-between items-center">
             <h4 className="text-gray-800 dark:text-gray-100 font-bold text-[14px]">
-              Are my funds safe with Cryptpay?
+              Are my funds safe with Celler ?
             </h4>
             {activeQuestion === 4 ? (
               <SlArrowUp className="text-gray-400 dark:text-gray-50 text-[16px]" />
@@ -128,7 +128,7 @@ const FAQ = ({ setSupportMode }: any) => {
           </div>
           {activeQuestion === 4 && (
             <h4 className="text-left text-gray-600 dark:text-gray-400 mt-4 text-[14px]">
-              Yes, your funds are safe with Cryptpay. We prioritize the security
+              Yes, your funds are safe with Celler . We prioritize the security
               of your assets by employing advanced encryption protocols, secure
               storage solutions, and regular security audits. Additionally, we
               adhere to industry best practices to protect your information and
@@ -148,7 +148,7 @@ const FAQ = ({ setSupportMode }: any) => {
         >
           <div className="flex justify-between items-center">
             <h4 className="text-gray-800 dark:text-gray-100 font-bold text-[14px]">
-              What are the fees associated with using Cryptpay?
+              What are the fees associated with using Celler ?
             </h4>
             {activeQuestion === 5 ? (
               <SlArrowUp className="text-gray-400 dark:text-gray-50 text-[16px]" />
@@ -158,7 +158,7 @@ const FAQ = ({ setSupportMode }: any) => {
           </div>
           {activeQuestion === 5 && (
             <h4 className="text-left text-gray-600 dark:text-gray-400 mt-4 text-[14px]">
-              Cryptpay charges fees for certain transactions and services. These
+              Celler charges fees for certain transactions and services. These
               may include trading fees, withdrawal fees, and deposit fees, which
               vary depending on the type of transaction and the cryptocurrency
               involved.

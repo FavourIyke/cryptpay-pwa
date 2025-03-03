@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
-import { pause, paylogoDark, paylogoLight } from "../../../assets/images";
+import { pause, logo, darkLogo } from "../../../assets/images";
 import { formatAmount } from "../../../utils/formatDate";
 import { PiWarningCircleLight } from "react-icons/pi";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -22,6 +22,7 @@ const PaymentScreen = ({
   setBankDetails,
   setOpenPSuccess,
   setOpenPCancel,
+  setBuyModal,
 }: any) => {
   const { theme, displayColor } = useUser();
   const [bgColor, setBgColor] = useState<string>("");
@@ -47,7 +48,7 @@ const PaymentScreen = ({
   const comfirmDetails = useMutation({
     mutationFn: getBankDetails,
     onSuccess: (r) => {
-      console.log(r);
+      // console.log(r);
       setTime(r?.data?.account_expiry_date);
       setBankDetails(r?.data?.account);
       //   toast.success(r.message);
@@ -89,13 +90,13 @@ const PaymentScreen = ({
   });
   const getThemeBasedImage = () => {
     if (theme === "dark") {
-      return paylogoDark;
+      return darkLogo;
     } else if (theme === "light") {
-      return paylogoLight;
+      return logo;
     } else if (theme === "system") {
-      return darkQuery.matches ? paylogoLight : paylogoDark;
+      return darkQuery.matches ? logo : darkLogo;
     }
-    return paylogoDark; // fallback in case of an unexpected value
+    return darkLogo; // fallback in case of an unexpected value
   };
   const [screen, setScreen] = useState<boolean>(true);
 
@@ -317,7 +318,7 @@ const PaymentScreen = ({
           <button
             onClick={() => {
               setOpenPS(false);
-              setOpenDeposit(true);
+              setBuyModal(true);
             }}
             className="w-[40px] h-[40px] rounded-full bg-[#007AFF] bg-opacity-10 dark:bg-opacity-100 dark:bg-[#3D3D3D] flex justify-center items-center"
           >

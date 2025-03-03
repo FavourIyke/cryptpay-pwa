@@ -54,7 +54,7 @@ const UserFeedback = ({ setSupportMode }: any) => {
           <img src={feedback} alt="" />
         </div>
         <h4 className="text-gray-800 dark:text-gray-100 font-medium text-[14px]">
-          How likely are you to recommend Cryptpay to your Family and Friends
+          How likely are you to recommend Celler to your Family and Friends
         </h4>
         <div className="grid grid-cols-5 mt-4 gap-4">
           {Array.from({ length: 10 }).map((_, num) => (

@@ -47,30 +47,25 @@ export const getFormattedDate = (dateStr: string) => {
   }
 };
 
-  export function formatAmount(value: any) {
-    if (value === null || value === undefined) return "0.00"; // Handle null/undefined values
+ export function formatAmount(value: any): string {
+  if (value === null || value === undefined || isNaN(Number(value))) return "0.00"; // Handle null, undefined, and non-numeric inputs
 
-    // Convert to a number if it's a string
-    const numValue = Number(value);
+  const numValue = Number(value);
 
-    // If value is greater than 0.01, format with 2 decimal places
-    if (numValue >= 0.01) {
-      return numValue.toLocaleString("en-US", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
-    }
-
-    // If value is smaller than 0.01, but not zero, format with higher precision
-    if (numValue > 0) {
-      const precision = Math.abs(numValue) < 0.0001 ? 8 : 3; // More precision for very small values
-      return numValue.toFixed(precision);
-    }
-
-    // Return '0.00' for zero value
-    return "0.00";
+  if (numValue >= 0.01) {
+    return numValue.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 3,
+    });
   }
 
+  if (numValue > 0) {
+    const precision = numValue < 0.0001 ? 8 : 6;
+    return numValue.toFixed(precision);
+  }
+
+  return "0.00";
+}
   export const formatDateAndTime = (utcDateString: string) => {
   const date = new Date(utcDateString + 'Z'); // Parse UTC string
   

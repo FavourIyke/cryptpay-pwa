@@ -1,4 +1,4 @@
-export const paddingX = "px-4 xs:px-8 mds:px-12 md:px-28 lgss:px-28 lg:px-36  xxxl:px-[480px]"
+export const paddingX = "px-4 xs:px-8 mds:px-12 md:px-28 lgss:px-6 lg:px-16  xxxl:px-[250px]"
 export const getExplorerUrl = (coin: string, network: string, transactionHash: string) => {
   switch (coin) {
     case "BTC":

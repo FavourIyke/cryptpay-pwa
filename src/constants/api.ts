@@ -47,5 +47,9 @@ export const API = {
   getReferrals: `${BASE_URL}/api/user/referrals`,
   getLeaderboard: `${BASE_URL}/api/leaderboard`,
 
-
+  sellCrypto: `${BASE_URL}/api/user/sell`,
+  getWallets: `${BASE_URL}/api/user/wallets`,
+  createWallet: `${BASE_URL}/api/user/wallet/update-status`,
+  getHoldingWalletAddress:(coin:string, network:string) => `${BASE_URL}/api/wallet-address?crypto_type=${coin}&network=${network}&address_type=holding`,
+  withdrawCrypto: `${BASE_URL}/api/user/withdraw`,
 };
