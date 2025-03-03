@@ -8,7 +8,7 @@ const Signup = () => {
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [referralCode, setReferralCode] = useState<string | null>(null);
-  const [, setCookie] = useCookies(["cryptpay-referral-code"]);
+  const [, setCookie] = useCookies(["celler-referral-code"]);
   const [referrer, setReferrer] = useState("");
 
   const location = useLocation();
@@ -20,12 +20,12 @@ const Signup = () => {
 
     if (codeFromUrl) {
       setReferrer(codeFromUrl); // Set the referral code in state
-      setCookie("cryptpay-referral-code", codeFromUrl, { path: "/" }); // Save in cookies
+      setCookie("celler-referral-code", codeFromUrl, { path: "/" }); // Save in cookies
     }
 
     // Fetch referral code from cookies if not in URL
     const cookies = new Cookies();
-    const cookieReferralCode = cookies.get("cryptpay-referral-code");
+    const cookieReferralCode = cookies.get("celler-referral-code");
     if (cookieReferralCode && !codeFromUrl) {
       setReferrer(cookieReferralCode);
     }
@@ -33,7 +33,7 @@ const Signup = () => {
 
   useEffect(() => {
     const cookies = new Cookies();
-    const newCookie = cookies.get("cryptpay-referral-code");
+    const newCookie = cookies.get("celler-referral-code");
 
     setReferrer(newCookie);
   }, []);

@@ -8,27 +8,27 @@ export const AuthContext = createContext<ContextValueType>({});
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider: React.FC<PropsType> = ({ children }) => {
-  const [, setCookie, removeCookie] = useCookies(["cryptpay-token"]);
+  const [, setCookie, removeCookie] = useCookies(["celler-token"]);
   const [token, setToken] = useState<string>("");
   useEffect(() => {
     const cookies = new Cookies();
-    const token = cookies.get("cryptpay-token");
+    const token = cookies.get("celler-token");
     setToken(token);
   }, []);
 
   const authenticate = async (token: string) => {
     try {
-      setCookie("cryptpay-token", token);
+      setCookie("celler-token", token);
       setToken(token);
       return Promise.resolve("");
     } catch (error) {
-      removeCookie("cryptpay-token");
+      removeCookie("celler-token");
       return Promise.reject(error);
     }
   };
 
   const logout = () => {
-    removeCookie("cryptpay-token");
+    removeCookie("celler-token");
     setToken("none");
   };
 

@@ -20,7 +20,7 @@ const handleError = (error: AxiosError) => {
       (error.response.data as ITokenExpired)?.error === "Unauthorized" &&
       (error.response.data as ITokenExpired)?.message === "Session expired"
     ) {
-      cookies.remove("cryptpay-token");
+      cookies.remove("celler-token");
     }
     return error.response;
   } else if (error.request) {
@@ -33,7 +33,7 @@ const handleError = (error: AxiosError) => {
 baseAxios.interceptors.request.use(
   async (config) => {
     if (!config.headers?.Authorization) {
-      const token = cookies.get("cryptpay-token");
+      const token = cookies.get("celler-token");
       if (token) {
         if (!config.headers) {
           config.headers = {} as AxiosRequestHeaders;
