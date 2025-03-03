@@ -4,7 +4,7 @@ import { FiClipboard, FiCopy } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { formatAmount, formatDateAndTime } from "../../utils/formatDate";
 import { truncateWord } from "../../utils/wordFunctions";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaHourglassHalf } from "react-icons/fa";
 
 const TransactionDetails = ({ clickedPayout }: any) => {
   const [open, setOpen] = useState<boolean>(false);
@@ -15,7 +15,7 @@ const TransactionDetails = ({ clickedPayout }: any) => {
   const { monthAndYear, formattedTime } = formatDateAndTime(
     clickedPayout.transaction_date
   );
-  console.log(clickedPayout);
+  // console.log(clickedPayout);
 
   return (
     <div className="w-full font-sora mt-8">
@@ -79,7 +79,7 @@ const TransactionDetails = ({ clickedPayout }: any) => {
           onClick={() => setOpen(false)}
           className={`w-1/2 flex justify-center items-center  py-3 text-[14px] ${
             !open
-              ? "border-b-2 border-text_blue text-white"
+              ? "border-b-2 border-text_blue dark:text-white text-black "
               : "border-b-2 border-[#262626] text-[#645D5D]"
           }`}
         >
@@ -87,9 +87,9 @@ const TransactionDetails = ({ clickedPayout }: any) => {
         </button>
         <button
           onClick={() => setOpen(true)}
-          className={`w-1/2 flex justify-center items-center text-white py-3 text-[14px] ${
+          className={`w-1/2 flex justify-center items-center  py-3 text-[14px] ${
             open
-              ? "border-b-2 border-text_blue text-white"
+              ? "border-b-2 border-text_blue dark:text-white text-black"
               : "border-b-2 border-[#262626] text-[#645D5D]"
           }`}
         >
@@ -321,6 +321,9 @@ const TransactionDetails = ({ clickedPayout }: any) => {
                     clickedPayout?.status === "completed" ||
                     clickedPayout?.status === "successful"
                       ? "bg-text_blue "
+                      : clickedPayout?.status === "pending" ||
+                        clickedPayout?.status === "processing"
+                      ? "dark:bg-text_blue bg-text_blue"
                       : "dark:bg-[#8D8484] bg-#B0B0B0]"
                   } 
                   
@@ -329,6 +332,9 @@ const TransactionDetails = ({ clickedPayout }: any) => {
                   {clickedPayout?.status === "completed" ||
                   clickedPayout?.status === "successful" ? (
                     <FaCheck className="text-[14px] text-white" />
+                  ) : clickedPayout?.status === "pending" ||
+                    clickedPayout?.status === "processing" ? (
+                    <FaHourglassHalf className="text-[13px] text-white" />
                   ) : null}
                 </div>
               </div>

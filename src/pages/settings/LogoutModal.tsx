@@ -35,7 +35,7 @@ const LogoutModal = ({ setLogout }: any) => {
   return (
     <div className="fixed inset-0 flex font-sora justify-center items-center  -top-20   backdrop-blur-sm ">
       <div
-        className={` w-11/12 mds:w-9/12 md:6/12 lgss:w-1/2 xxl:w-[35%] xxxl:w-[25%] border dark:border-[#303030] border-[#E6E6E6] bg-white  rounded-xl mx-auto p-6 dark:bg-[#1F1F1F]   `}
+        className={` w-11/12 mds:w-9/12 md:6/12 lgss:w-2/5 xxl:w-[35%] xxxl:w-[25%] border dark:border-[#303030] border-[#E6E6E6] bg-white  rounded-xl mx-auto p-6 dark:bg-[#1F1F1F]   `}
       >
         <div className="flex flex-col px-4 justify-center mt-6 gap-4 items-center">
           <RiErrorWarningFill className="text-[100px] text-[#D42620] dark:text-[#DD524D] " />

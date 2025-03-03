@@ -25,9 +25,16 @@ const BuyReceipt = ({
   setBuySummary,
   setNairaAmount,
   buySummary,
+  buyType,
+  setCoinAmount,
+  from,
+  setFrom,
+  setBuyExModal,
+  setScreen,
+  setSidePage,
 }: any) => {
   const [copyBankName, setCopyBankName] = useState<boolean>(false);
-  const { refetch2, displayColor } = useUser();
+  const { refetch1, displayColor } = useUser();
   const [bgColor, setBgColor] = useState<string>("");
   const queryClient = useQueryClient();
   // Retrieve saved color from localStorage on mount
@@ -55,16 +62,21 @@ const BuyReceipt = ({
       // console.log(r);
       toast.success(r.message);
 
-      refetch2();
+      refetch1();
       queryClient.invalidateQueries({
-        queryKey: ["userDetails"],
+        queryKey: ["userDetails", "get-user-wallets"],
       });
       setTimeout(() => {
         setBuyReceiptModal(false);
         setFinalModal(true);
         setWalletAddy("");
         setNairaAmount("");
+        setCoinAmount("");
         setBuySummary([]);
+        if (from === "SidePage") {
+          setScreen(0);
+          setSidePage(false);
+        }
       }, 1500);
       // setTimeout(() => {
       //   setSelectBankModal(false);
@@ -87,7 +99,11 @@ const BuyReceipt = ({
           <button
             onClick={() => {
               setBuyReceiptModal(false);
-              setBuyCoinModal(true);
+              if (buyType === "Ex") {
+                setBuyCoinModal(true);
+              } else {
+                setBuyExModal(true);
+              }
             }}
             className="flex items-center gap-2 "
           >
@@ -121,13 +137,27 @@ const BuyReceipt = ({
               </div>
               <button
                 onClick={() => {
-                  const data = {
-                    crypto_symbol: coin,
-                    network: network,
-                    amount_naira: buySummary?.amount_naira,
-                    wallet_address: walletAddy,
-                    pin: pin,
-                  };
+                  const data =
+                    buyType === "Ex"
+                      ? {
+                          crypto_symbol: coin,
+                          network,
+                          amount_naira: buySummary?.amount_naira,
+                          wallet_address: walletAddy,
+                          pin,
+                        }
+                      : buyType === "Celler"
+                      ? {
+                          crypto_symbol: coin,
+                          network: "Nil",
+                          amount_naira: buySummary?.amount_naira,
+                          pin,
+                          wallet_address: "Nil",
+
+                          internal_wallet: true,
+                        }
+                      : {};
+
                   comfirmBuy.mutate(data);
                 }}
                 disabled={pin.length !== 4 || comfirmBuy.isPending}
@@ -155,7 +185,7 @@ const BuyReceipt = ({
             <h4 className="text-gray-800 dark:text-gray-100 mt-4 font-semibold text-[20px]">
               Buy {coin}
             </h4>
-            <div className="w-full flex flex-col justify-center  mt-10 items-center">
+            <div className="w-full flex flex-col justify-center  mt-8 items-center">
               <h4 className="text-gray-800 text-[12px]  dark:text-gray-400  ">
                 You’re about to buy
               </h4>
@@ -165,81 +195,91 @@ const BuyReceipt = ({
                   {coin}
                 </span>
               </h4>
-            </div>
-
-            <div className="w-full mt-4 flex justify-between items-center">
-              <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
-                Network
-              </h4>
-              <h4 className="dark:text-gray-400 text-[12px] uppercase text-gray-800">
-                {network}
-              </h4>
-            </div>
-            <div className="w-full mt-4 flex justify-between items-center">
-              <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
-                Transaction Fee
-              </h4>
-              <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
-                {formatAmount(buySummary?.transaction_fee)} {coin}
-              </h4>
-            </div>
-
-            <h4 className="dark:text-white text-gray-800 text-[14px] mt-8">
-              Transaction Details
-            </h4>
-            <div className="w-full mt-8 flex justify-between items-center">
-              <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
-                Reciepeint Address
-              </h4>
-              <div className="flex items-center gap-3">
-                <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
-                  {truncateWord(walletAddy)}
+              <div className="flex justify-center items-center mt-2 gap-2">
+                <h4 className=" text-gray-500 dark:text-gray-400  text-[14px] ">
+                  for NGN {formatAmount(buySummary?.amount_naira)}
                 </h4>
-                <CopyToClipboard
-                  text={walletAddy}
-                  onCopy={() => {
-                    setCopyBankName(true);
-                    setTimeout(() => {
-                      setCopyBankName(false);
-                    }, 2500);
-                  }}
-                >
-                  {copyBankName ? (
-                    <FiClipboard className="text-[16px] dark:text-[#D0D5DD] text-black" />
-                  ) : (
-                    <FiCopy className="text-[16px] dark:text-[#D0D5DD] text-black" />
-                  )}
-                </CopyToClipboard>
               </div>
             </div>
-            <div className="w-full mt-4 flex justify-between items-center">
-              <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
-                Amount Paid
-              </h4>
-              <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
-                {formatAmount(buySummary?.amount_naira)} NGN
-              </h4>
-            </div>
-            <div className="w-full mt-4 flex justify-between items-center">
-              <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
-                Amount Received
-              </h4>
-              <h4 className="dark:text-gray-400 uppercase text-[12px] text-gray-800">
-                {formatAmount(buySummary?.crypto_amount)} {coin}
-              </h4>
+            <div className="w-full  rounded-xl mt-6 p-4 bg-[#F1F1F1] dark:bg-[#2f2e2e]">
+              {from === "" && (
+                <div className="w-full  flex justify-between items-center">
+                  <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
+                    Network
+                  </h4>
+                  <h4 className="dark:text-gray-400 text-[12px] uppercase text-gray-800">
+                    {network}
+                  </h4>
+                </div>
+              )}
+              <div
+                className={`w-full mt-4 ${
+                  from === "" ? "mt-4" : "mt-0"
+                } flex justify-between items-center`}
+              >
+                <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
+                  Transaction Fee
+                </h4>
+                <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
+                  {formatAmount(buySummary?.transaction_fee)} {coin}
+                </h4>
+              </div>
+
+              {buyType === "Ex" && (
+                <div className="w-full mt-4 flex justify-between items-center">
+                  <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
+                    Reciepeint Address
+                  </h4>
+                  <div className="flex items-center gap-3">
+                    <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
+                      {truncateWord(walletAddy)}
+                    </h4>
+                    <CopyToClipboard
+                      text={walletAddy}
+                      onCopy={() => {
+                        setCopyBankName(true);
+                        setTimeout(() => {
+                          setCopyBankName(false);
+                        }, 2500);
+                      }}
+                    >
+                      {copyBankName ? (
+                        <FiClipboard className="text-[16px] dark:text-[#D0D5DD] text-black" />
+                      ) : (
+                        <FiCopy className="text-[16px] dark:text-[#D0D5DD] text-black" />
+                      )}
+                    </CopyToClipboard>
+                  </div>
+                </div>
+              )}
+              <div className="w-full mt-4 flex justify-between items-center">
+                <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
+                  Amount Paid
+                </h4>
+                <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
+                  NGN {formatAmount(buySummary?.amount_naira)}
+                </h4>
+              </div>
+              <div className="w-full mt-4 flex justify-between items-center">
+                <h4 className="dark:text-gray-400 text-[12px] text-gray-800">
+                  Amount Received
+                </h4>
+                <h4 className="dark:text-gray-400 uppercase text-[12px] text-gray-800">
+                  {formatAmount(buySummary?.crypto_amount)} {coin}
+                </h4>
+              </div>
             </div>
 
-            <div className="flex items-center gap-4 mt-8 w-full">
+            <div className="flex items-center gap-4 mt-32 w-full">
               <button
                 style={{
                   border: `1px solid ${bgColor}`,
-                  color: `${bgColor}`,
                 }}
                 onClick={() => setBuyReceiptModal(false)}
                 className={`w-1/2  text-[14px] rounded-2xl h-[52px] border ${
                   bgColor
-                    ? `border-[${bgColor}] text-[${bgColor}] `
-                    : "text-[#3A66FF] border-text_blue"
+                    ? `border-[${bgColor}] text-gray-900 dark:text-gray-100`
+                    : "text-gray-900 dark:text-gray-100 border-text_blue"
                 } flex justify-center items-center`}
               >
                 Cancel trade

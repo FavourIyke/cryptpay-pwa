@@ -20,6 +20,7 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
   const [isPalette, setIsPalette] = useState<boolean>(false);
   const [transactionID, setTransactionID] = useState<string>("");
   const [showDetails, setShowDetails] = useState<boolean>(false);
+  const [showMenu, setShowMenu] = useState<boolean>(false);
   const [displayColor, setDisplayColor] = useState<string>("");
   const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
   const element = document.documentElement;
@@ -152,6 +153,8 @@ export const UserProvider: React.FC<PropsType> = ({ children }) => {
         setDisplayColor,
         setIsPalette,
         isPalette,
+        showMenu,
+        setShowMenu,
       }}
     >
       {children}

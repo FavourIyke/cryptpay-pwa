@@ -29,7 +29,7 @@ const Colorpalette = ({ setIsPalette }: any) => {
   };
 
   return (
-    <div className="fixed w-full inset-0 flex font-sora z-50 justify-center px-6 xs:px-10 items-center lgss:items-start lgss:pt-24 pt-12 overflow-auto pb-16 bg-[#000000] dark:bg-opacity-80 bg-opacity-10 ">
+    <div className="fixed w-full inset-0 flex font-sora z-50 justify-center px-6 xs:px-10 items-start lgss:items-start lgss:pt-24 pt-12 overflow-auto pb-16 bg-[#000000] dark:bg-opacity-80 bg-opacity-10 ">
       <div className="bg-white dark:bg-[#242424] w-full mds:w-2/3 md:w-3/5 lgss:w-2/5 xl:w-1/3 xxxl:w-1/5 px-4 rounded-xl py-6">
         <div className="w-full flex justify-between items-center">
           <h4 className="text-gray-800 dark:text-gray-100 font-semibold text-[20px]">

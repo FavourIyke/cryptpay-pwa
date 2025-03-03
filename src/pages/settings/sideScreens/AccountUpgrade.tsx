@@ -91,7 +91,7 @@ const AccountUpgrade = ({
               You are currently on
             </h4>
             <div
-              className={`px-3 py-1 bg-text_blue rounded-lg text-white text-[11px]`}
+              className={`px-3 py-1 bg-[#E9F4FF] rounded-lg text-[#0D2BF5] text-[11px]`}
             >
               Level{" "}
               {level === "100" ? 1 : level === "201" || level === "202" ? 2 : 0}
@@ -162,7 +162,7 @@ const AccountUpgrade = ({
                       Daily Sell Limit
                     </h4>
                     <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
-                      ₦1,000,000
+                      ₦10,000,000
                     </h4>
                   </div>
 
@@ -176,7 +176,7 @@ const AccountUpgrade = ({
                 <div className="w-full mt-4">
                   <div className="w-full flex justify-start gap-2 items-center">
                     {email ? (
-                      <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                      <FaCircleCheck className="text-[#18CF2D] text-[20px]" />
                     ) : (
                       <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
                     )}
@@ -186,7 +186,7 @@ const AccountUpgrade = ({
                   </div>
                   <div className="w-full mt-2 flex justify-start gap-2 items-center">
                     {level === "100" || level === "201" || level === "202" ? (
-                      <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                      <FaCircleCheck className="text-[#18CF2D] text-[20px]" />
                     ) : (
                       <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
                     )}{" "}
@@ -196,7 +196,7 @@ const AccountUpgrade = ({
                   </div>
                   <div className="w-full mt-2 flex justify-start gap-2 items-center">
                     {level === "100" || level === "201" || level === "202" ? (
-                      <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                      <FaCircleCheck className="text-[#18CF2D] text-[20px]" />
                     ) : (
                       <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
                     )}{" "}
@@ -213,7 +213,12 @@ const AccountUpgrade = ({
                       navigate("/kyc");
                     }
                   }}
-                  className={`w-full bg-text_blue mt-6 h-[44px] rounded-xl text-[14px] font-semibold text-white`}
+                  style={{
+                    backgroundColor: bgColor,
+                  }}
+                  className={`w-full ${
+                    bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+                  }  mt-6 h-[44px] rounded-xl text-[14px] font-semibold text-white`}
                 >
                   {level === "100"
                     ? "Upgrade to level 2"
@@ -257,14 +262,22 @@ const AccountUpgrade = ({
                     </div>
                     <div className="w-full flex justify-between mt-4 items-center">
                       <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
-                        Unlimited
+                        Daily Sell Limit
                       </h4>
                       <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
-                        ₦1,000,000
+                        Unlimited
+                      </h4>
+                    </div>
+                    <div className="w-full flex justify-between mt-4 items-center">
+                      <h4 className=" text-[14px] text-gray-600 dark:text-gray-100">
+                        Daily Deposit
+                      </h4>
+                      <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
+                        ₦10,000,000
                       </h4>
                     </div>
 
-                    <h4 className=" text-[14px] mt-2 text-gray-600 dark:text-gray-100">
+                    <h4 className=" text-[14px] mt-4 text-gray-600 dark:text-gray-100">
                       Multiple Bank Account
                     </h4>
                   </div>
@@ -274,7 +287,7 @@ const AccountUpgrade = ({
                   <div className="w-full mt-4">
                     <div className="w-full flex justify-start gap-2 items-center">
                       {email ? (
-                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                        <FaCircleCheck className="text-[#18CF2D] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
                       )}
@@ -284,7 +297,7 @@ const AccountUpgrade = ({
                     </div>
                     <div className="w-full flex justify-start gap-2 mt-2 items-center">
                       {email ? (
-                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                        <FaCircleCheck className="text-[#18CF2D] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
                       )}
@@ -294,7 +307,7 @@ const AccountUpgrade = ({
                     </div>
                     <div className="w-full mt-2 flex justify-start gap-2 items-center">
                       {level === "100" || level === "201" || level === "202" ? (
-                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                        <FaCircleCheck className="text-[#18CF2D] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
                       )}{" "}
@@ -304,7 +317,7 @@ const AccountUpgrade = ({
                     </div>
                     <div className="w-full mt-2 flex justify-start gap-2 items-center">
                       {level === "201" || level === "202" ? (
-                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                        <FaCircleCheck className="text-[#18CF2D] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
                       )}{" "}
@@ -364,11 +377,11 @@ const AccountUpgrade = ({
                         Daily Deposit
                       </h4>
                       <h4 className=" text-[14px] text-right text-gray-600 dark:text-gray-100">
-                        ₦1,000,000
+                        ₦10,000,000
                       </h4>
                     </div>
 
-                    <h4 className=" text-[14px] mt-2 text-gray-600 dark:text-gray-100">
+                    <h4 className=" text-[14px] mt-4 text-gray-600 dark:text-gray-100">
                       Multiple Bank Account (incl Business Acct)
                     </h4>
                   </div>
@@ -378,7 +391,7 @@ const AccountUpgrade = ({
                   <div className="w-full mt-4">
                     <div className="w-full flex justify-start gap-2 items-center">
                       {email ? (
-                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                        <FaCircleCheck className="text-[#18CF2D] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
                       )}
@@ -388,7 +401,7 @@ const AccountUpgrade = ({
                     </div>
                     <div className="w-full flex justify-start gap-2 mt-2 items-center">
                       {email ? (
-                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                        <FaCircleCheck className="text-[#18CF2D] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
                       )}
@@ -398,7 +411,7 @@ const AccountUpgrade = ({
                     </div>
                     <div className="w-full mt-2 flex justify-start gap-2 items-center">
                       {level === "100" || level === "201" || level === "202" ? (
-                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                        <FaCircleCheck className="text-[#18CF2D] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
                       )}{" "}
@@ -408,7 +421,7 @@ const AccountUpgrade = ({
                     </div>
                     <div className="w-full mt-2 flex justify-start gap-2 items-center">
                       {level === "201" || level === "202" ? (
-                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                        <FaCircleCheck className="text-[#18CF2D] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
                       )}{" "}
@@ -418,7 +431,7 @@ const AccountUpgrade = ({
                     </div>
                     <div className="w-full mt-2 flex justify-start gap-2 items-center">
                       {level === "202" ? (
-                        <FaCircleCheck className="text-[#5E91FF] text-[20px]" />
+                        <FaCircleCheck className="text-[#18CF2D] text-[20px]" />
                       ) : (
                         <IoIosRemoveCircleOutline className="text-gray-100 text-[20px]" />
                       )}{" "}
@@ -444,10 +457,21 @@ const AccountUpgrade = ({
                     setOpenGovId(true);
                   }
                 }}
+                style={{
+                  backgroundColor:
+                    kycStatus?.data.kyc_status === "pending" ||
+                    level === "202" ||
+                    (level === "201" && tier === 0) ||
+                    (level === "100" && tier === 0)
+                      ? "bg-[#3D434C]"
+                      : bgColor,
+                }}
                 className={
                   tier === 0
                     ? "w-full bg-gray-500 mt-6 h-[48px] rounded-xl text-[14px] font-semibold text-gray-200"
-                    : `w-full bg-text_blue mt-6 h-[48px] rounded-xl text-[14px] font-semibold text-white`
+                    : `w-full ${
+                        bgColor ? `bg-[${bgColor}]` : "bg-text_blue"
+                      } mt-6 h-[48px] rounded-xl text-[14px] font-semibold text-white`
                 }
               >
                 {level === "202"

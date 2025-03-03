@@ -18,6 +18,8 @@ import VerifyReset from "./components/VerifyReset";
 import CacheBuster from "react-cache-buster";
 import packageFiles from "../package.json";
 import Loading from "./Loading";
+import Wallet from "./pages/wallet/Wallet";
+import History from "./pages/history/History";
 
 function App() {
   return (
@@ -56,19 +58,35 @@ function App() {
           }
         />
 
-        <Route
+        {/* <Route
           path="/transactions"
           element={
             <PrivateRoute>
               <Transactions />
             </PrivateRoute>
           }
-        />
+        /> */}
         <Route
           path="/settings"
           element={
             <PrivateRoute>
               <SettingsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/wallet"
+          element={
+            <PrivateRoute>
+              <Wallet />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/history"
+          element={
+            <PrivateRoute>
+              <History />
             </PrivateRoute>
           }
         />
