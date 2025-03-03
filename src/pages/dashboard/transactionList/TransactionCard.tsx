@@ -110,7 +110,7 @@ const TransactionCard = ({ payouts, onClick1 }: any) => {
               : payouts?.transaction_type === "deposit" ||
                 payouts?.transaction_type === "buy"
               ? `${formatAmount(Number(payouts?.asset_amount))}${" "}
-              ${payouts.crypto_currency}`
+              ${payouts.crypto_currency?.toUpperCase()}`
               : ""}
           </h4>
           <h4 className="text-gray-400 dark:text-gray-500 text-right mt-1 text-[14px]">
