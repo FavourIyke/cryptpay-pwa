@@ -36,15 +36,15 @@ const TransactionCard = ({ payouts, onClick1 }: any) => {
             <div className="w-[32px] h-[32px] bg-white rounded-full ">
               <img
                 src={
-                  payouts.crypto_currency === "BTC"
+                  payouts.crypto_currency?.toUpperCase() === "BTC"
                     ? btc
-                    : payouts.crypto_currency === "USDT"
+                    : payouts.crypto_currency?.toUpperCase() === "USDT"
                     ? usdt
-                    : payouts.crypto_currency === "ETH"
+                    : payouts.crypto_currency?.toUpperCase() === "ETH"
                     ? eth
-                    : payouts.crypto_currency === "SOL"
+                    : payouts.crypto_currency?.toUpperCase() === "SOL"
                     ? solana
-                    : payouts.crypto_currency === "TRX"
+                    : payouts.crypto_currency?.toUpperCase() === "TRX"
                     ? trx
                     : ""
                 }
