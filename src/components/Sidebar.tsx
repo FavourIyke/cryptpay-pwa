@@ -73,7 +73,7 @@ const Sidebar = () => {
     <div className="lgss:w-[20%] bg-[#FFFFFF] font-sora dark:bg-[#141414]">
       <div className="hidden lgss:flex lgss:flex-col px-6 font-sora h-screen justify-between border-r border-[#E6E6E6] dark:border-[#252525]  w-full  bg-[#FFFFFF]  dark:bg-[#141414] pt-[35px] ">
         <div className=" mt-12 lgss:mt-0 w-full">
-          <div className="flex justify-start items-center w-full mb-24">
+          <div className="flex justify-start items-center w-full mb-12">
             {theme === "light" ? (
               <img src={logo} className="" alt="logo" />
             ) : (
